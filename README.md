@@ -1,6 +1,4 @@
-# ComboFly
-
-[https://raw.githubusercontent.com/MXJosueDev/ComboFly/main/assets/icon.png](https://raw.githubusercontent.com/MXJosueDev/ComboFly/main/README.md)
+# ComboFly <img width=48 src="https://raw.githubusercontent.com/MXJosueDev/ComboFly/main/assets/icon.png"></img>
 
 ComboFly is an open source plugin and is made for [PocketMine-MP](https://github.com/pmmp/PocketMine-MP) 3.25.x.
 
