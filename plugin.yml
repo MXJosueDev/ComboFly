@@ -1,0 +1,21 @@
+---
+name: ComboFly
+description: ComboFly MiniGame, plugin for Pocketmine-MP.
+version: 0.1-Beta
+main: combofly\Loader
+api: 3.25.x
+author: MXJosueDev
+website: https://github.com/MXJosueDev/ComboFly
+
+permissions:
+  combofly:
+    children:
+      combofly.*:
+        description: Allow to players use all ComboFly features.
+        default: op
+      combofly.command:
+        children:
+          combofly.command.setarena:
+            description: Allow place players spawn upon entering the arena.
+            default: op
+...
