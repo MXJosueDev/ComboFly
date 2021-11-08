@@ -50,7 +50,7 @@ class Arena {
     }
 
     public function addPlayer(Player $player): void {
-        if($this->isPlayer()) return;
+        if($this->isPlayer($player)) return;
 
         $this->players[$player->getXuid()] = $player;
         
@@ -60,7 +60,7 @@ class Arena {
     }
 
     public function quitPlayer(Player $player): void {
-        if(!$this->isPlayer()) return;
+        if(!$this->isPlayer($player)) return;
 
         unset($this->players[$player->getXuid()]);
 
