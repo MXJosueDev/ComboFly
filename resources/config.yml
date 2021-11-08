@@ -7,4 +7,26 @@
 #   \_____\___/|_| |_| |_|_.__/ \___/|_|    |_|\__, |
 #                                               __/ |
 #                                              |___/ 
+
+# ------------------
+# - Data settings. -
+# ------------------
+
+# Provider type (Only available yaml)
+provider: yaml
+
+# ------------------------
+# - Scoreboard settings. -
+# ------------------------
+
+# Select the time it will take for the scoreboard to update (in seconds).
+# Default: 1
+scoreboard-update-interval: 1
+
+#
+scoreboard-title:
+
+# 
+scoreboard-lines:
+  - "Test line"
 ...

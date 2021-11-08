@@ -16,7 +16,6 @@ namespace combofly;
 
 use combofly\commands\CommandManager;
 use combofly\utils\ConfigManager;
-use onebone\economyapi\EconomyAPI;
 use pocketmine\plugin\PluginBase;
 use pocketmine\Player;
 use pocketmine\utils\SingletonTrait;
@@ -34,17 +33,6 @@ class Loader extends PluginBase {
     public function onEnable() {
         ConfigManager::saveAll();
         CommandManager::registerAll();
-        
-        $this->getServer()->getPluginManager()->registerEvents(new EventListener(), $this);
-
-        if(!is_null($this->getServer()->getPluginManager()->getPlugin("EconomyAPI"))) {
-			self::$economy = EconomyAPI::getInstance();
-		} else {
-			self::$economy = null;
-		}
-    }
-
-    public function giveKill(Player $player): void {
-        // TODO
+        (new Arena());
     }
 }

@@ -12,15 +12,27 @@ Install the file named `ComboFly.phar` in the`/home/plugins/` folder, you can do
 
 ## Features
 
-| Feature | Status |
-|-|:-:|
-| Economy Integration | ❌ |
-| ScoreHud Integration (v5 & v6) | ❌ |
-| Saves Players by UUID | ❌ |
-| SQLite3 Support | ❌ |
-| MySQL Support | ❌ |
-| UI | ❌ |
-| Multi-Language Support | ❌ |
+| List |
+|-|
+| Economy Integration |
+| Scoreboard Support |
+| Saves Players by UUID |
+| YAML Support |
+| UI |
+| Join Entity |
+| Custom Loot |
+
+## TODO's
+
+| List |
+|-|
+| Spectator mode |
+| ScoreHud Integration (v5 & v6) |
+| SQLite3 Support |
+| MySQL Support |
+| GUI & UI |
+| Multi-Language Support |
+| Tops Floating Text |
 
 ## Commands
 

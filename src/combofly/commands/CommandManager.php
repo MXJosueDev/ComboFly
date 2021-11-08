@@ -12,17 +12,4 @@ declare(strict_types=1);
  *                                            |___/ 
  */
 
-namespace combofly;
-
-use pocketmine\event\Listener;
-use pocketmine\event\player\PlayerJoinEvent;
-
-class EventListener implements Listener {
-
-    public function onPlayerJoin(PlayerJoinEvent $event): void {
-        $player = $event->getPlayer();
-
-        if(!$player->isAuthenticated())
-            $player->kick("translate", false);
-    }
-}
+namespace combofly\commands;
