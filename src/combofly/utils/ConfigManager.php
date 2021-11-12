@@ -21,6 +21,11 @@ class ConfigManager {
 
     public static function saveAll() {
         self::saveFile("config.yml");
+        self::ensureDirectory("data");
+    }
+
+    public static function ensureDirectory(string $directory): void {
+        mkdir(self::getPath($directory));
     }
 
     public static function getDataFolder(): string {
