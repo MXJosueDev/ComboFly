@@ -17,9 +17,11 @@ namespace combofly;
 use combofly\tasks\ScoreboardTask;
 use combofly\tasks\UpdateEntityTask;
 use combofly\utils\ConfigManager;
+use combofly\entity\NPCEntity;
 use onebone\economyapi\EconomyAPI;
 use pocketmine\Player;
 use pocketmine\entity\Entity;
+use pocketmine\level\Position;
 use pocketmine\utils\SingletonTrait;
 
 class Arena {
@@ -43,7 +45,9 @@ class Arena {
         Loader::getInstance()->getScheduler()->scheduleRepeatingTask(new ScoreboardTask(), ConfigManager::getValue("scoreboard-update-interval") * 20);
         Loader::getInstance()->getScheduler()->scheduleRepeatingTask(new UpdateEntityTask(), 20);
 
-        // TODO: Register entity & load level
+        Entity::registerEntity(NPCEntity::class, true, ["ComboFlyJoinNPC", "combofly:join_npc"]);
+
+        $this->loadArena();
 
         if(!is_null($this->getServer()->getPluginManager()->getPlugin("EconomyAPI"))) {
 			self::$economy = EconomyAPI::getInstance();
@@ -52,12 +56,28 @@ class Arena {
 		}
     }
 
+    public function loadArena(): void {
+        Loader::getServer()->loadLevel(ConfigManager::getValue("arena-level"));
+    }
+
+    public function setArena(Position $pos): void {
+        ConfigManager::setValue("arena-level", $pos->getLevel());
+        ConfigManager::setValue("arena-pos", [
+            "x" => $pos->getX(),
+            "y" => $pos->getY(),
+            "z" => $pos->getZ()
+        ]);
+    }  
+
+    public function isArenaLoaded(): bool {
+        return Loader::getServer()->isLevelLoaded(ConfigManager::getValue("arena-level"));
+    }
+
     public function addPlayer(Player $player): void {
         if($this->isPlayer($player)) return;
-
         $this->players[$player->getXuid()] = $player;
         
-        $this->giveItems($player);
+        $this->giveInv($player);
 
         $this->broadcast("§c{$player->getName()} §r§7joined the arena!");
     }
@@ -84,7 +104,7 @@ class Arena {
         return $players;
     }
 
-    private function giveItems(Player $player): void {
+    private function giveInv(Player $player): void {
         // TODO
     }
 
@@ -111,6 +131,6 @@ class Arena {
     }
 
     public function addKill(Player $killer, Player $died): void {  
-        
+        $killer->setHealth($killer->getMaxHealth());
     }
 }

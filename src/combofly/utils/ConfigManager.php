@@ -19,17 +19,25 @@ use pocketmine\utils\Config;
 
 class ConfigManager {
 
-    public static $defaultConfig;
-
     public static function saveAll() {
         self::saveFile("config.yml");
-        self::saveFile("kit.yml");
-        
-        self::$defaultConfig = self::getConfig();
+    }
+
+    public static function getDataFolder(): string {
+        return Loader::getInstace()->getDataFolder();
+    }
+
+    public static function getPath(string $path): string {
+        return self::getDataFolder() . str_replace(["/"], [DIRECTORY_SEPARATOR], $path);
     }
 
     public static function getValue(string $key) {
-        return self::getDefConfig()->get($key);
+        return self::getConfig()->get($key);
+    }
+
+    public static function setValue(string $key, $value) {
+        self::getConfig()->set($key, $value);
+        self::getConfig()->save();
     }
 
     public static function saveFile(string $filePath): void {
@@ -37,11 +45,7 @@ class ConfigManager {
     }
 
     public static function getConfig(string $filePath = "config.yml"): Config {
-        return new Config(Loader::getInstace()->getDataFolder() . $filePath);
-    }
-
-    public static function getDefConfig(): Config {
-        return self::$defaultConfig;
+        return new Config(self::getDataFolder() . $filePath);
     }
 
     public static function getPrefix(): string {
