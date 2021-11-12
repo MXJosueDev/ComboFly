@@ -19,6 +19,7 @@ use combofly\tasks\UpdateEntityTask;
 use combofly\utils\ConfigManager;
 use onebone\economyapi\EconomyAPI;
 use pocketmine\Player;
+use pocketmine\entity\Entity;
 use pocketmine\utils\SingletonTrait;
 
 class Arena {
@@ -29,6 +30,8 @@ class Arena {
     const SUBTITLE = "subtitle";
     const TIP = "tip";
     const POPUP = "popup";
+
+    private $economy;
 
     public $players = [];
     
@@ -45,7 +48,7 @@ class Arena {
         if(!is_null($this->getServer()->getPluginManager()->getPlugin("EconomyAPI"))) {
 			self::$economy = EconomyAPI::getInstance();
 		} else {
-            Loader::getInstance()->getLogger()->alert(TF::RED . "The EconomyAPI dependency was not found!");
+            Loader::getInstance()->getLogger()->alert("The EconomyAPI dependency was not found.");
 		}
     }
 
@@ -56,7 +59,7 @@ class Arena {
         
         $this->giveItems($player);
 
-        $player->sendMessage("translate");
+        $this->broadcast("§c{$player->getName()} §r§7joined the arena!");
     }
 
     public function quitPlayer(Player $player): void {
@@ -64,7 +67,7 @@ class Arena {
 
         unset($this->players[$player->getXuid()]);
 
-        $player->sendMessage("translate");
+        $this->broadcast("§c{$player->getName()} §r§7left the arena!");
     }
 
     public function isPlayer(Player $player): bool {

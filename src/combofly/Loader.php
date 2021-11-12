@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace combofly;
 
-use combofly\commands\CommandManager;
 use combofly\utils\ConfigManager;
 use pocketmine\plugin\PluginBase;
 use pocketmine\Player;
@@ -23,8 +22,6 @@ use pocketmine\utils\TextFormat as TF;
 
 class Loader extends PluginBase {
     use SingletonTrait;
-
-    private $economy = null;
     
     public function onLoad() {
         self::setInstance($this);        
@@ -32,7 +29,9 @@ class Loader extends PluginBase {
 
     public function onEnable() {
         ConfigManager::saveAll();
-        CommandManager::registerAll();
+
+        $this->getServer()->getCommandMap()->register("/combofly", new ComboFlyCommand());
+
         (new Arena());
     }
 }

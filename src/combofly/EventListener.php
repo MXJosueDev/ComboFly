@@ -23,6 +23,6 @@ class EventListener implements Listener {
         $player = $event->getPlayer();
 
         if(!$player->isAuthenticated())
-            $player->kick("translate", false);
+            $player->kick("%disconnectionScreen.notAuthenticated", false);
     }
 }

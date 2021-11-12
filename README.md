@@ -20,25 +20,27 @@ Install the file named `ComboFly.phar` in the`/home/plugins/` folder, you can do
 | YAML Support |
 | UI |
 | Join Entity |
-| Custom Loot |
+| Custom Kit |
 
 ## TODO's
 
 | List |
 |-|
 | Spectator mode |
-| ScoreHud Integration (v5 & v6) |
 | SQLite3 Support |
 | MySQL Support |
 | GUI & UI |
-| Multi-Language Support |
 | Tops Floating Text |
 
 ## Commands
 
-### Command alias
+### Command info
 
-/cf
+**Name:** /combofly
+
+**Alias:**
+
+- /cf
 
 ### Command List
 
