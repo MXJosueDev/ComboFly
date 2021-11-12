@@ -19,6 +19,15 @@ use pocketmine\Player;
 
 class PlayerData implements JsonSerializable {
 
+    public static function generateBasicData(Player $player): array {
+        return [
+            "player" => $player->getName(),
+            "xuid"   => $player->getXuid(),
+            "kills"  => 0,
+            "deaths" => 0
+        ];
+    }
+
     public $player;
     private $data;
 
@@ -26,12 +35,20 @@ class PlayerData implements JsonSerializable {
         $this->player = $player;
 
         if(!is_file($this->getPath())) {
-            file_put_contents($this->getPath(), self::generateBasicData()); // TODO basic data
-            return;
+            $this->data = self::generateBasicData($player);
+            $this->save();
         }
 
         $file = file_get_contents(ConfigManager::getPath("data/{$player->getXuid()}"));
         $this->data = json_decode($file, true);
+        
+        $this->updateData();
+    }
+
+    public function updateData(): void {
+        $player = $this->getPlayer();
+
+        $this->set("player", $player->getName());
     }
 
     public function getPlayer(): Player {

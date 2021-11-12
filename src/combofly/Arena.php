@@ -131,6 +131,8 @@ class Arena {
     }
 
     public function addKill(Player $killer, Player $died): void {  
+        // TODO
         $killer->setHealth($killer->getMaxHealth());
+        $this->
     }
 }

@@ -39,10 +39,4 @@ class Loader extends PluginBase {
     public static function getServer(): Server {
         return Server::getInstance();
     }
-
-    
-
-    public static function generatePlayerData(): void {
-
-    }
 }
