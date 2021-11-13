@@ -93,7 +93,7 @@ class Arena {
         $this->giveInv($player);
 
         $level = ConfigManager::getValue("arena-level");
-        $vector = ConfigManager:::getValue("arena-pos");
+        $vector = ConfigManager::getValue("arena-pos");
         $x = (float) $vector["x"];
         $y = (float) $vector["y"];
         $z = (float) $vector["z"];
