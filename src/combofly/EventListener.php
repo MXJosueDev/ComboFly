@@ -16,13 +16,29 @@ namespace combofly;
 
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerJoinEvent;
+use pocketmine\event\player\PlayerQuitEvent;
 
 class EventListener implements Listener {
 
     public function onPlayerJoin(PlayerJoinEvent $event): void {
         $player = $event->getPlayer();
 
-        if(!$player->isAuthenticated())
+        if(!$player->isAuthenticated()) {
             $player->kick("%disconnectionScreen.notAuthenticated", false);
+            return;
+        }
+
+        $playerData = new PlayerData($player);
+
+        Arena::getInstance()->data[$player->getXuid()] = $playerData;  
+    }
+
+    public function onPlayerQuit(PlayerQuitEvent $event): void {
+        $player = $event->getPlayer();
+
+        if(Arena::getInstance()->isPlayer($player))
+            Arena::getInstance()->quitPlayer($player, false);
+
+        unset(Arena::getInstance()->data[$player->getXuid()]);
     }
 }

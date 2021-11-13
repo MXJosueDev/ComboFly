@@ -36,6 +36,7 @@ class Arena {
     private $economy;
 
     public $players = [];
+    public $data = [];
     
     public function __construct() {
         self::setInstance($this);
@@ -57,6 +58,9 @@ class Arena {
     }
 
     public function loadArena(): void {
+        if(!ConfigManager::getValue("arena-level"))
+            return;
+    
         Loader::getServer()->loadLevel(ConfigManager::getValue("arena-level"));
     }
 
@@ -67,27 +71,47 @@ class Arena {
             "y" => $pos->getY(),
             "z" => $pos->getZ()
         ]);
+
+        $this->loadArena();
     }  
 
     public function isArenaLoaded(): bool {
+        if(!ConfigManager::getValue("arena-level"))
+            return false;
+
         return Loader::getServer()->isLevelLoaded(ConfigManager::getValue("arena-level"));
     }
 
     public function addPlayer(Player $player): void {
         if($this->isPlayer($player)) return;
+        if(!$this->isArenaLoaded()) {
+            $player->sendMessage(ConfigManager::getPrefix() . "§7Sorry, the arena is not enabled!");
+            return;
+        }
         $this->players[$player->getXuid()] = $player;
         
         $this->giveInv($player);
 
+        $level = ConfigManager::getValue("arena-level");
+        $vector = ConfigManager:::getValue("arena-pos");
+        $x = (float) $vector["x"];
+        $y = (float) $vector["y"];
+        $z = (float) $vector["z"];
+
+        $player->teleport(new Position($level, $x, $y, $z));
+
         $this->broadcast("§c{$player->getName()} §r§7joined the arena!");
     }
 
-    public function quitPlayer(Player $player): void {
+    public function quitPlayer(Player $player, bool $isDied): void {
         if(!$this->isPlayer($player)) return;
+
+        // TODO: Clear player inventory & teleport to lobby
 
         unset($this->players[$player->getXuid()]);
 
-        $this->broadcast("§c{$player->getName()} §r§7left the arena!");
+        if(!$isDied)
+            $this->broadcast("§c{$player->getName()} §r§7left the arena!");
     }
 
     public function isPlayer(Player $player): bool {
@@ -108,11 +132,19 @@ class Arena {
         // TODO
     }
 
+    public function getPlayerData(Player $player): ?PlayerData {
+        if(!isset($this->data[$player->getXuid()])) {
+            throw new \Exception("Player data was not found.");
+        }
+
+        return $this->data[$player->getXuid()];
+    }
+
     public function broadcast(string $text, $type = self::MESSAGE): void {
         foreach($this->getAllPlayers() as $player) {
             switch($type) {
                 case self::MESSAGE:
-                    $player->sendMessage($text);
+                    $player->sendMessage(ConfigManager::getPrefix() . $text);
                     break;
                 case self::TITLE:
                     $player->sendTitle($text);
@@ -130,9 +162,15 @@ class Arena {
         }
     }
 
-    public function addKill(Player $killer, Player $died): void {  
-        // TODO
+    public function addKill(Player $killer, Player $died): void {
         $killer->setHealth($killer->getMaxHealth());
-        $this->
+
+        $killerData = $this->getPlayerData($killer);
+        $diedData = $this->getPlayerData($killer);
+        
+        $killerData->set("kills", $killerData->get("kills") + 1);
+        $diedData->set("deaths", $diedData->get("deaths") + 1);
+
+        $this->broadcast("§r§4{$died->getName()} §r§7was killed by §r§c{$killer->getName()}");
     }
 }

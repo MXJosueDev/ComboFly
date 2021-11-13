@@ -17,7 +17,7 @@ Install the file named `ComboFly.phar` in the`/home/plugins/` folder, you can do
 | Economy Integration |
 | Scoreboard Support |
 | Saves Players by UUID |
-| YAML Support |
+| Json Provider Support |
 | UI |
 | Join Entity |
 | Custom Kit |

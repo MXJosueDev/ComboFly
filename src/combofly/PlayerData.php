@@ -45,6 +45,10 @@ class PlayerData implements JsonSerializable {
         $this->updateData();
     }
 
+    public function getXuid() {
+        return $this->get("xuid");
+    }
+
     public function updateData(): void {
         $player = $this->getPlayer();
 

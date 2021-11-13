@@ -8,14 +8,31 @@
 #                                               __/ |
 #                                              |___/ 
 
+# You can simplify '§' as '&'
 prefix: "&l&7[&r&bCombo&3Fly&r&l&7] &r"
 
 # ------------------
 # - Data settings. -
 # ------------------
 
-# Provider type (Only available yaml)
-provider: yaml
+# Provider type (Only available json)
+# Default: json
+provider: json
+
+# -------------------
+# - Arena settings. -
+# -------------------
+
+# Level the player will be teleported to (set to false to disable the arena).
+# Default: false
+arena-level: false
+
+# Coordinates to which the player will be teleported.
+# Default: x: 0, y: 0, z: 0
+arena-pos:
+  x: 0
+  y: 0
+  z: 0
 
 # ------------------------
 # - Scoreboard settings. -
@@ -25,10 +42,20 @@ provider: yaml
 # Default: 1
 scoreboard-update-interval: 1
 
-#
-scoreboard-title:
+# Scoreboard title that will be shown to the player (sidebar).
+# You can simplify '§' as '&'
+scoreboard-title: "&l&bCombo&3Fly"
 
-# 
+# Lines that will be shown to the player on the scoreboard.
+# --------------------------------------------------------------------------------------------------
+# Important things.
+#   -> The scoreboard are in ascending order. From 1-15
+#      From down to up.
+#   -> We have limited empty spaces due to mojang
+#   -> They must be in array.
+#   -> You can simplify '§' as '&'
+#   -> The maximum arrays in one scoreboard is 15, Please follow this
+#      otherwise we will complain about it in console.
 scoreboard-lines:
   - "Test line"
 ...
