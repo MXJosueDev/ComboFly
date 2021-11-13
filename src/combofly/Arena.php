@@ -134,7 +134,7 @@ class Arena {
         $this->broadcast("§c{$player->getName()} §r§7joined the arena!");
     }
 
-    public function quitPlayer(Player $player, bool $isDied): void {
+    public function quitPlayer(Player $player, bool $isDied = true): void {
         if(!$this->isPlayer($player)) return;
 
         Utils::resetPlayer($player);
