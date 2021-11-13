@@ -34,6 +34,21 @@ arena-pos:
   y: 0
   z: 0
 
+# -------------------
+# - Lobby settings. -
+# -------------------
+
+# Level the player will be teleported to (set to false to teleport to the default level).
+# Default: false
+lobby-level: false
+
+# Coordinates to which the player will be teleported.
+# Default: x: 0, y: 0, z: 0
+lobby-pos:
+  x: 0
+  y: 0
+  z: 0
+
 # ------------------------
 # - Scoreboard settings. -
 # ------------------------

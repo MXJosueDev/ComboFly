@@ -17,6 +17,7 @@ namespace combofly;
 use combofly\tasks\ScoreboardTask;
 use combofly\tasks\UpdateEntityTask;
 use combofly\utils\ConfigManager;
+use combofly\utils\Utils;
 use combofly\entity\NPCEntity;
 use onebone\economyapi\EconomyAPI;
 use pocketmine\Player;
@@ -73,7 +74,25 @@ class Arena {
         ]);
 
         $this->loadArena();
-    }  
+    }
+
+    public function loadLobby(): void {
+        if(!ConfigManager::getValue("lobby-level"))
+            return;
+    
+        Loader::getServer()->loadLevel(ConfigManager::getValue("lobby-level"));
+    }
+    
+    public function setLobby(Position $pos): void {
+        ConfigManager::setValue("lobby-level", $pos->getLevel());
+        ConfigManager::setValue("lobby-pos", [
+            "x" => $pos->getX(),
+            "y" => $pos->getY(),
+            "z" => $pos->getZ()
+        ]);
+
+        $this->loadLobby();
+    }
 
     public function isArenaLoaded(): bool {
         if(!ConfigManager::getValue("arena-level"))
@@ -82,14 +101,26 @@ class Arena {
         return Loader::getServer()->isLevelLoaded(ConfigManager::getValue("arena-level"));
     }
 
+    public function isLobbyLoaded(): bool {
+        if(!ConfigManager::getValue("lobby-level"))
+            return true;
+
+        return Loader::getServer()->isLevelLoaded(ConfigManager::getValue("lobby-level"));
+    }
+
     public function addPlayer(Player $player): void {
         if($this->isPlayer($player)) return;
+        
+        $this->loadArena();
+
         if(!$this->isArenaLoaded()) {
             $player->sendMessage(ConfigManager::getPrefix() . "§7Sorry, the arena is not enabled!");
             return;
         }
+
         $this->players[$player->getXuid()] = $player;
         
+        Utils::resetPlayer($player);
         $this->giveInv($player);
 
         $level = ConfigManager::getValue("arena-level");
@@ -106,7 +137,25 @@ class Arena {
     public function quitPlayer(Player $player, bool $isDied): void {
         if(!$this->isPlayer($player)) return;
 
-        // TODO: Clear player inventory & teleport to lobby
+        Utils::resetPlayer($player);
+
+        if(!ConfigManager::getValue("lobby-level")) {
+            $player->teleport(Loader::getServer()->getDefaultLevel()->getSafeSpawn());
+        } else {
+            $this->loadLobby();
+
+            if(!$this->isLobbyLoaded()) {
+                $player->teleport(Loader::getServer()->getDefaultLevel()->getSafeSpawn());
+            } else {
+                $level = ConfigManager::getValue("lobby-level");
+                $vector = ConfigManager::getValue("lobby-pos");
+                $x = (float) $vector["x"];
+                $y = (float) $vector["y"];
+                $z = (float) $vector["z"];
+    
+                $player->teleport(new Position($level, $x, $y, $z));
+            }
+        }
 
         unset($this->players[$player->getXuid()]);
 
@@ -129,7 +178,7 @@ class Arena {
     }
 
     private function giveInv(Player $player): void {
-        // TODO
+        // TODO:
     }
 
     public function getPlayerData(Player $player): ?PlayerData {
@@ -163,10 +212,8 @@ class Arena {
     }
 
     public function addKill(Player $killer, Player $died): void {
-        $killer->setHealth($killer->getMaxHealth());
-
         $killerData = $this->getPlayerData($killer);
-        $diedData = $this->getPlayerData($killer);
+        $diedData = $this->getPlayerData($died);
         
         $killerData->set("kills", $killerData->get("kills") + 1);
         $diedData->set("deaths", $diedData->get("deaths") + 1);
