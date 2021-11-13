@@ -20,21 +20,21 @@ class Utils {
 
     public static function resetPlayer(Player $player): void {
         $player->setSprinting(false);
-		$player->setSneaking(false);
+        $player->setSneaking(false);
 
-		$player->extinguish();
+        $player->extinguish();
 
         $player->getInventory()->clearAll();
         $player->getArmorInventory()->clearAll();
-        
-        $player->removeAllEffects();
-        $player->setHealth($player->getMaxHealth());
 
+        $player->removeAllEffects();
+        $player->setHealth($player->getMaxHealth()) ;    
+        
         $player->setXpAndProgress(0, 0);
 
         $player->setAllowFlight(false);
         $player->setFlying(false);
-
+               
         $player->setGamemode(Player::SURVIVAL);
     }
 }
