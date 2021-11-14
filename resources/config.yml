@@ -62,8 +62,7 @@ scoreboard-update-interval: 1
 scoreboard-title: "&l&bCombo&3Fly"
 
 # Lines that will be shown to the player on the scoreboard.
-# --------------------------------------------------------------------------------------------------
-# Important things.
+#  Important things:
 #   -> The scoreboard are in ascending order. From 1-15
 #      From down to up.
 #   -> We have limited empty spaces due to mojang

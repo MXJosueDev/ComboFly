@@ -213,11 +213,14 @@ class Arena {
 
     public function addKill(Player $killer, Player $died): void {
         $killerData = $this->getPlayerData($killer);
-        $diedData = $this->getPlayerData($died);
         
         $killerData->set("kills", $killerData->get("kills") + 1);
-        $diedData->set("deaths", $diedData->get("deaths") + 1);
+        $this->addDeath($died);
+    }
 
-        $this->broadcast("§r§4{$died->getName()} §r§7was killed by §r§c{$killer->getName()}");
+    public function addDeath(Player $died): void {
+        $diedData = $this->getPlayerData($died);
+
+        $diedData->set("deaths", $diedData->get("deaths") + 1);
     }
 }

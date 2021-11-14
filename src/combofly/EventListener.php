@@ -91,19 +91,38 @@ class EventListener implements Listener {
     }
 
     public function onEntityDamage(EntityDamageEvent $event): void {
-        // TODO:
         $player = $event->getEntity();
+        $cause = $event->getCause();
 
         if(!$player instanceof Player || !Arena::getInstance()->isPlayer($player))
             return;
-    }
 
-    public function onEntityDamageByEntity(EntityDamageByEntityEvent $event): void {
-        // TODO:
-        $player = $event->getEntity();
+        switch($cause) {
+            case EntityDamageEvent::CAUSE_FALL:
+                $event->setCancelled();
+                break;
+            case EntityDamageEvent::CAUSE_VOID:
+                Arena::getInstance()->quitPlayer($player);
+                Arena::getInstance()->broadcast("§r§4{$died->getName()} §r§7was killed by the void.");
+                break;
+        }
 
-        if(!$player instanceof Player || !Arena::getInstance()->isPlayer($player))
+        if(!$event instanceof EntityDamageByEntityEvent)
             return;
+        $damager = $event->getDamager();
+
+        $event->setCancelled(false);
+        $event->setKnockBack(ConfigManager::getValue("knockback"));
+
+        if($player->getHealth() - $event->getFinalDamage() <= 0) {
+            Arena::getInstance()->quitPlayer($player);
+            Arena::getInstance()->broadcast("§r§4{$died->getName()} §r§7was killed by §r§c{$killer->getName()}");
+
+            Arena::getInstance()->addKill($damager, $player);
+
+            Utils::strike
+            $player->sendTitle("§l§cYou died!", "§7Good luck next time.");
+        }
     }
 
     public function onBlockPlace(BlockPlaceEvent $event): void {
