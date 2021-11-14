@@ -1,7 +1,5 @@
 # ComboFly
 
-<img width=300 src="https://raw.githubusercontent.com/MXJosueDev/ComboFly/main/assets/icon.png"></img>
-
 ComboFly is an open source plugin and is made for [PocketMine-MP](https://github.com/pmmp/PocketMine-MP) 3.25.x.
 
 It is currently under development. ✔
@@ -46,13 +44,20 @@ Install the file named `ComboFly.phar` in the`/home/plugins/` folder, you can do
 
 | Command | Description | Permission |
 |-|:-:|:-:|
-| **/combofly setspawn** | Place players spawn upon entering the arena. | combofly.command.setarena |
+| **/combofly help** | Get help on the sub-commands. | No permission |
+| **/combofly join** | Join the arena by means of a command. | combofly.command.join.with.command |
+| **/combofly setarena** | Set where players appear in the arena. | combofly.command.setarena |
+| **/combofly setlobby** | Set where players appear when exiting the arena. | combofly.command.setlobby |
+| **/combofly setkit** | Configure the kit with which the players appear in the arena (The kit will be configured with your inventory). | combofly.command.setkit |
 
 ## Permissions
 
 | Permission | Description |
 |-|:-:|
-| **combofly.command.setarena** | Allow place players spawn upon entering the arena. |
+| **combofly.command.join.with.command** | Allows join the arena by means of a command. |
+| **combofly.command.setarena** | Allows set where players appear in the arena. |
+| **combofly.command.setlobby** | Allows set where players appear when exiting the arena. |
+| **combofly.command.setkit** | Allows configure the kit with which the players appear in the arena. |
 
 ## Contributing
 

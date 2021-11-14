@@ -44,9 +44,11 @@ class Arena {
 
         Loader::getInstance()->getServer()->getPluginManager()->registerEvents(new EventListener(), $this);
         
+        // TODO:
         Loader::getInstance()->getScheduler()->scheduleRepeatingTask(new ScoreboardTask(), ConfigManager::getValue("scoreboard-update-interval") * 20);
         Loader::getInstance()->getScheduler()->scheduleRepeatingTask(new UpdateEntityTask(), 20);
 
+        // TODO:
         Entity::registerEntity(NPCEntity::class, true, ["ComboFlyJoinNPC", "combofly:join_npc"]);
 
         $this->loadArena();
@@ -121,7 +123,7 @@ class Arena {
         $this->players[$player->getXuid()] = $player;
         
         Utils::resetPlayer($player);
-        $this->giveInv($player);
+        $this->giveKit($player);
 
         $level = ConfigManager::getValue("arena-level");
         $vector = ConfigManager::getValue("arena-pos");
@@ -177,7 +179,11 @@ class Arena {
         return $players;
     }
 
-    private function giveInv(Player $player): void {
+    public function setKit(Player $player): void {
+        // TODO:
+    } 
+
+    public function giveKit(Player $player): void {
         // TODO:
     }
 

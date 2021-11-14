@@ -17,6 +17,7 @@ namespace combofly\utils;
 use combofly\Loader;
 use pocketmine\Player;
 use pocketmine\math\Vector3;
+use pocketmine\level\Location;
 use pocketmine\entity\Entity;
 use pocketmine\network\mcpe\protocol\AddActorPacket;
 use pocketmine\network\mcpe\protocol\PlaySoundPacket;
@@ -43,21 +44,23 @@ class Utils {
         $player->setGamemode(Player::SURVIVAL);
     }
 
-    public static function addSound(string $sound, ?array $players = null) {
-        // TODO
-        $sound = new PlaySoundPacket();
-		$sound->soundName = $sound;
-		$sound->x = $p->getX();
-		$sound->y = $p->getY();
-		$sound->z = $p->getZ();
-		$sound->volume = 1;
-		$sound->pitch = 1;
+    public static function addSound(Vector3 $vector, string $sound, ?array $players = null) {
+        $pk = new PlaySoundPacket();
+		$pk->soundName = $sound;
+		$pk->x = $vector->getX();
+		$pk->y = $vector->getY();
+		$pk->z = $vector->getZ();
+		$pk->volume = 1;
+		$pk->pitch = 1;
 
-		Loader::getServer()->broadcastPacket($level->getPlayers(), $sound);  
+        if(!is_null($players))
+		    Loader::getServer()->broadcastPacket($players, $pk);
+
+        return $pk;
     } 
 
-    public static function strikeLightning(Player $position): void{
-		$level = $p->getLevel();
+    public static function strikeLightning(Location $location, Player $killer): void{
+		$level = $location->getLevel();
 
 		$light = new AddActorPacket();
 		$light->metadata = [];
@@ -66,21 +69,19 @@ class Utils {
 		$light->entityRuntimeId = Entity::$entityCount++;
 		$light->entityUniqueId = 0;
 
-		$light->position = $p->getPosition();
+		$light->position = $location->getPosition();
 		$light->motion = new Vector3();
 
-		$light->yaw = $p->getYaw();
-		$light->pitch = $p->getPitch();
+		$light->yaw = $location->getYaw();
+		$light->pitch = $location->getPitch();
 
 		Loader::getServer()->broadcastPacket($level->getPlayers(), $light);
 		
-		$sound = new PlaySoundPacket();
-		$sound->soundName = "ambient.weather.thunder";
-		$sound->x = $p->getX();
-		$sound->y = $p->getY();
-		$sound->z = $p->getZ();
-		$sound->volume = 1;
-		$sound->pitch = 1;
-		Loader::getServer()->broadcastPacket($level->getPlayers(), $sound);
+        $sound = self::addSound($location, "ambient.weather.thunder");
+
+        foreach($level->getPlayers() as $player) {
+            if($player->getXuid() !== $killer->getXuid())
+                $player->batchDataPacket($sound);
+        }
 	}
 }

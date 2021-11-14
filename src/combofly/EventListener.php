@@ -102,6 +102,7 @@ class EventListener implements Listener {
                 $event->setCancelled();
                 break;
             case EntityDamageEvent::CAUSE_VOID:
+                $event->setCancelled();
                 Arena::getInstance()->quitPlayer($player);
                 Arena::getInstance()->broadcast("§r§4{$died->getName()} §r§7was killed by the void.");
                 break;
@@ -120,7 +121,9 @@ class EventListener implements Listener {
 
             Arena::getInstance()->addKill($damager, $player);
 
-            Utils::strike
+            Utils::strikeLightning($player, $damager);
+            $damager->dataPacket(Utils::addSound($damager, "random.pop"));
+            
             $player->sendTitle("§l§cYou died!", "§7Good luck next time.");
         }
     }
