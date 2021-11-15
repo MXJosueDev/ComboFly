@@ -14,22 +14,24 @@ declare(strict_types=1);
 
 namespace combofly\entity;
 
+use pocketmine\level\{Position, Level};
 use pocketmine\entity\Entity;
+use pocketmine\math\Vector3;
 
 class EntityManager {
 
     public function setJoinNPC(Player $player): void {
         $nbt = Entity::createBaseNBT(new Vector3($player->getX(), $player->getY(), $player->getZ()));
-		$nbt->setTag(clone $player->namedtag->getCompoundTag("Skin"));
+        $nbt->setTag(clone $player->namedtag->getCompoundTag("Skin"));
 
-		$human = new JoinEntity($player->getLevel(), $nbt);
-		$human->setNameTag("");
-		$human->setNameTagVisible(true);
-		$human->setNameTagAlwaysVisible(true);
-		$human->yaw = $player->getYaw();
-		$human->pitch = $player->getPitch();
+	$human = new JoinEntity($player->getLevel(), $nbt);
+	$human->setNameTag("");
+	$human->setNameTagVisible(true);
+	$human->setNameTagAlwaysVisible(true);
+	$human->yaw = $player->getYaw();
+	$human->pitch = $player->getPitch();
 
-		$human->spawnToAll();
+	$human->spawnToAll();
     }
 
     public function removeJoinNPC(JoinEntity $entity): void {
