@@ -36,8 +36,8 @@ class ConfigManager {
         return self::getDataFolder() . str_replace(["/"], [DIRECTORY_SEPARATOR], $path);
     }
 
-    public static function getValue(string $key) {
-        return self::getConfig()->get($key);
+    public static function getValue(string $key, $default = null) {
+        return self::getConfig()->get($key, $default);
     }
 
     public static function setValue(string $key, $value) {

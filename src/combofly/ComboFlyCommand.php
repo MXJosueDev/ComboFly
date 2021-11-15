@@ -39,13 +39,13 @@ class ComboFlyCommand extends PluginCommand {
         switch($subCommand) {
             case "help":
                 $sender->sendMessage("
-                §7============ §bCombo§3Fly §7============§r\n
-                §r/{$label} help: §r§c
-                §r/{$label} join§7: §r§c
-                §r/{$label} join§7: §r§c 
-                §r/{$label} join§7: §r§c
-                §r/{$label} join§7: §r§c
-                §7============ §bCombo§3Fly §7============§r\n
+                §7=================== §l§bCombo§3Fly §r§7===================§r\n
+                §r/{$label} help: §r§cGet help on the sub-commands.§r\n
+                §r/{$label} join§7: §r§cJoin the arena by means of a command.§r\n
+                §r/{$label} setarena§7: §r§cSet where players appear in the arena.§r\n
+                §r/{$label} setlobby§7: §r§cSet where players appear when exiting the arena.§r\n
+                §r/{$label} setkit§7: §r§cConfigure the kit with which the players appear in the arena (The kit will be configured with your inventory).§r\n
+                §7=================== §l§bCombo§3Fly §r§7===================§r\n
                 ");
                 break;
             case "join":

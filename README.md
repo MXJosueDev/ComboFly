@@ -8,28 +8,6 @@ It is currently under development. ✔
 
 Install the file named `ComboFly.phar` in the`/home/plugins/` folder, you can download this file from [Poggit](https://poggit.pmmp.io/plugins)
 
-## Features
-
-| List |
-|-|
-| Economy Integration |
-| Scoreboard Support |
-| Saves Players by UUID |
-| Json Provider Support |
-| UI |
-| Join Entity |
-| Custom Kit |
-
-## TODO's
-
-| List |
-|-|
-| Spectator mode |
-| SQLite3 Support |
-| MySQL Support |
-| GUI & UI |
-| Tops Floating Text |
-
 ## Commands
 
 ### Command info
@@ -58,6 +36,27 @@ Install the file named `ComboFly.phar` in the`/home/plugins/` folder, you can do
 | **combofly.command.setarena** | Allows set where players appear in the arena. |
 | **combofly.command.setlobby** | Allows set where players appear when exiting the arena. |
 | **combofly.command.setkit** | Allows configure the kit with which the players appear in the arena. |
+
+## Features
+
+| List |
+|-|
+| Economy Integration |
+| Scoreboard Support |
+| Saves Players by UUID |
+| Json Provider Support |
+| UI |
+| Join NPC |
+| Custom Kit |
+
+## TODO's
+
+| List |
+|-|
+| Spectator mode |
+| SQLite3 Support |
+| MySQL Support |
+| Tops Floating Text |
 
 ## Contributing
 

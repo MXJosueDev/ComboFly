@@ -22,7 +22,7 @@ class PlayerData implements JsonSerializable {
     public static function generateBasicData(Player $player): array {
         return [
             "player" => $player->getName(),
-            "xuid"   => $player->getXuid(),
+            "uuid"   => $player->getUniqueId()->toString(),
             "kills"  => 0,
             "deaths" => 0
         ];
@@ -39,14 +39,14 @@ class PlayerData implements JsonSerializable {
             $this->save();
         }
 
-        $file = file_get_contents(ConfigManager::getPath("data/{$player->getXuid()}"));
+        $file = file_get_contents(ConfigManager::getPath("data/{$player->getUniqueId()->toString()}"));
         $this->data = json_decode($file, true);
         
         $this->updateData();
     }
 
-    public function getXuid() {
-        return $this->get("xuid");
+    public function getUuid() {
+        return $this->get("uuid");
     }
 
     public function updateData(): void {
@@ -60,7 +60,7 @@ class PlayerData implements JsonSerializable {
     }
 
     public function getPath(): string {
-        return ConfigManager::getPath("data/{$this->getPlayer()->getXuid()}");
+        return ConfigManager::getPath("data/{$this->getPlayer()->getUniqueId()->toString()}");
     }
 
     public function set(string $key, $value): void {

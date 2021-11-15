@@ -12,20 +12,19 @@ declare(strict_types=1);
  *                                            |___/ 
  */
 
-namespace combofly\tasks;
+namespace combofly\entity;
 
-use combofly\Loader;
-use combofly\entity\JoinEntity;
-use pocketmine\scheduler\Task;
+use pocketmine\entity\Human;
 
-class UpdateEntityTask extends Task {
+class JoinEntity extends Human {
 
-    public function onRun(int $_) {
-        foreach(Loader::getServer()->getLevels() as $level) {
-            foreach($level->getEntities() as $entity) {
-                if($entity instanceof JoinEntity)
-                    $entity->update();
-            }
-        }
+    public function update(): void {
+        $entity->setNameTag($this::getNameTagCustom());
+        $entity->setNameTagAlwaysVisible(true);
+        $entity->setScale(1);
     }
+
+    public function getNameTagCustom(): string {
+        // TODO
+    } 
 }

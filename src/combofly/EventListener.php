@@ -33,14 +33,9 @@ class EventListener implements Listener {
     public function onPlayerJoin(PlayerJoinEvent $event): void {
         $player = $event->getPlayer();
 
-        if(!$player->isAuthenticated()) {
-            $player->kick("%disconnectionScreen.notAuthenticated", false);
-            return;
-        }
-
         $playerData = new PlayerData($player);
 
-        Arena::getInstance()->data[$player->getXuid()] = $playerData;  
+        Arena::getInstance()->data[$player->getUniqueId()->toString()] = $playerData;  
     }
 
     public function onPlayerQuit(PlayerQuitEvent $event): void {
@@ -49,7 +44,7 @@ class EventListener implements Listener {
         if(Arena::getInstance()->isPlayer($player))
             Arena::getInstance()->quitPlayer($player, false);
 
-        unset(Arena::getInstance()->data[$player->getXuid()]);
+        unset(Arena::getInstance()->data[$player->getUniqueId()->toString()]);
     }
 
     public function onPlayerExhaust(PlayerExhaustEvent $event): void {
@@ -85,7 +80,7 @@ class EventListener implements Listener {
         if(!$player instanceof Player || !Arena::getInstance()->isPlayer($player))
             return;
 
-        if($event->getTarget()->getFolderName() !== ConfigManager::getValue("arena-level")) {
+        if($event->getTarget()->getFolderName() !== ConfigManager::getValue("arena-level", false)) {
             Arena::getInstance()->quitPlayer($player, false);
         }
     }
@@ -113,7 +108,7 @@ class EventListener implements Listener {
         $damager = $event->getDamager();
 
         $event->setCancelled(false);
-        $event->setKnockBack(ConfigManager::getValue("knockback"));
+        $event->setKnockBack(intval(ConfigManager::getValue("knockback", 0.25)));
 
         if($player->getHealth() - $event->getFinalDamage() <= 0) {
             Arena::getInstance()->quitPlayer($player);

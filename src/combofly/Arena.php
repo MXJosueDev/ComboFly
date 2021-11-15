@@ -45,7 +45,7 @@ class Arena {
         Loader::getInstance()->getServer()->getPluginManager()->registerEvents(new EventListener(), $this);
         
         // TODO:
-        Loader::getInstance()->getScheduler()->scheduleRepeatingTask(new ScoreboardTask(), ConfigManager::getValue("scoreboard-update-interval") * 20);
+        Loader::getInstance()->getScheduler()->scheduleRepeatingTask(new ScoreboardTask(), ConfigManager::getValue("scoreboard-update-interval", 1) * 20);
         Loader::getInstance()->getScheduler()->scheduleRepeatingTask(new UpdateEntityTask(), 20);
 
         // TODO:
@@ -61,7 +61,7 @@ class Arena {
     }
 
     public function loadArena(): void {
-        if(!ConfigManager::getValue("arena-level"))
+        if(!ConfigManager::getValue("arena-level", false))
             return;
     
         Loader::getServer()->loadLevel(ConfigManager::getValue("arena-level"));
@@ -79,10 +79,10 @@ class Arena {
     }
 
     public function loadLobby(): void {
-        if(!ConfigManager::getValue("lobby-level"))
+        if(!ConfigManager::getValue("lobby-level", false))
             return;
     
-        Loader::getServer()->loadLevel(ConfigManager::getValue("lobby-level"));
+        Loader::getServer()->loadLevel(ConfigManager::getValue("lobby-level", false));
     }
     
     public function setLobby(Position $pos): void {
@@ -97,17 +97,17 @@ class Arena {
     }
 
     public function isArenaLoaded(): bool {
-        if(!ConfigManager::getValue("arena-level"))
+        if(!ConfigManager::getValue("arena-level", false))
             return false;
 
-        return Loader::getServer()->isLevelLoaded(ConfigManager::getValue("arena-level"));
+        return Loader::getServer()->isLevelLoaded(ConfigManager::getValue("arena-level", false));
     }
 
     public function isLobbyLoaded(): bool {
-        if(!ConfigManager::getValue("lobby-level"))
+        if(!ConfigManager::getValue("lobby-level", false))
             return true;
 
-        return Loader::getServer()->isLevelLoaded(ConfigManager::getValue("lobby-level"));
+        return Loader::getServer()->isLevelLoaded(ConfigManager::getValue("lobby-level", false));
     }
 
     public function addPlayer(Player $player): void {
@@ -120,13 +120,13 @@ class Arena {
             return;
         }
 
-        $this->players[$player->getXuid()] = $player;
+        $this->players[$player->getUniqueId()->toString()] = $player;
         
         Utils::resetPlayer($player);
         $this->giveKit($player);
 
-        $level = ConfigManager::getValue("arena-level");
-        $vector = ConfigManager::getValue("arena-pos");
+        $level = ConfigManager::getValue("arena-level", false);
+        $vector = ConfigManager::getValue("arena-pos", ["x" => 0, "y" => 0, "z" => 0]);
         $x = (float) $vector["x"];
         $y = (float) $vector["y"];
         $z = (float) $vector["z"];
@@ -141,7 +141,7 @@ class Arena {
 
         Utils::resetPlayer($player);
 
-        if(!ConfigManager::getValue("lobby-level")) {
+        if(!ConfigManager::getValue("lobby-level", false)) {
             $player->teleport(Loader::getServer()->getDefaultLevel()->getSafeSpawn());
         } else {
             $this->loadLobby();
@@ -149,8 +149,8 @@ class Arena {
             if(!$this->isLobbyLoaded()) {
                 $player->teleport(Loader::getServer()->getDefaultLevel()->getSafeSpawn());
             } else {
-                $level = ConfigManager::getValue("lobby-level");
-                $vector = ConfigManager::getValue("lobby-pos");
+                $level = ConfigManager::getValue("lobby-level", false);
+                $vector = ConfigManager::getValue("lobby-pos", ["x" => 0, "y" => 0, "z" => 0]);
                 $x = (float) $vector["x"];
                 $y = (float) $vector["y"];
                 $z = (float) $vector["z"];
@@ -159,14 +159,14 @@ class Arena {
             }
         }
 
-        unset($this->players[$player->getXuid()]);
+        unset($this->players[$player->getUniqueId()->toString()]);
 
         if(!$isDied)
             $this->broadcast("§c{$player->getName()} §r§7left the arena!");
     }
 
     public function isPlayer(Player $player): bool {
-        return isset($this->players[$player->getXuid()]);
+        return isset($this->players[$player->getUniqueId()->toString()]);
     }
 
     public function getAllPlayers(): array {
@@ -188,11 +188,11 @@ class Arena {
     }
 
     public function getPlayerData(Player $player): ?PlayerData {
-        if(!isset($this->data[$player->getXuid()])) {
+        if(!isset($this->data[$player->getUniqueId()->toString()])) {
             throw new \Exception("Player data was not found.");
         }
 
-        return $this->data[$player->getXuid()];
+        return $this->data[$player->getUniqueId()->toString()];
     }
 
     public function broadcast(string $text, $type = self::MESSAGE): void {

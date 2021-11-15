@@ -80,7 +80,7 @@ class Utils {
         $sound = self::addSound($location, "ambient.weather.thunder");
 
         foreach($level->getPlayers() as $player) {
-            if($player->getXuid() !== $killer->getXuid())
+            if($player->getUniqueId()->toString() !== $killer->getUniqueId()->toString())
                 $player->batchDataPacket($sound);
         }
 	}

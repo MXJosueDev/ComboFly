@@ -23,6 +23,10 @@ provider: json
 # - Arena settings. -
 # -------------------
 
+# Knockback to be used in the arena.
+# Default: 0.25
+knockback: 0.25
+
 # Level the player will be teleported to (set to false to disable the arena).
 # Default: false
 arena-level: false
@@ -48,6 +52,14 @@ lobby-pos:
   x: 0
   y: 0
   z: 0
+
+# ----------------------
+# - Entities settings. -
+# ----------------------
+
+# If activated the NPC will follow you with his eyes (It can cause lag)
+# Default: true
+npc-rotation: true
 
 # ------------------------
 # - Scoreboard settings. -
