@@ -14,17 +14,38 @@ declare(strict_types=1);
 
 namespace combofly\entity;
 
+use combofly\Arena;
+use combofly\utils\ConfigManager;
+use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\entity\Human;
 
 class JoinEntity extends Human {
 
     public function update(): void {
-        $entity->setNameTag($this::getNameTagCustom());
-        $entity->setNameTagAlwaysVisible(true);
-        $entity->setScale(1);
+        $this->setNameTag($this->getNameTagCustom());
+        $this->setNameTagAlwaysVisible(true);
+        $this->setScale(1);
+        $this->setImmobile(true);
     }
 
     public function getNameTagCustom(): string {
-        // TODO
-    } 
+        $replace = [
+            "{playing}"      => count(Arena::getInstance()->getAllPlayers());
+            "{arena_status}" => Arena::getInstance()->isArenaLoaded() ? "§aOnline" : "§cOffline",
+            "{line}"         => "\n",
+            "&"              => "§"
+        ];
+
+        return str_replace(array_keys($replace), array_values($replace), ConfigManager::getValue("join-npc-nametag", "&l&bCombo&3Fly{line}&r&fStatus&7: {arena_status}{line}&r&fPlaying&7: &c{playing}"));
+    }
+
+    public function attack(EntityDamageEvent $source): void {
+        if($source->getCause() == EntityDamageEvent::CAUSE_FALL) {
+            $this->close();
+            return;
+        }
+        
+        $source->setCancelled();
+        parent::attack();
+    }
 }

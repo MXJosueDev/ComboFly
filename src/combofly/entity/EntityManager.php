@@ -20,19 +20,15 @@ class EntityManager {
 
     public function setJoinNPC(Player $player): void {
         $nbt = Entity::createBaseNBT(new Vector3($player->getX(), $player->getY(), $player->getZ()));
-		$nbt->setTag(clone $player->namedtag->getCompoundTag("Skin"));
-
-		$human = new JoinEntity($player->getLevel(), $nbt);
-		$human->setNameTag("");
-		$human->setNameTagVisible(true);
-		$human->setNameTagAlwaysVisible(true);
-		$human->yaw = $player->getYaw();
-		$human->pitch = $player->getPitch();
-
-		$human->spawnToAll();
-    }
-
-    public function removeJoinNPC(JoinEntity $entity): void {
-        $entity->close();
+        $nbt->setTag(clone $player->namedtag->getCompoundTag("Skin"));
+        
+        $human = new JoinEntity($player->getLevel(), $nbt);
+        $human->setNameTag("");
+        $human->setNameTagVisible(true);
+        $human->setNameTagAlwaysVisible(true);
+        $human->yaw = $player->getYaw();
+        $human->pitch = $player->getPitch();
+        
+        $human->spawnToAll();
     }
 }

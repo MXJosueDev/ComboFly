@@ -52,36 +52,4 @@ lobby-pos:
   x: 0
   y: 0
   z: 0
-
-# ----------------------
-# - Entities settings. -
-# ----------------------
-
-# If activated the NPC will follow you with his eyes (It can cause lag)
-# Default: true
-npc-rotation: true
-
-# ------------------------
-# - Scoreboard settings. -
-# ------------------------
-
-# Select the time it will take for the scoreboard to update (in seconds).
-# Default: 1
-scoreboard-update-interval: 1
-
-# Scoreboard title that will be shown to the player (sidebar).
-# You can simplify '§' as '&'
-scoreboard-title: "&l&bCombo&3Fly"
-
-# Lines that will be shown to the player on the scoreboard.
-#  Important things:
-#   -> The scoreboard are in ascending order. From 1-15
-#      From down to up.
-#   -> We have limited empty spaces due to mojang
-#   -> They must be in array.
-#   -> You can simplify '§' as '&'
-#   -> The maximum arrays in one scoreboard is 15, Please follow this
-#      otherwise we will complain about it in console.
-scoreboard-lines:
-  - "Test line"
 ...

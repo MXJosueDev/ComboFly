@@ -36,13 +36,13 @@ class ConfigManager {
         return self::getDataFolder() . str_replace(["/"], [DIRECTORY_SEPARATOR], $path);
     }
 
-    public static function getValue(string $key, $default = null) {
-        return self::getConfig()->get($key, $default);
+    public static function getValue(string $key, $default = null, string $file = "config.yml") {
+        return self::getConfig($file)->get($key, $default);
     }
 
-    public static function setValue(string $key, $value) {
-        self::getConfig()->set($key, $value);
-        self::getConfig()->save();
+    public static function setValue(string $key, $value, string $file = "config.yml") {
+        self::getConfig($file)->set($key, $value);
+        self::getConfig($file)->save();
     }
 
     public static function saveFile(string $filePath): void {

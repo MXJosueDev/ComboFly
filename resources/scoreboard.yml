@@ -1,0 +1,37 @@
+---
+#    _____                _           ______ _       
+#   / ____|              | |         |  ____| |      
+#  | |     ___  _ __ ___ | |__   ___ | |__  | |_   _ 
+#  | |    / _ \| '_ ` _ \| '_ \ / _ \|  __| | | | | |
+#  | |___| (_) | | | | | | |_) | (_) | |    | | |_| |
+#   \_____\___/|_| |_| |_|_.__/ \___/|_|    |_|\__, |
+#                                               __/ |
+#                                              |___/ 
+
+# ------------------------
+# - Scoreboard settings. -
+# ------------------------
+
+# Select the time it will take for the scoreboard to update (in seconds).
+# Default: 1
+scoreboard-update-interval: 1
+
+# Scoreboard title that will be shown to the player (sidebar).
+# You can simplify '§' as '&'
+scoreboard-title: "&l&bCombo&3Fly"
+
+# Lines that will be shown to the player on the scoreboard.
+# You can simplify '§' as '&'
+#  - Important things:
+#   -> The scoreboard are in ascending order. From 1-15
+#      From down to up.
+#   -> We have limited empty spaces due to mojang
+#   -> They must be in array.
+#   -> You can simplify '§' as '&'
+#   -> The maximum arrays in one scoreboard is 15, Please follow this
+#      otherwise we will complain about it in console.
+#
+#  - Tags information.
+scoreboard-lines:
+  - "Test line"
+...

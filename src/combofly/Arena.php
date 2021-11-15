@@ -45,7 +45,7 @@ class Arena {
         Loader::getInstance()->getServer()->getPluginManager()->registerEvents(new EventListener(), $this);
         
         // TODO:
-        Loader::getInstance()->getScheduler()->scheduleRepeatingTask(new ScoreboardTask(), ConfigManager::getValue("scoreboard-update-interval", 1) * 20);
+        Loader::getInstance()->getScheduler()->scheduleRepeatingTask(new ScoreboardTask(), ConfigManager::getValue("scoreboard-update-interval", 1, "scoreboard.yml") * 20);
         Loader::getInstance()->getScheduler()->scheduleRepeatingTask(new UpdateEntityTask(), 20);
 
         // TODO:
@@ -172,7 +172,7 @@ class Arena {
     public function getAllPlayers(): array {
         $players = [];
 
-        foreach($this->players as $xuid => $player) {
+        foreach($this->players as $uuid => $player) {
             $players[] = $player; 
         }
 

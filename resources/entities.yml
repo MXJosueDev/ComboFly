@@ -1,0 +1,27 @@
+---
+#    _____                _           ______ _       
+#   / ____|              | |         |  ____| |      
+#  | |     ___  _ __ ___ | |__   ___ | |__  | |_   _ 
+#  | |    / _ \| '_ ` _ \| '_ \ / _ \|  __| | | | | |
+#  | |___| (_) | | | | | | |_) | (_) | |    | | |_| |
+#   \_____\___/|_| |_| |_|_.__/ \___/|_|    |_|\__, |
+#                                               __/ |
+#                                              |___/ 
+
+# ----------------------
+# - Entities settings. -
+# ----------------------
+
+# Configure the NameTag that the JoinNPC will have.
+# You can simplify '§' as '&'
+# You can use '{line}' to add a line break.
+#  - Tags information.
+#   - {playing}:      Shows the number of current players in the arena.
+#   - {arena_status}: Shows the status of the arena, this will
+#                     return either 'Online' or 'Offline'.
+join-npc-nametag: "&l&bCombo&3Fly{line}&r&fStatus&7: {arena_status}{line}&r&fPlaying&7: &c{playing}"
+
+# If activated the NPC will follow you with his eyes (It can cause lag).
+# Default: true
+npc-rotation: true
+...

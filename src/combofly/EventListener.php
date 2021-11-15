@@ -108,7 +108,7 @@ class EventListener implements Listener {
         $damager = $event->getDamager();
 
         $event->setCancelled(false);
-        $event->setKnockBack(intval(ConfigManager::getValue("knockback", 0.25)));
+        $event->setKnockBack((int) ConfigManager::getValue("knockback", 0.25));
 
         if($player->getHealth() - $event->getFinalDamage() <= 0) {
             Arena::getInstance()->quitPlayer($player);
