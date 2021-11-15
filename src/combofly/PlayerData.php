@@ -17,7 +17,7 @@ namespace combofly;
 use combofly\utils\ConfigManager;
 use pocketmine\Player;
 
-class PlayerData implements JsonSerializable {
+class PlayerData implements \JsonSerializable {
 
     public static function generateBasicData(Player $player): array {
         return [

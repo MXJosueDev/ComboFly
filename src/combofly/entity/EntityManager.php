@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace combofly\entity;
 
+use pocketmine\Player;
 use pocketmine\entity\Entity;
 
 class EntityManager {
