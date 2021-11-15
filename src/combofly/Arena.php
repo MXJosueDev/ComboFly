@@ -18,7 +18,7 @@ use combofly\tasks\ScoreboardTask;
 use combofly\tasks\UpdateEntityTask;
 use combofly\utils\ConfigManager;
 use combofly\utils\Utils;
-use combofly\entity\NPCEntity;
+use combofly\entity\JoinEntity;
 use onebone\economyapi\EconomyAPI;
 use pocketmine\Player;
 use pocketmine\entity\Entity;
@@ -48,8 +48,7 @@ class Arena {
         Loader::getInstance()->getScheduler()->scheduleRepeatingTask(new ScoreboardTask(), ConfigManager::getValue("scoreboard-update-interval", 1, "scoreboard.yml") * 20);
         Loader::getInstance()->getScheduler()->scheduleRepeatingTask(new UpdateEntityTask(), 20);
 
-        // TODO:
-        Entity::registerEntity(NPCEntity::class, true, ["ComboFlyJoinNPC", "combofly:join_npc"]);
+        Entity::registerEntity(JoinEntity::class, true, ["ComboFlyJoinNPC", "combofly:join_npc"]);
 
         $this->loadArena();
 

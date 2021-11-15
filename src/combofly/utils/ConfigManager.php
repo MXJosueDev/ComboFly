@@ -54,6 +54,6 @@ class ConfigManager {
     }
 
     public static function getPrefix(): string {
-        return self::getDefConfig()->get("prefix");
+        return self::getValue("prefix");
     }
 }

@@ -36,7 +36,8 @@ class Utils {
         $player->removeAllEffects();
         $player->setHealth($player->getMaxHealth()) ;    
         
-        $player->setXpAndProgress(0, 0);
+        $player->setXpLevel(0);
+        $player->setXpProgress(0);
 
         $player->setAllowFlight(false);
         $player->setFlying(false);
@@ -69,7 +70,7 @@ class Utils {
 		$light->entityRuntimeId = Entity::$entityCount++;
 		$light->entityUniqueId = 0;
 
-		$light->position = $location->getPosition();
+		$light->position = $location->asPosition();
 		$light->motion = new Vector3();
 
 		$light->yaw = $location->getYaw();
