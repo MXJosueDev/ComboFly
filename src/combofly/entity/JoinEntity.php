@@ -30,7 +30,7 @@ class JoinEntity extends Human {
 
     public function getNameTagCustom(): string {
         $replace = [
-            "{playing}"      => count(Arena::getInstance()->getAllPlayers());
+            "{playing}"      => count(Arena::getInstance()->getAllPlayers()),
             "{arena_status}" => Arena::getInstance()->isArenaLoaded() ? "§aOnline" : "§cOffline",
             "{line}"         => "\n",
             "&"              => "§"
