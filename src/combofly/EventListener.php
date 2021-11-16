@@ -32,6 +32,19 @@ class EventListener implements Listener {
 
     public static $remove = [];
 
+    public static function setRemoveEntity(Player $player): void {
+        self::$remove[$player->getUniqueId()->toString()] = $player;
+    }
+
+    public static function unsetRemoveEntity(Player $player): void {
+        if(self::isRemoveEntity($player))
+            unset(self::$remove[$player->getUniqueId()->toString()]);
+    }
+
+    public static function isRemoveEntity(Player $player): bool {
+        return isset(self::$remove[$player->getUniqueId()->toString()]);
+    }
+
     public function onPlayerJoin(PlayerJoinEvent $event): void {
         $player = $event->getPlayer();
 
@@ -101,7 +114,7 @@ class EventListener implements Listener {
             case EntityDamageEvent::CAUSE_VOID:
                 $event->setCancelled();
                 Arena::getInstance()->quitPlayer($player);
-                Arena::getInstance()->broadcast("§r§4{$died->getName()} §r§7was killed by the void.");
+                Arena::getInstance()->broadcast("§r§4{$player->getName()} §r§7was killed by the void.");
                 break;
         }
 
@@ -114,7 +127,7 @@ class EventListener implements Listener {
 
         if($player->getHealth() - $event->getFinalDamage() <= 0) {
             Arena::getInstance()->quitPlayer($player);
-            Arena::getInstance()->broadcast("§r§4{$died->getName()} §r§7was killed by §r§c{$killer->getName()}");
+            Arena::getInstance()->broadcast("§r§4{$player->getName()} §r§7was killed by §r§c{$damager->getName()}");
 
             Arena::getInstance()->addKill($damager, $player);
 
@@ -134,7 +147,7 @@ class EventListener implements Listener {
 
         if($entity instanceof JoinEntity) {
             $entity->close();
-            // TODO: Send removed entity message
+            $player->sendMessage(ConfigManager::getPrefix() . "§aThe NPC removed successfully.");
         }
     }
 
@@ -154,18 +167,5 @@ class EventListener implements Listener {
             return;
 
         $event->setCancelled();
-    }
-
-    public static function setRemoveEntity(Player $player): void {
-        self::$remove[$player->getUniqueId()->toString()] = $player;
-    }
-
-    public static function unsetRemoveEntity(Player $player): void {
-        if(self::isRemoveEntity($player))
-            unset(self::$remove[$player->getUniqueId()->toString()]);
-    }
-
-    public static function isRemoveEntity(Player $player): bool {
-        return isset(self::$remove[$player->getUniqueId()->toString()]);
     }
 }
