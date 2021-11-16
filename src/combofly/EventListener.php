@@ -165,7 +165,7 @@ class EventListener implements Listener {
             unset(self::$remove[$player->getUniqueId()->toString()]);
     }
 
-    public static function isRemoveEntity(Player $player): void {
+    public static function isRemoveEntity(Player $player): bool {
         return isset(self::$remove[$player->getUniqueId()->toString()]);
     }
 }
