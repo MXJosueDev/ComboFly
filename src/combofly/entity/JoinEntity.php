@@ -40,7 +40,7 @@ class JoinEntity extends Human {
     }
 
     public function attack(EntityDamageEvent $source): void {
-        if($source->getCause() == EntityDamageEvent::CAUSE_FALL) {
+        if($source->getCause() == EntityDamageEvent::CAUSE_VOID) {
             $this->close();
             return;
         }

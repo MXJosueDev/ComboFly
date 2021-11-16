@@ -36,6 +36,8 @@ class ComboFlyCommand extends PluginCommand {
 
         $subCommand = $args[0];
 
+        // TODO: Add remove entity sub-command
+
         switch($subCommand) {
             case "help":
                 $sender->sendMessage("

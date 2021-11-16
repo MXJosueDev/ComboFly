@@ -30,6 +30,8 @@ use pocketmine\event\block\BlockBreakEvent;
 
 class EventListener implements Listener {
 
+    public static $remove = [];
+
     public function onPlayerJoin(PlayerJoinEvent $event): void {
         $player = $event->getPlayer();
 
@@ -123,6 +125,19 @@ class EventListener implements Listener {
         }
     }
 
+    public function onEntityRemove(EntityDamageByEntityEvent $event): void {
+        $entity = $event->getEntity();
+        $player = $event->getDamager();
+        
+        if(!$player instanceof Player || !self::isRemoveEntity($player))
+            return;
+
+        if($entity instanceof JoinEntity) {
+            $entity->close();
+            // TODO: Send removed entity message
+        }
+    }
+
     public function onBlockPlace(BlockPlaceEvent $event): void {
         $player = $event->getPlayer();
 
@@ -139,5 +154,18 @@ class EventListener implements Listener {
             return;
 
         $event->setCancelled();
+    }
+
+    public static function setRemoveEntity(Player $player): void {
+        self::$remove[$player->getUniqueId()->toString()] = $player;
+    }
+
+    public static function unsetRemoveEntity(Player $player): void {
+        if(self::isRemoveEntity($player))
+            unset(self::$remove[$player->getUniqueId()->toString()]);
+    }
+
+    public static function isRemoveEntity(Player $player): void {
+        return isset(self::$remove[$player->getUniqueId()->toString()]);
     }
 }
