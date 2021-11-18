@@ -19,7 +19,9 @@ use pocketmine\Player;
 
 class PlayerData implements \JsonSerializable {
 
-    public static function generateBasicData(Player $player, string $key = null): array {
+    public static function generateBasicData(Player $player, string $key = null) {
+        // TODO: return value if player is null
+        
         $def = [
             "player" => $player->getName(),
             "uuid"   => $player->getUniqueId()->toString(),
@@ -75,7 +77,7 @@ class PlayerData implements \JsonSerializable {
 
     public function get(string $key) {
         // TODO: Add default values if undefined
-        return $this->data[$key];
+        return isset($this->data[$key]) ? $this->data[$key] : self::generateBasicData(null, $key);
     }
 
     public function save(): void {

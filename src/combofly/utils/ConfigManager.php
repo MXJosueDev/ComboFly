@@ -54,6 +54,6 @@ class ConfigManager {
     }
 
     public static function getPrefix(): string {
-        return self::getValue("prefix");
+        return str_replace(["§"], ["&"], self::getValue("prefix")) . " §r";
     }
 }
