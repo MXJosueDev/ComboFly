@@ -89,7 +89,7 @@ class ComboFlyCommand extends PluginCommand {
                 if(!$this->checkConsole($sender)) return;
                 if(!$this->hasPermission($sender, "combofly.command.removejoin")) return;
 
-                EventListener::setRemoveEntity($player);
+                EventListener::setRemoveEntity($sender);
                 $sender->sendMessage(ConfigManager::getPrefix() . "§7Please hit the NPC you want to remove (Expires in 3 minutes).");
                 break;
             default:
