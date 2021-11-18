@@ -60,7 +60,6 @@ class ScoreboardAPI {
 
 		if($score > 15 || $score < 1){
 			throw new \Exception("Error, you exceeded the limit of parameters 1-15");
-			return;
 		}
 
 		$objectiveName = $this->getObjectiveName($player);

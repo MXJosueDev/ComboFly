@@ -46,6 +46,6 @@ class JoinEntity extends Human {
         }
         
         $source->setCancelled();
-        parent::attack();
+        parent::attack($source);
     }
 }

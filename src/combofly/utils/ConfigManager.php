@@ -29,7 +29,7 @@ class ConfigManager {
     }
 
     public static function getDataFolder(): string {
-        return Loader::getInstace()->getDataFolder();
+        return Loader::getInstance()->getDataFolder();
     }
 
     public static function getPath(string $path): string {
@@ -46,7 +46,7 @@ class ConfigManager {
     }
 
     public static function saveFile(string $filePath): void {
-        Loader::getInstace()->saveResource($filePath);
+        Loader::getInstance()->saveResource($filePath);
     }
 
     public static function getConfig(string $filePath = "config.yml"): Config {

@@ -14,7 +14,9 @@ declare(strict_types=1);
 
 namespace combofly;
 
+use combofly\utils\Utils;
 use combofly\utils\ConfigManager;
+use combofly\entity\JoinEntity;
 use pocketmine\Player;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerJoinEvent;
@@ -122,6 +124,9 @@ class EventListener implements Listener {
             return;
         $damager = $event->getDamager();
 
+        if(!$damager instanceof Player || !Arena::getInstance()->isPlayer($damager))
+            return;
+
         $event->setCancelled(false);
         $event->setKnockBack((int) ConfigManager::getValue("knockback", 0.25));
 
@@ -147,6 +152,7 @@ class EventListener implements Listener {
 
         if($entity instanceof JoinEntity) {
             $entity->close();
+            $this->unsetRemoveEntity($player);
             $player->sendMessage(ConfigManager::getPrefix() . "§aThe NPC removed successfully.");
         }
     }

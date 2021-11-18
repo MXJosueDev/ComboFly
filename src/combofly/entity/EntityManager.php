@@ -16,6 +16,7 @@ namespace combofly\entity;
 
 use pocketmine\Player;
 use pocketmine\entity\Entity;
+use pocketmine\math\Vector3;
 
 class EntityManager {
 

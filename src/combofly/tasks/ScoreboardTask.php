@@ -13,3 +13,13 @@ declare(strict_types=1);
  */
 
 namespace combofly\tasks;
+
+use combofly\Loader;
+use pocketmine\scheduler\Task;
+
+class ScoreboardTask extends Task {
+
+    public function onRun(int $_) {
+        // TODO:
+    }
+}

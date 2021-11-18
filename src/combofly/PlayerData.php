@@ -85,7 +85,7 @@ class PlayerData implements \JsonSerializable {
     }
 
     public function jsonSerialize() {
-        return $data;
+        return $this->data;
     }
 
     public function __destruct() {
