@@ -27,6 +27,8 @@ Install the file named `ComboFly.phar` in the`/home/plugins/` folder, you can do
 | **/combofly setarena** | Set where players appear in the arena. | combofly.command.setarena |
 | **/combofly setlobby** | Set where players appear when exiting the arena. | combofly.command.setlobby |
 | **/combofly setkit** | Configure the kit with which the players appear in the arena (The kit will be configured with your inventory). | combofly.command.setkit |
+| **/combofly setjoin** | Put the JoinNPC in your current location. | combofly.command.setjoin |
+| **/combofly removejoin** | Remove the JoinNPC (Hit it). | combofly.command.removejoin |
 
 ## Permissions
 
@@ -36,6 +38,8 @@ Install the file named `ComboFly.phar` in the`/home/plugins/` folder, you can do
 | **combofly.command.setarena** | Allows set where players appear in the arena. |
 | **combofly.command.setlobby** | Allows set where players appear when exiting the arena. |
 | **combofly.command.setkit** | Allows configure the kit with which the players appear in the arena. |
+| **combofly.command.setjoin** | Allows put the JoinNPC in your current location. |
+| **combofly.command.removejoin** | Allows remove the JoinNPC. |
 
 ## Features
 

@@ -35,8 +35,4 @@ class Loader extends PluginBase {
 
         (new Arena());
     }
-
-    public static function getServer(): Server {
-        return Server::getInstance();
-    }
 }

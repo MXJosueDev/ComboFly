@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace combofly;
 
 use combofly\utils\ConfigManager;
+use combofly\entity\EntityManager;
 use pocketmine\command\PluginCommand;
 use pocketmine\command\CommandSender;
 use pocketmine\Player;
@@ -36,8 +37,6 @@ class ComboFlyCommand extends PluginCommand {
 
         $subCommand = $args[0];
 
-        // TODO: Add remove entity sub-command
-
         switch($subCommand) {
             case "help":
                 $sender->sendMessage("
@@ -47,6 +46,8 @@ class ComboFlyCommand extends PluginCommand {
                 §r/{$label} setarena§7: §r§cSet where players appear in the arena.§r\n
                 §r/{$label} setlobby§7: §r§cSet where players appear when exiting the arena.§r\n
                 §r/{$label} setkit§7: §r§cConfigure the kit with which the players appear in the arena (The kit will be configured with your inventory).§r\n
+                §r/{$label} setjoin§7: §r§cPut the JoinNPC in your current location.§r\n
+                §r/{$label} removejoin§7: §r§cRemove the JoinNPC (Hit it).§r\n
                 §7=================== §l§bCombo§3Fly §r§7===================§r\n
                 ");
                 break;
@@ -76,6 +77,20 @@ class ComboFlyCommand extends PluginCommand {
 
                 Arena::getInstance()->setKit($sender);
                 $sender->sendMessage(ConfigManager::getPrefix() . "§7The arena kit was configured correctly.");
+                break;
+            case "setjoin":
+                if(!$this->checkConsole($sender)) return;
+                if(!$this->hasPermission($sender, "combofly.command.setjoin")) return;
+
+                EntityManager::setJoinNPC($sender);
+                $sender->sendMessage(ConfigManager::getPrefix() . "§7The JoinNPC was successfully placed.");
+                break;
+            case "removejoin":
+                if(!$this->checkConsole($sender)) return;
+                if(!$this->hasPermission($sender, "combofly.command.removejoin")) return;
+
+                EventListener::setRemoveEntity($player);
+                $sender->sendMessage(ConfigManager::getPrefix() . "§7Please hit the NPC you want to remove (Expires in 3 minutes).");
                 break;
             default:
                 $sender->sendMessage(ConfigManager::getPrefix() . "§7Please use §r'/{$label} help' §7to get help for the command.");

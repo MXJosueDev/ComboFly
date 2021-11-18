@@ -19,6 +19,7 @@ use combofly\utils\ConfigManager;
 use combofly\entity\JoinEntity;
 use pocketmine\Player;
 use pocketmine\event\Listener;
+use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\player\PlayerExhaustEvent;
@@ -35,7 +36,7 @@ class EventListener implements Listener {
     public static $remove = [];
 
     public static function setRemoveEntity(Player $player): void {
-        self::$remove[$player->getUniqueId()->toString()] = $player;
+        self::$remove[$player->getUniqueId()->toString()] = time();
     }
 
     public static function unsetRemoveEntity(Player $player): void {
@@ -150,11 +151,22 @@ class EventListener implements Listener {
         if(!$player instanceof Player || !self::isRemoveEntity($player))
             return;
 
+        $commandTime = self::$remove[$player->getUniqueId()->toString()];
+
+        if($commandTime > $commandTime + 60 * 3) {
+            self::unsetRemoveEntity($player);
+            return;
+        }
+
         if($entity instanceof JoinEntity) {
             $entity->close();
-            $this->unsetRemoveEntity($player);
+            self::unsetRemoveEntity($player);
             $player->sendMessage(ConfigManager::getPrefix() . "§aThe NPC removed successfully.");
         }
+    }
+
+    public function onPlayerMove(PlayerMoveEvent $event): void {
+        // TODO: NPC Rotation
     }
 
     public function onBlockPlace(BlockPlaceEvent $event): void {
