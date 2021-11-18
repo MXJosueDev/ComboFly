@@ -55,7 +55,7 @@ class Utils {
 		$pk->pitch = 1;
 
         if(!is_null($players))
-		    Loader::getServer()->broadcastPacket($players, $pk);
+		    Loader::getInstance()->getServer()->broadcastPacket($players, $pk);
 
         return $pk;
     } 
@@ -76,7 +76,7 @@ class Utils {
 		$light->yaw = $location->getYaw();
 		$light->pitch = $location->getPitch();
 
-		Loader::getServer()->broadcastPacket($level->getPlayers(), $light);
+		Loader::getInstance()->getServer()->broadcastPacket($level->getPlayers(), $light);
 		
         $sound = self::addSound($location, "ambient.weather.thunder");
 

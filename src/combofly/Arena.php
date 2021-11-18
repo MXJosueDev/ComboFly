@@ -52,7 +52,7 @@ class Arena {
 
         $this->loadArena();
 
-        if(!is_null(Loader::getServer()->getServer()->getPluginManager()->getPlugin("EconomyAPI"))) {
+        if(!is_null(Loader::getInstance()->getServer()->getPluginManager()->getPlugin("EconomyAPI"))) {
 			$this->economy = EconomyAPI::getInstance();
 		} else {
             Loader::getInstance()->getLogger()->alert("The EconomyAPI dependency was not found.");
@@ -63,7 +63,7 @@ class Arena {
         if(!ConfigManager::getValue("arena-level", false))
             return;
     
-        Loader::getServer()->loadLevel(ConfigManager::getValue("arena-level"));
+        Loader::getInstance()->getServer()->loadLevel(ConfigManager::getValue("arena-level"));
     }
 
     public function setArena(Position $pos): void {
@@ -81,7 +81,7 @@ class Arena {
         if(!ConfigManager::getValue("lobby-level", false))
             return;
     
-        Loader::getServer()->loadLevel(ConfigManager::getValue("lobby-level", false));
+        Loader::getInstance()->getServer()->loadLevel(ConfigManager::getValue("lobby-level", false));
     }
     
     public function setLobby(Position $pos): void {
@@ -99,14 +99,14 @@ class Arena {
         if(!ConfigManager::getValue("arena-level", false))
             return false;
 
-        return Loader::getServer()->isLevelLoaded(ConfigManager::getValue("arena-level", false));
+        return Loader::getInstance()->getServer()->isLevelLoaded(ConfigManager::getValue("arena-level", false));
     }
 
     public function isLobbyLoaded(): bool {
         if(!ConfigManager::getValue("lobby-level", false))
             return true;
 
-        return Loader::getServer()->isLevelLoaded(ConfigManager::getValue("lobby-level", false));
+        return Loader::getInstance()->getServer()->isLevelLoaded(ConfigManager::getValue("lobby-level", false));
     }
 
     public function addPlayer(Player $player): void {
@@ -141,12 +141,12 @@ class Arena {
         Utils::resetPlayer($player);
 
         if(!ConfigManager::getValue("lobby-level", false)) {
-            $player->teleport(Loader::getServer()->getDefaultLevel()->getSafeSpawn());
+            $player->teleport(Loader::getInstance()->getServer()->getDefaultLevel()->getSafeSpawn());
         } else {
             $this->loadLobby();
 
             if(!$this->isLobbyLoaded()) {
-                $player->teleport(Loader::getServer()->getDefaultLevel()->getSafeSpawn());
+                $player->teleport(Loader::getInstance()->getServer()->getDefaultLevel()->getSafeSpawn());
             } else {
                 $level = ConfigManager::getValue("lobby-level", false);
                 $vector = ConfigManager::getValue("lobby-pos", ["x" => 0, "y" => 0, "z" => 0]);

@@ -21,7 +21,7 @@ use pocketmine\scheduler\Task;
 class UpdateEntityTask extends Task {
 
     public function onRun(int $_) {
-        foreach(Loader::getServer()->getLevels() as $level) {
+        foreach(Loader::getInstance()->getServer()->getLevels() as $level) {
             foreach($level->getEntities() as $entity) {
                 if($entity instanceof JoinEntity)
                     $entity->update();
