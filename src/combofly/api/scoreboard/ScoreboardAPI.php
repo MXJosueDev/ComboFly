@@ -22,6 +22,10 @@ use pocketmine\network\mcpe\protocol\SetScorePacket;
 use pocketmine\network\mcpe\protocol\types\ScorePacketEntry;
 
 class ScoreboardAPI {
+
+	const DISPLAY_SLOT = "sidebar";
+	const CRITERIA_NAME = "dummy";
+	const SORT_ORDER = 0;
 	
 	private $scoreboards = [];
 	
@@ -31,13 +35,13 @@ class ScoreboardAPI {
 		}
 
 		$pk = new SetDisplayObjectivePacket();
-		$pk->displaySlot = "sidebar";
+		$pk->displaySlot = self::DISPLAY_SLOT;
 		$pk->objectiveName = $objectiveName;
 		$pk->displayName = $displayName;
-		$pk->criteriaName = "dummy";
-		$pk->sortOrder = 0;
+		$pk->criteriaName = self::CRITERIA_NAME;
+		$pk->sortOrder = self::SORT_ORDER;
 
-		$player->sendDataPacket($pk);
+		$player->batchDataPacket($pk);
 		$this->scoreboards[$player->getName()] = $objectiveName;
 	}
 	
@@ -48,7 +52,7 @@ class ScoreboardAPI {
 			$pk = new RemoveObjectivePacket();
 			$pk->objectiveName = $objectiveName;
 
-			$player->sendDataPacket($pk);
+			$player->batchDataPacket($pk);
 			unset($this->scoreboards[$player->getName()]);
 		}
 	}
@@ -75,7 +79,7 @@ class ScoreboardAPI {
 		$pk->type = $pk::TYPE_CHANGE;
 		$pk->entries[] = $entry;
 		
-        $player->sendDataPacket($pk);
+        $player->batchDataPacket($pk);
 	}
 	
 	public function getObjectiveName(Player $player): ?string {

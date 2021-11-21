@@ -19,15 +19,18 @@ use pocketmine\Player;
 
 class PlayerData implements \JsonSerializable {
 
-    public static function generateBasicData(Player $player, string $key = null) {
-        // TODO: return value if player is null
-        
+    public static function generateBasicData(Player $player = null, string $key = null) {
         $def = [
-            "player" => $player->getName(),
-            "uuid"   => $player->getUniqueId()->toString(),
+            "player" => "Unknown",
+            "uuid"   => "Unknown",
             "kills"  => 0,
             "deaths" => 0
         ];
+
+        if(!is_null($player)) {
+            $def["player"] = $player->getName();
+            $def["uuid"] = $player->getUniqueId()->toString();
+        }
 
         if(is_null($key))
             return $def;
@@ -59,7 +62,11 @@ class PlayerData implements \JsonSerializable {
     public function updateData(): void {
         $player = $this->getPlayer();
 
-        $this->set("player", $player->getName());
+        $updateKeys = ["player"];
+
+        foreach($updateKeys as $key) {
+            $this->set($key, self::generateBasicData($player, $key));
+        }
     }
 
     public function getPlayer(): Player {
@@ -76,7 +83,6 @@ class PlayerData implements \JsonSerializable {
     }
 
     public function get(string $key) {
-        // TODO: Add default values if undefined
         return isset($this->data[$key]) ? $this->data[$key] : self::generateBasicData(null, $key);
     }
 

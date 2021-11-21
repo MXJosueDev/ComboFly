@@ -23,6 +23,11 @@ provider: json
 # - Arena settings. -
 # -------------------
 
+# The money that will be given to the player when he kills another.
+# Set 0 to disable
+# Default: 20
+money-reward: 20
+
 # Knockback to be used in the arena.
 # Default: 0.25
 knockback: 0.25

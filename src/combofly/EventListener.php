@@ -30,6 +30,8 @@ use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\block\BlockPlaceEvent;
 use pocketmine\event\block\BlockBreakEvent;
+use pocketmine\network\mcpe\protocol\MovePlayerPacket;
+use pocketmine\math\Vector2;
 
 class EventListener implements Listener {
 
@@ -138,7 +140,7 @@ class EventListener implements Listener {
             Arena::getInstance()->addKill($damager, $player);
 
             Utils::strikeLightning($player, $damager);
-            $damager->dataPacket(Utils::addSound($damager, "random.pop"));
+            $damager->batchDataPacket(Utils::addSound($damager, "random.pop"));
             
             $player->sendTitle("§l§cYou died!", "§7Good luck next time.");
         }
@@ -153,20 +155,49 @@ class EventListener implements Listener {
 
         $commandTime = self::$remove[$player->getUniqueId()->toString()];
 
-        if($commandTime > $commandTime + 60 * 3) {
+        if($commandTime > ($commandTime + (60 * 3))) {
             self::unsetRemoveEntity($player);
             return;
         }
 
         if($entity instanceof JoinEntity) {
-            $entity->close();
+            $entity->flagForDespawn();
             self::unsetRemoveEntity($player);
             $player->sendMessage(ConfigManager::getPrefix() . "§aThe NPC removed successfully.");
         }
     }
 
     public function onPlayerMove(PlayerMoveEvent $event): void {
-        // TODO: NPC Rotation
+        $player = $event->getPlayer();
+
+        if(!ConfigManager::getValue("npc-rotation", true, "entities.yml"))
+            return;
+
+        $expandedBoundingBox = $player->getBoundingBox()->expandedCopy(15, 15, 15);
+        
+        foreach($player->getLevel()->getNearbyEntities($expandedBoundingBox, $player) as $entity) {
+            if($entity instanceof JoinEntity) {
+                $xdiff = $player->x - $entity->x;
+                $zdiff = $player->z - $entity->z;
+                $angle = atan2($zdiff, $xdiff);
+                $yaw = (($angle * 180) / M_PI) - 90;
+                $ydiff = $player->y - $entity->y;
+                $v = new Vector2($entity->x, $entity->z);
+                $dist = $v->distance($player->x, $player->z);
+                $angle = atan2($dist, $ydiff);
+                $pitch = (($angle * 180) / M_PI) - 90;
+        
+                $pk = new MovePlayerPacket();
+                $pk->entityRuntimeId = $entity->getId();
+                $pk->position = $entity->asVector3()->add(0, $entity->getEyeHeight(), 0);
+                $pk->yaw = $yaw;
+                $pk->pitch = $pitch;
+                $pk->headYaw = $yaw;
+                $pk->onGround = $entity->onGround;
+                
+                $player->batchDataPacket($pk);
+            }
+        }
     }
 
     public function onBlockPlace(BlockPlaceEvent $event): void {

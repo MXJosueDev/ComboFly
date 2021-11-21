@@ -19,7 +19,7 @@
 #   - {playing}:      Shows the number of current players in the arena.
 #   - {arena_status}: Shows the status of the arena, this will
 #                     return either 'Online' or 'Offline'.
-join-npc-nametag: "&l&bCombo&3Fly{line}&r&fStatus&7: {arena_status}{line}&r&fPlaying&7: &c{playing}"
+join-npc-nametag: "&l&bCombo&3Fly{line}&fStatus&7: {arena_status}{line}&fPlaying&7: &c{playing}{line}&eClick to join!"
 
 # If activated the NPC will follow you with his eyes (It can cause lag).
 # Default: true

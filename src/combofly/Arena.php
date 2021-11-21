@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace combofly;
 
 use combofly\tasks\ScoreboardTask;
-use combofly\tasks\UpdateEntityTask;
 use combofly\utils\ConfigManager;
 use combofly\utils\Utils;
 use combofly\entity\JoinEntity;
@@ -44,9 +43,7 @@ class Arena {
 
         Loader::getInstance()->getServer()->getPluginManager()->registerEvents(new EventListener(), $this);
         
-        // TODO:
         Loader::getInstance()->getScheduler()->scheduleRepeatingTask(new ScoreboardTask(), ConfigManager::getValue("scoreboard-update-interval", 1, "scoreboard.yml") * 20);
-        Loader::getInstance()->getScheduler()->scheduleRepeatingTask(new UpdateEntityTask(), 20);
 
         Entity::registerEntity(JoinEntity::class, true, ["ComboFlyJoinNPC", "combofly:join_npc"]);
 
@@ -216,7 +213,19 @@ class Arena {
         }
     }
 
+    public function getEconomy(): ?EconomyAPI {
+        return $this->economy;
+    }
+
     public function addKill(Player $killer, Player $died): void {
+        $moneyReward = (int) ConfigManager::getValue("money-reward", 20);
+        $economy = $this->getEconomy();
+
+        if(!is_null($economy) && $moneyReward > 0) {
+            $economy->addMoney($killer, $moneyReward);
+            $killer->sendPopup("§r§6+{$moneyReward} coins!");
+        }
+
         $killerData = $this->getPlayerData($killer);
         
         $killerData->set("kills", $killerData->get("kills") + 1);
