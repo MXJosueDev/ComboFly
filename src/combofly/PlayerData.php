@@ -41,7 +41,7 @@ class PlayerData implements \JsonSerializable {
     public $player;
     private $data;
 
-    public function __construct(Player $player) {
+    public function __construct(string $player) {
         $this->player = $player;
 
         if(!is_file($this->getPath())) {
@@ -69,8 +69,14 @@ class PlayerData implements \JsonSerializable {
         }
     }
 
-    public function getPlayer(): Player {
-        return $this->player;
+    public function getPlayer(): ?Player {
+        $player = Loader::getInstance()->getServer()->getPlayerExact($this->player);
+
+        if(is_null($player)) {
+            throw new Exception("The player must be online!");
+        }
+
+        return $player;
     }
 
     public function getPath(): string {
