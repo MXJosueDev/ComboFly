@@ -21,6 +21,7 @@ use combofly\entity\JoinEntity;
 use onebone\economyapi\EconomyAPI;
 use pocketmine\Player;
 use pocketmine\entity\Entity;
+use pocketmine\item\Item;
 use pocketmine\level\Position;
 use pocketmine\utils\SingletonTrait;
 
@@ -106,8 +107,18 @@ class Arena {
         return Loader::getInstance()->getServer()->isLevelLoaded(ConfigManager::getValue("lobby-level", false));
     }
 
-    public function addPlayer(Player $player): void {
-        if($this->isPlayer($player)) return;
+    public function respawn(Player $player): void {
+        if(!$this->isSpectator($player))
+            return;
+        
+        unset($this->spectators[$player->getUniqueId()->toString()]);
+
+        $this->addPlayer($player, true);
+    }
+
+    public function addPlayer(Player $player, bool $respawn = false): void {
+        if($this->isPlayer($player))
+            return;
         
         $this->loadArena();
 
@@ -129,11 +140,13 @@ class Arena {
 
         $player->teleport(new Position($level, $x, $y, $z));
 
-        $this->broadcast("§c{$player->getName()} §r§7joined the arena!");
+        if(!$respawn)
+            $this->broadcast("§c{$player->getName()} §r§7joined the arena!");
     }
 
     public function quitPlayer(Player $player, bool $isDied = true): void {
-        if(!$this->isPlayer($player)) return;
+        if(!$this->isPlayer($player))
+            return;
 
         Utils::resetPlayer($player);
 
@@ -163,6 +176,85 @@ class Arena {
 
     public function isPlayer(Player $player): bool {
         return isset($this->players[$player->getUniqueId()->toString()]);
+    }
+
+    public function addSpectator(Player $player, bool $isDied = true): void {
+        if($this->isSpectator($player)) return;
+
+        if($isDied) {
+            unset($this->players[$player->getUniqueId()->toString()]);
+        }
+        
+        $this->loadArena();
+
+        if(!$this->isArenaLoaded()) {
+            $player->sendMessage(ConfigManager::getPrefix() . "§7Sorry, the arena is not enabled!");
+
+            if($isDied) {
+                $this->quitPlayer($player, $isDied);
+            }
+            return;
+        }
+
+        $this->spectators[$player->getUniqueId()->toString()] = $player;
+        
+        Utils::resetPlayer($player);
+
+        $itemData = ConfigManager::getValue("spectator-item", ["slot" => 4, "id" => 345, "meta" => 0, "name" => "&r&l&cNavigator", "lore" => "Right click to open the menu."]);
+        $itemSlot = $itemData["slot"];
+        $itemID = $itemData["id"];
+        $itemMeta = $itemData["meta"];
+        $itemName = str_replace(["&"], ["§"], $itemData["name"]);
+        $itemLore = str_replace(["&"], ["§"], $itemData["lore"]);
+
+        $item = Item::get($itemID, $itemMeta)->setCustomName($itemName)->setLore([$itemLore])->getNamedTag()->setInt("spectator", 1);
+
+        $player->getInventory()->setItem($itemSlot, $item);
+
+        if(!$isDied) {
+            $level = ConfigManager::getValue("arena-level", false);
+            $vector = ConfigManager::getValue("arena-pos", ["x" => 0, "y" => 0, "z" => 0]);
+            $x = (float) $vector["x"];
+            $y = (float) $vector["y"];
+            $z = (float) $vector["z"];
+
+            $player->teleport(new Position($level, $x, $y, $z));
+
+            $this->broadcast("§c{$player->getName()} §r§7joined the arena! (Spectator)");
+        }
+    }
+
+    public function quitSpectator(Player $player): void {
+        if(!$this->isSpectator($player))
+            return;
+
+        Utils::resetPlayer($player);
+
+        if(!ConfigManager::getValue("lobby-level", false)) {
+            $player->teleport(Loader::getInstance()->getServer()->getDefaultLevel()->getSafeSpawn());
+        } else {
+            $this->loadLobby();
+
+            if(!$this->isLobbyLoaded()) {
+                $player->teleport(Loader::getInstance()->getServer()->getDefaultLevel()->getSafeSpawn());
+            } else {
+                $level = ConfigManager::getValue("lobby-level", false);
+                $vector = ConfigManager::getValue("lobby-pos", ["x" => 0, "y" => 0, "z" => 0]);
+                $x = (float) $vector["x"];
+                $y = (float) $vector["y"];
+                $z = (float) $vector["z"];
+    
+                $player->teleport(new Position($level, $x, $y, $z));
+            }
+        }
+
+        unset($this->spectators[$player->getUniqueId()->toString()]);
+
+        $this->broadcast("§c{$player->getName()} §r§7left the arena! (Spectator)");
+    }
+
+    public function isSpectator(Player $player): bool {
+        return isset($this->spectators[$player->getUniqueId()->toString()]);
     }
 
     public function getAllPlayers(): array {

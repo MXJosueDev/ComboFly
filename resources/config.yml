@@ -43,6 +43,21 @@ arena-pos:
   y: 0
   z: 0
 
+# Item that the player will have when in spectator mode.
+# You can simplify '§' as '&'
+spectator-item:
+  # Default: 4
+  slot: 4
+  # Default: 0
+  meta: 0
+  # You can see the item IDs at https://www.digminecraft.com/lists/item_id_list_pe.php
+  # Default: 345 (Compass)
+  id: 345
+  # Default: &r&l&cNavigator
+  name: "&r&l&cNavigator"
+  # Default: &r&o&7Right click to open the menu.
+  lore: "Right click to open the menu."
+
 # -------------------
 # - Lobby settings. -
 # -------------------

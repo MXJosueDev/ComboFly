@@ -15,11 +15,15 @@ declare(strict_types=1);
 namespace combofly\entity;
 
 use combofly\Arena;
+use combofly\form\JoinForm;
 use combofly\utils\ConfigManager;
+use pocketmine\Player;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\entity\Human;
 
 class JoinEntity extends Human {
+
+    private $cooldown = [];
 
     public function entityBaseTick(int $tickDiff = 1) : bool{
 		if($this->closed){
@@ -30,6 +34,7 @@ class JoinEntity extends Human {
 
         if($this->ticksLived % 20 === 0) {
             $this->setNameTag($this->getNameTagCustom());
+            $this->setNameTagVisible(true);
             $this->setNameTagAlwaysVisible(true);
             $this->setScale(1);
             $this->setImmobile(true);
@@ -50,8 +55,37 @@ class JoinEntity extends Human {
     }
 
     public function attack(EntityDamageEvent $source): void {
-		if($source->getCause() === EntityDamageEvent::CAUSE_VOID) {
-			parent::attack($source);
-		}
+        switch($source->getCause()) {
+            case EntityDamageEvent::CAUSE_VOID:
+                parent::attack($source);
+                break;
+            case EntityDamageEvent::CAUSE_ENTITY_ATTACK:
+                $player = $event->getDamager();
+
+                if($player instanceof Player && !$this->isCooldown($player)) {
+                    $this->setCooldown($player);
+
+                    (new JoinForm($player));
+                }
+                break;
+        }
 	}
+
+    private function setCooldown(Player $player): void {
+        $this->cooldown[$player->getUniqueId()->toString()] = time();
+    }
+
+    private function isCooldown(Player $player): bool {
+        if(!isset($this->cooldown[$player->getUniqueId()->toString()]))
+            return false;
+        
+        $cooldownTime = $this->cooldown[$player->getUniqueId()->toString()];
+
+        if($cooldownTime > ($cooldownTime + 1)) {
+            unset($this->cooldown[$player->getUniqueId()->toString()]);
+            return true;
+        }
+
+        return false;
+    }
 }

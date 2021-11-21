@@ -21,6 +21,8 @@ use pocketmine\math\Vector3;
 class EntityManager {
 
     public static function setJoinNPC(Player $player): void {
+        $player->getLevel()->loadChunk((int) $player->getX(), (int) $player->getZ());
+
         $nbt = Entity::createBaseNBT(new Vector3($player->getX(), $player->getY(), $player->getZ()));
         $nbt->setTag(clone $player->namedtag->getCompoundTag("Skin"));
         

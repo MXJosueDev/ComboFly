@@ -45,6 +45,7 @@ Install the file named `ComboFly.phar` in the`/home/plugins/` folder, you can do
 
 | List |
 |-|
+| Spectator mode |
 | Economy Integration |
 | Scoreboard Support |
 | Saves Players by UUID |
@@ -57,7 +58,6 @@ Install the file named `ComboFly.phar` in the`/home/plugins/` folder, you can do
 
 | List |
 |-|
-| Spectator mode |
 | SQLite3 Support |
 | MySQL Support |
 | Tops Floating Text |

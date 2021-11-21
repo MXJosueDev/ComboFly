@@ -1,0 +1,38 @@
+---
+#    _____                _           ______ _       
+#   / ____|              | |         |  ____| |      
+#  | |     ___  _ __ ___ | |__   ___ | |__  | |_   _ 
+#  | |    / _ \| '_ ` _ \| '_ \ / _ \|  __| | | | | |
+#  | |___| (_) | | | | | | |_) | (_) | |    | | |_| |
+#   \_____\___/|_| |_| |_|_.__/ \___/|_|    |_|\__, |
+#                                               __/ |
+#                                              |___/ 
+
+# Configuration of the menu that will be shown when you try to enter the arena.
+# You can simplify '§' as '&'
+join-menu:
+  # Default: &l&bCombo&3Fly 
+  title: "&l&bCombo&3Fly"
+  # Default: &7How do you want to join the arena? 
+  content: "&7How do you want to join the arena?"
+  buttons:
+    # Default: &cPlayer 
+    player: "&cPlayer"
+    # Default: &cSpectator
+    spectator: "&cSpectator"
+
+# Configuration of the menu that will be shown when you click the item to join.
+# You can simplify '§' as '&'
+spectator-menu:
+  # Default: &l&bSpectator 
+  title: "&l&bSpectator"
+  # Default: &7You want to do? 
+  content: "&7You want to do?"
+  buttons:
+    # Default: &aContinue Spectating
+    continue: "&cContinue Spectating"
+    # Default: &cRespawn
+    respawn: "&cRespawn"
+    # Default: &cGo to lobby
+    go-to-lobby: "&cGo to lobby"
+...

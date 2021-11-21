@@ -17,14 +17,16 @@ namespace combofly;
 use combofly\utils\Utils;
 use combofly\utils\ConfigManager;
 use combofly\entity\JoinEntity;
+use combofly\form\SpectatorForm;
 use pocketmine\Player;
 use pocketmine\event\Listener;
-use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\player\PlayerExhaustEvent;
 use pocketmine\event\player\PlayerDropItemEvent;
 use pocketmine\event\player\PlayerDeathEvent;
+use pocketmine\event\player\PlayerMoveEvent;
+use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\entity\EntityLevelChangeEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
@@ -50,6 +52,8 @@ class EventListener implements Listener {
         return isset(self::$remove[$player->getUniqueId()->toString()]);
     }
 
+    private $cooldown = [];
+
     public function onPlayerJoin(PlayerJoinEvent $event): void {
         $player = $event->getPlayer();
 
@@ -70,7 +74,7 @@ class EventListener implements Listener {
     public function onPlayerExhaust(PlayerExhaustEvent $event): void {
         $player = $event->getPlayer();
 
-        if(!Arena::getInstance()->isPlayer($player))
+        if(!$player instanceof Player || !Arena::getInstance()->isPlayer($player))
             return;
 
         $player->setFood($player->getMaxFood());
@@ -92,6 +96,57 @@ class EventListener implements Listener {
             return;
 
         Arena::getInstance()->quitPlayer($player, false);
+    }
+
+    public function onPlayerMove(PlayerMoveEvent $event): void {
+        $player = $event->getPlayer();
+
+        if(!ConfigManager::getValue("npc-rotation", true, "entities.yml"))
+            return;
+
+        $expandedBoundingBox = $player->getBoundingBox()->expandedCopy(15, 15, 15);
+        
+        foreach($player->getLevel()->getNearbyEntities($expandedBoundingBox, $player) as $entity) {
+            if($entity instanceof JoinEntity) {
+                $xdiff = $player->x - $entity->x;
+                $zdiff = $player->z - $entity->z;
+                $angle = atan2($zdiff, $xdiff);
+                $yaw = (($angle * 180) / M_PI) - 90;
+                $ydiff = $player->y - $entity->y;
+                $v = new Vector2($entity->x, $entity->z);
+                $dist = $v->distance($player->x, $player->z);
+                $angle = atan2($dist, $ydiff);
+                $pitch = (($angle * 180) / M_PI) - 90;
+        
+                $pk = new MovePlayerPacket();
+                $pk->entityRuntimeId = $entity->getId();
+                $pk->position = $entity->asVector3()->add(0, $entity->getEyeHeight(), 0);
+                $pk->yaw = $yaw;
+                $pk->pitch = $pitch;
+                $pk->headYaw = $yaw;
+                $pk->onGround = $entity->onGround;
+                
+                $player->batchDataPacket($pk);
+            }
+        }
+    }
+
+    public function onPlayerInteract(PlayerInteractEvent $event): void {
+        $player = $event->getPlayer();
+
+        if(!Arena::getInstance()->isSpectator($player))
+            return;
+        
+        if($event->getAction() === PlayerInteractEvent::RIGHT_CLICK_BLOCK || $event->getAction() === PlayerInteractEvent::RIGHT_CLICK_AIR) {
+            if(is_null($event->getItem()->getNamedTagEntry("spectator")))
+                return;
+            
+            if(!$this->isCooldown($player)) {
+                $this->setCooldown($player);
+    
+                (new SpectatorForm($player));
+            }
+        }
     }
 
     public function onEntityLevelChange(EntityLevelChangeEvent $event): void {
@@ -130,11 +185,10 @@ class EventListener implements Listener {
         if(!$damager instanceof Player || !Arena::getInstance()->isPlayer($damager))
             return;
 
-        $event->setCancelled(false);
-        $event->setKnockBack((int) ConfigManager::getValue("knockback", 0.25));
-
         if($player->getHealth() - $event->getFinalDamage() <= 0) {
-            Arena::getInstance()->quitPlayer($player);
+            $event->setCancelled(true);
+
+            Arena::getInstance()->addSpectator($player);
             Arena::getInstance()->broadcast("§r§4{$player->getName()} §r§7was killed by §r§c{$damager->getName()}");
 
             Arena::getInstance()->addKill($damager, $player);
@@ -143,7 +197,11 @@ class EventListener implements Listener {
             $damager->batchDataPacket(Utils::addSound($damager, "random.pop"));
             
             $player->sendTitle("§l§cYou died!", "§7Good luck next time.");
+            return;
         }
+
+        $event->setCancelled(false);
+        $event->setKnockBack((int) ConfigManager::getValue("knockback", 0.25));
     }
 
     public function onEntityRemove(EntityDamageByEntityEvent $event): void {
@@ -167,39 +225,6 @@ class EventListener implements Listener {
         }
     }
 
-    public function onPlayerMove(PlayerMoveEvent $event): void {
-        $player = $event->getPlayer();
-
-        if(!ConfigManager::getValue("npc-rotation", true, "entities.yml"))
-            return;
-
-        $expandedBoundingBox = $player->getBoundingBox()->expandedCopy(15, 15, 15);
-        
-        foreach($player->getLevel()->getNearbyEntities($expandedBoundingBox, $player) as $entity) {
-            if($entity instanceof JoinEntity) {
-                $xdiff = $player->x - $entity->x;
-                $zdiff = $player->z - $entity->z;
-                $angle = atan2($zdiff, $xdiff);
-                $yaw = (($angle * 180) / M_PI) - 90;
-                $ydiff = $player->y - $entity->y;
-                $v = new Vector2($entity->x, $entity->z);
-                $dist = $v->distance($player->x, $player->z);
-                $angle = atan2($dist, $ydiff);
-                $pitch = (($angle * 180) / M_PI) - 90;
-        
-                $pk = new MovePlayerPacket();
-                $pk->entityRuntimeId = $entity->getId();
-                $pk->position = $entity->asVector3()->add(0, $entity->getEyeHeight(), 0);
-                $pk->yaw = $yaw;
-                $pk->pitch = $pitch;
-                $pk->headYaw = $yaw;
-                $pk->onGround = $entity->onGround;
-                
-                $player->batchDataPacket($pk);
-            }
-        }
-    }
-
     public function onBlockPlace(BlockPlaceEvent $event): void {
         $player = $event->getPlayer();
 
@@ -216,5 +241,23 @@ class EventListener implements Listener {
             return;
 
         $event->setCancelled();
+    }
+
+    private function setCooldown(Player $player): void {
+        $this->cooldown[$player->getUniqueId()->toString()] = time();
+    }
+
+    private function isCooldown(Player $player): bool {
+        if(!isset($this->cooldown[$player->getUniqueId()->toString()]))
+            return false;
+        
+        $cooldownTime = $this->cooldown[$player->getUniqueId()->toString()];
+
+        if($cooldownTime > ($cooldownTime + 1)) {
+            unset($this->cooldown[$player->getUniqueId()->toString()]);
+            return true;
+        }
+
+        return false;
     }
 }

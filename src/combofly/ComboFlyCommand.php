@@ -16,6 +16,7 @@ namespace combofly;
 
 use combofly\utils\ConfigManager;
 use combofly\entity\EntityManager;
+use combofly\form\JoinForm;
 use pocketmine\command\PluginCommand;
 use pocketmine\command\CommandSender;
 use pocketmine\Player;
@@ -55,7 +56,7 @@ class ComboFlyCommand extends PluginCommand {
                 if(!$this->checkConsole($sender)) return;
                 if(!$this->hasPermission($sender, "combofly.command.join.with.command")) return;
 
-                Arena::getInstance()->addPlayer($sender);
+                (new JoinForm($player));
                 break;
             case "setarena":
                 if(!$this->checkConsole($sender)) return;
