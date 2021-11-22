@@ -101,16 +101,13 @@ class ComboFlyCommand extends PluginCommand {
                 if($sender instanceof Player) 
                     return;
                 
-                $plugin = Arena::getInstance();
-
-                $plugin->getLogger()->info("Showing debug info..." . PHP_EOL .
+                Arena::getInstance()->getLogger()->info("Showing debug info..." . PHP_EOL .
                     "-- PLUGIN INFO --" . PHP_EOL .
-                    "NAME: " . $plugin->getName() . PHP_EOL .
-                    "VERSION: " . $plugin->getDescription()->getVersion() . PHP_EOL .
+                    "NAME: " . Arena::getInstance()->getName() . PHP_EOL .
+                    "VERSION: " . Arena::getInstance()->getDescription()->getVersion() . PHP_EOL .
                     "-- PMMP INFO --" . PHP_EOL .
-                    "NAME: " . $plugin->getServer()->getName() . PHP_EOL .
-                    "VERSION: " . $plugin->getServer()->getApiVersion() . PHP_EOL .
-                    "GIT COMMIT: " . GIT_COMMIT . PHP_EOL .
+                    "NAME: " . Arena::getInstance()->getServer()->getName() . PHP_EOL .
+                    "VERSION: " . Arena::getInstance()->getServer()->getApiVersion() . PHP_EOL .
                     "-- MC INFO --" . PHP_EOL .
                     "VERSION: " . ProtocolInfo::MINECRAFT_VERSION_NETWORK . PHP_EOL .
                     "PROTOCOL: " . ProtocolInfo::CURRENT_PROTOCOL . PHP_EOL .
@@ -120,8 +117,8 @@ class ComboFlyCommand extends PluginCommand {
                     "PHP VERSION: " . PHP_VERSION . PHP_EOL .
                     "-- PLUGINS --" . PHP_EOL .
                     implode(", ", array_map(function(Plugin $plugin): string {
-                        return $plugin->getDescription()->getFullName();
-                    }, $plugin->getServer()->getPluginManager()->getPlugins()))
+                        return Arena::getInstance()->getDescription()->getFullName();
+                    }, Arena::getInstance()->getServer()->getPluginManager()->getPlugins()))
                 );
                 break;
             default:
