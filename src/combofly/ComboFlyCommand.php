@@ -20,6 +20,10 @@ use combofly\form\JoinForm;
 use pocketmine\command\PluginCommand;
 use pocketmine\command\CommandSender;
 use pocketmine\Player;
+use pocketmine\network\mcpe\protocol\ProtocolInfo;
+use pocketmine\utils\Utils;
+use pocketmine\plugin\Plugin;
+use const pocketmine\GIT_COMMIT;
 
 class ComboFlyCommand extends PluginCommand {
 
@@ -92,6 +96,33 @@ class ComboFlyCommand extends PluginCommand {
 
                 EventListener::setRemoveEntity($sender);
                 $sender->sendMessage(ConfigManager::getPrefix() . "§7Please hit the NPC you want to remove (Expires in 3 minutes).");
+                break;
+            case "debug":
+                if($sender instanceof Player) 
+                    return;
+                
+                $plugin = Arena::getInstance();
+
+                $plugin->getLogger()->info("Showing debug info..." . PHP_EOL .
+                    "-- PLUGIN INFO --" . PHP_EOL .
+                    "NAME: " . $plugin->getName() . PHP_EOL .
+                    "VERSION: " . $plugin->getDescription()->getVersion() . PHP_EOL .
+                    "-- PMMP INFO --" . PHP_EOL .
+                    "NAME: " . $plugin->getServer()->getName() . PHP_EOL .
+                    "VERSION: " . $plugin->getServer()->getApiVersion() . PHP_EOL .
+                    "GIT COMMIT: " . GIT_COMMIT . PHP_EOL .
+                    "-- MC INFO --" . PHP_EOL .
+                    "VERSION: " . ProtocolInfo::MINECRAFT_VERSION_NETWORK . PHP_EOL .
+                    "PROTOCOL: " . ProtocolInfo::CURRENT_PROTOCOL . PHP_EOL .
+                    "-- SYSTEM INFO --" . PHP_EOL .
+                    "OS TYPE: " . PHP_OS . ", " . Utils::getOS() . PHP_EOL .
+                    "OS VERSION: " . php_uname("v") . PHP_EOL .
+                    "PHP VERSION: " . PHP_VERSION . PHP_EOL .
+                    "-- PLUGINS --" . PHP_EOL .
+                    implode(", ", array_map(function(Plugin $plugin): string {
+                        return $plugin->getDescription()->getFullName();
+                    }, $plugin->getServer()->getPluginManager()->getPlugins()))
+                );
                 break;
             default:
                 $sender->sendMessage(ConfigManager::getPrefix() . "§7Please use §r'/{$label} help' §7to get help for the command.");

@@ -29,6 +29,7 @@ Install the file named `ComboFly.phar` in the`/home/plugins/` folder, you can do
 | **/combofly setkit** | Configure the kit with which the players appear in the arena (The kit will be configured with your inventory). | combofly.command.setkit |
 | **/combofly setjoin** | Put the JoinNPC in your current location. | combofly.command.setjoin |
 | **/combofly removejoin** | Remove the JoinNPC (Hit it). | combofly.command.removejoin |
+| **/combofly debug** | Debug info for bug report | No permission |
 
 ## Permissions
 
