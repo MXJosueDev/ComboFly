@@ -23,7 +23,6 @@ use pocketmine\Player;
 use pocketmine\network\mcpe\protocol\ProtocolInfo;
 use pocketmine\utils\Utils;
 use pocketmine\plugin\Plugin;
-use const pocketmine\GIT_COMMIT;
 
 class ComboFlyCommand extends PluginCommand {
 
