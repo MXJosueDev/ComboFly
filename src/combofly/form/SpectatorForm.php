@@ -19,7 +19,7 @@ use combofly\utils\ConfigManager;
 use combofly\api\form\jojoe77777\FormAPI\SimpleForm;
 use pocketmine\Player;
 
-class JoinForm {
+class SpectatorForm {
 
     public function __construct(Player $player) {
         $form = new SimpleForm(function(Player $player, int $data = null) {
@@ -52,5 +52,7 @@ class JoinForm {
         $form->addButton($formButtonContinue);
         $form->addButton($formButtonRespawn);
         $form->addButton($formButtonLobby);
+
+        $form->sendToPlayer($player);
     }
 }

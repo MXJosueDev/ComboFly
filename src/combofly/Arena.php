@@ -37,6 +37,7 @@ class Arena {
     private $economy;
 
     public $players = [];
+    public $spectators = [];
     public $data = [];
     
     public function __construct() {
@@ -182,7 +183,7 @@ class Arena {
         if($this->isSpectator($player)) return;
 
         if($isDied) {
-            unset($this->players[$player->getUniqueId()->toString()]);
+            unset($this->spectators[$player->getUniqueId()->toString()]);
         }
         
         $this->loadArena();
@@ -207,7 +208,8 @@ class Arena {
         $itemName = str_replace(["&"], ["§"], $itemData["name"]);
         $itemLore = str_replace(["&"], ["§"], $itemData["lore"]);
 
-        $item = Item::get($itemID, $itemMeta)->setCustomName($itemName)->setLore([$itemLore])->getNamedTag()->setInt("spectator", 1);
+        $item = Item::get($itemID, $itemMeta)->setCustomName($itemName)->setLore([$itemLore]);
+        $item->getNamedTag()->setInt("spectator", 1);
 
         $player->getInventory()->setItem($itemSlot, $item);
 

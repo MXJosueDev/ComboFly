@@ -60,7 +60,7 @@ class JoinEntity extends Human {
                 parent::attack($source);
                 break;
             case EntityDamageEvent::CAUSE_ENTITY_ATTACK:
-                $player = $event->getDamager();
+                $player = $source->getDamager();
 
                 if($player instanceof Player && !$this->isCooldown($player)) {
                     $this->setCooldown($player);

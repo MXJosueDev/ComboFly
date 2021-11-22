@@ -56,7 +56,7 @@ class ComboFlyCommand extends PluginCommand {
                 if(!$this->checkConsole($sender)) return;
                 if(!$this->hasPermission($sender, "combofly.command.join.with.command")) return;
 
-                (new JoinForm($player));
+                (new JoinForm($sender));
                 break;
             case "setarena":
                 if(!$this->checkConsole($sender)) return;

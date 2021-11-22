@@ -47,5 +47,7 @@ class JoinForm {
 
         $form->addButton($formButtonPlayer);
         $form->addButton($formButtonSpectator);
+
+        $form->sendToPlayer($player);
     }
 }

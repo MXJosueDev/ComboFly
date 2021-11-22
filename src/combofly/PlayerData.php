@@ -49,7 +49,9 @@ class PlayerData implements \JsonSerializable {
             $this->save();
         }
 
-        $file = file_get_contents(ConfigManager::getPath("data/{$player->getUniqueId()->toString()}"));
+        $uuid = $player->getUniqueId()->toString();
+
+        $file = file_get_contents(ConfigManager::getPath("data/{$uuid}"));
         $this->data = json_decode($file, true);
         
         $this->updateData();
@@ -73,7 +75,7 @@ class PlayerData implements \JsonSerializable {
         $player = Loader::getInstance()->getServer()->getPlayerExact($this->player);
 
         if(is_null($player)) {
-            throw new Exception("The player must be online!");
+            throw new \Exception("The player must be online!");
         }
 
         return $player;
