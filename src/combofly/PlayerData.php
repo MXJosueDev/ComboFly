@@ -44,6 +44,8 @@ class PlayerData implements \JsonSerializable {
     public function __construct(string $player) {
         $this->player = $player;
 
+        $player = $this->getPlayer();
+
         if(!is_file($this->getPath())) {
             $this->data = self::generateBasicData($player);
             $this->save();

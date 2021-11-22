@@ -19,6 +19,7 @@ use combofly\form\JoinForm;
 use combofly\utils\ConfigManager;
 use pocketmine\Player;
 use pocketmine\event\entity\EntityDamageEvent;
+use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\entity\Human;
 
 class JoinEntity extends Human {
@@ -60,6 +61,9 @@ class JoinEntity extends Human {
                 parent::attack($source);
                 break;
             case EntityDamageEvent::CAUSE_ENTITY_ATTACK:
+                if(!$source instanceof EntityDamageByEntityEvent)
+                    return;
+                
                 $player = $source->getDamager();
 
                 if($player instanceof Player && !$this->isCooldown($player)) {
