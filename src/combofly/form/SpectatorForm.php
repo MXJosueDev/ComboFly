@@ -19,10 +19,10 @@ use combofly\utils\ConfigManager;
 use combofly\api\form\jojoe77777\FormAPI\SimpleForm;
 use pocketmine\Player;
 
-class SpectatorForm {
+class SpectatorForm extends SimpleForm {
 
     public function __construct(Player $player) {
-        $form = new SimpleForm(function(Player $player, int $data = null) {
+        parent::__construct(function(Player $player, int $data = null) {
             if(is_null($data))
                 return;
             
@@ -46,13 +46,13 @@ class SpectatorForm {
         $formButtonRespawn = str_replace(["&"], ["§"], $formData["buttons"]["respawn"] . "\n&r&7Click to select!");
         $formButtonLobby = str_replace(["&"], ["§"], $formData["buttons"]["go-to-lobby"] . "\n&r&7Click to select!");
 
-        $form->setTitle($formTitle);
-        $form->setContent($formContent);
+        $this->setTitle($formTitle);
+        $this->setContent($formContent);
 
-        $form->addButton($formButtonContinue);
-        $form->addButton($formButtonRespawn);
-        $form->addButton($formButtonLobby);
+        $this->addButton($formButtonContinue);
+        $this->addButton($formButtonRespawn);
+        $this->addButton($formButtonLobby);
 
-        $form->sendToPlayer($player);
+        $this->sendToPlayer($player);
     }
 }
