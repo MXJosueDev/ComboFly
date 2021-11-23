@@ -48,7 +48,7 @@ class SetKitTask extends AsyncTask {
             $fileData["armorInventory"][$slot] = $item->jsonSerialize();
         }
 
-        $fileData["slot"] = $inventory->getHeldItemIndex();
+        $fileData["slot"] = $this->getInventory()->getHeldItemIndex();
 
         $file->setAll($fileData);
         $file->save();
