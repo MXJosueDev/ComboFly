@@ -46,11 +46,11 @@ class ConfigManager {
     }
 
     public static function saveFile(string $filePath): void {
-        Loader::getInstance()->saveResource($filePath);
+        Loader::getInstance()->saveResource(self::getPath($filePath));
     }
 
     public static function getConfig(string $filePath = "config.yml"): Config {
-        return new Config(self::getDataFolder() . $filePath);
+        return new Config(self::getPath($filePath));
     }
 
     public static function getPrefix(): string {

@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace combofly;
 
 use combofly\tasks\ScoreboardTask;
+use combofly\tasks\asynq\SetKitTask;
 use combofly\utils\ConfigManager;
 use combofly\utils\Utils;
 use combofly\entity\JoinEntity;
@@ -270,11 +271,40 @@ class Arena {
     }
 
     public function setKit(Player $player): void {
-        // TODO:
+        Loader::getInstance()->getServer()->getAsyncPool()->submitTask(new SetKitTask($player->getInventory(), $player->getArmorInventory(), strtolower($player->getName())));
     } 
 
     public function giveKit(Player $player): void {
-        // TODO:
+        $inventory = [];
+        $armorInventory = [];
+        $slot = 0;
+
+        $kit = ConfigManager::getConfig("kit.yml");
+        $kitData = $kit->getAll();
+
+        if($kitData === []) {
+            $player->sendMessage(ConfigManager::getPrefix() . "§cPlease set the arena kit.");
+            return;
+        }
+
+        if(isset($kitData["inventory"])) {
+            foreach($kitData["inventory"] as $slot => $item) {
+                $inventory[$slot] = Item::jsonDeserialize($item);
+            }
+        }
+
+        if(isset($kitData["armorInventory"])) {
+            foreach($kitData["armorInventory"] as $slot => $item) {
+                $armorInventory[$slot] = Item::jsonDeserialize($item);
+            }
+        }
+
+        if(isset($kitData["slot"]))
+            $slot = $kitData["slot"];
+
+        $player->getInventory()->setContents($inventory);
+        $player->getArmorInventory()->setContents($inventory);
+        $player->getInventory()->setHeldItemIndex($slot);
     }
 
     public function getPlayerData(Player $player): ?PlayerData {
