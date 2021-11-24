@@ -26,7 +26,7 @@ class JoinEntity extends Human {
 
     private $cooldown = [];
 
-    public function entityBaseTick(int $tickDiff = 1) : bool{
+    public function entityBaseTick(int $tickDiff = 1) : bool {
         if($this->closed) {
         	return false;
         }
@@ -42,7 +42,7 @@ class JoinEntity extends Human {
         }
         
         return $hasUpdate;
-	}
+    }
 
     public function getNameTagCustom(): string {
         $replace = [
@@ -73,7 +73,7 @@ class JoinEntity extends Human {
                 }
                 break;
         }
-	}
+    }
 
     private function setCooldown(Player $player): void {
         $this->cooldown[$player->getUniqueId()->toString()] = time();
