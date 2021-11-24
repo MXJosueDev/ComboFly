@@ -47,36 +47,36 @@ class Utils {
 
     public static function addSound(Vector3 $vector, string $sound, ?array $players = null) {
         $pk = new PlaySoundPacket();
-		$pk->soundName = $sound;
-		$pk->x = $vector->getX();
-		$pk->y = $vector->getY();
-		$pk->z = $vector->getZ();
-		$pk->volume = 1;
-		$pk->pitch = 1;
+        $pk->soundName = $sound;
+        $pk->x = $vector->getX();
+        $pk->y = $vector->getY();
+        $pk->z = $vector->getZ();
+        $pk->volume = 1;
+        $pk->pitch = 1;
 
         if(!is_null($players))
-		    Loader::getInstance()->getServer()->broadcastPacket($players, $pk);
+            Loader::getInstance()->getServer()->broadcastPacket($players, $pk);
 
         return $pk;
     } 
 
     public static function strikeLightning(Location $location, Player $killer): void{
-		$level = $location->getLevel();
+        $level = $location->getLevel();
 
-		$light = new AddActorPacket();
-		$light->metadata = [];
+        $light = new AddActorPacket();
+        $light->metadata = [];
 
-		$light->type = AddActorPacket::LEGACY_ID_MAP_BC[93];
-		$light->entityRuntimeId = Entity::$entityCount++;
-		$light->entityUniqueId = 0;
+        $light->type = AddActorPacket::LEGACY_ID_MAP_BC[93];
+        $light->entityRuntimeId = Entity::$entityCount++;
+        $light->entityUniqueId = 0;
 
-		$light->position = $location->asPosition();
-		$light->motion = new Vector3();
+        $light->position = $location->asPosition();
+        $light->motion = new Vector3();
 
-		$light->yaw = $location->getYaw();
-		$light->pitch = $location->getPitch();
+        $light->yaw = $location->getYaw();
+        $light->pitch = $location->getPitch();
 
-		Loader::getInstance()->getServer()->broadcastPacket($level->getPlayers(), $light);
+        Loader::getInstance()->getServer()->broadcastPacket($level->getPlayers(), $light);
 		
         $sound = self::addSound($location, "ambient.weather.thunder");
 
@@ -84,5 +84,5 @@ class Utils {
             if($player->getUniqueId()->toString() !== $killer->getUniqueId()->toString())
                 $player->batchDataPacket($sound);
         }
-	}
+    }
 }

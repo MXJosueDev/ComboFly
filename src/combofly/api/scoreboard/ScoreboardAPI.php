@@ -68,7 +68,7 @@ class ScoreboardAPI {
 
 		$objectiveName = $this->getObjectiveName($player);
 		
-        $entry = new ScorePacketEntry();
+		$entry = new ScorePacketEntry();
 		$entry->objectiveName = $objectiveName;
 		$entry->type = $entry::TYPE_FAKE_PLAYER;
 		$entry->customName = $message;
@@ -79,7 +79,7 @@ class ScoreboardAPI {
 		$pk->type = $pk::TYPE_CHANGE;
 		$pk->entries[] = $entry;
 		
-        $player->batchDataPacket($pk);
+		$player->batchDataPacket($pk);
 	}
 	
 	public function getObjectiveName(Player $player): ?string {

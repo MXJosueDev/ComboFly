@@ -27,12 +27,12 @@ class JoinEntity extends Human {
     private $cooldown = [];
 
     public function entityBaseTick(int $tickDiff = 1) : bool{
-		if($this->closed){
-			return false;
-		}
-
-		$hasUpdate = parent::entityBaseTick($tickDiff);
-
+        if($this->closed) {
+        	return false;
+        }
+        
+        $hasUpdate = parent::entityBaseTick($tickDiff);
+        
         if($this->ticksLived % 20 === 0) {
             $this->setNameTag($this->getNameTagCustom());
             $this->setNameTagVisible(true);
@@ -40,8 +40,8 @@ class JoinEntity extends Human {
             $this->setScale(1);
             $this->setImmobile(true);
         }
-
-		return $hasUpdate;
+        
+        return $hasUpdate;
 	}
 
     public function getNameTagCustom(): string {

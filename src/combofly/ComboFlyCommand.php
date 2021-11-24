@@ -30,7 +30,7 @@ class ComboFlyCommand extends PluginCommand {
         parent::__construct("combofly", Loader::getInstance());
 
         $this->setDescription("Look at the available commands and get help from the command.");
-		$this->setAliases(["cf"]);
+        $this->setAliases(["cf"]);
     }
 
     public function execute(CommandSender $sender, string $label, array $args): void {

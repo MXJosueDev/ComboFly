@@ -53,10 +53,10 @@ class Arena {
         $this->loadArena();
 
         if(!is_null(Loader::getInstance()->getServer()->getPluginManager()->getPlugin("EconomyAPI"))) {
-			$this->economy = EconomyAPI::getInstance();
-		} else {
+            $this->economy = EconomyAPI::getInstance();
+        } else {
             Loader::getInstance()->getLogger()->alert("The EconomyAPI dependency was not found.");
-		}
+        }
     }
 
     public function loadArena(): void {
