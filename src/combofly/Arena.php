@@ -46,7 +46,7 @@ class Arena {
 
         Loader::getInstance()->getServer()->getPluginManager()->registerEvents(new EventListener(), $this);
         
-        Loader::getInstance()->getScheduler()->scheduleRepeatingTask(new ScoreboardTask(), ConfigManager::getValue("scoreboard-update-interval", 1, "scoreboard.yml") * 20);
+        Loader::getInstance()->getScheduler()->scheduleRepeatingTask(new ScoreboardTask(), (int) ConfigManager::getValue("scoreboard-update-interval", 1, "scoreboard.yml") * 20);
 
         Entity::registerEntity(JoinEntity::class, true, ["ComboFlyJoinNPC", "combofly:join_npc"]);
 
