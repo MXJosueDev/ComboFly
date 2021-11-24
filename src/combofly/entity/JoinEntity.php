@@ -85,11 +85,11 @@ class JoinEntity extends Human {
         
         $cooldownTime = $this->cooldown[$player->getUniqueId()->toString()];
 
-        if($cooldownTime > ($cooldownTime + 1)) {
+        if($cooldownTime > ($cooldownTime + 1)) { // TODO: Fix it (Wtf?)
             unset($this->cooldown[$player->getUniqueId()->toString()]);
-            return true;
+            return false;
         }
 
-        return false;
+        return true;
     }
 }
