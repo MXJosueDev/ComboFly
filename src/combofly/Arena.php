@@ -172,6 +172,8 @@ class Arena {
 
         unset($this->players[$player->getUniqueId()->toString()]);
 
+        ScoreboardTask::getInstance()->getScoreboardAPI()->remove($player);
+
         if(!$isDied)
             $this->broadcast("§c{$player->getName()} §r§7left the arena!");
     }
@@ -253,6 +255,8 @@ class Arena {
 
         unset($this->spectators[$player->getUniqueId()->toString()]);
 
+        ScoreboardTask::getInstance()->getScoreboardAPI()->remove($player);
+
         $this->broadcast("§c{$player->getName()} §r§7left the arena! (Spectator)");
     }
 
@@ -260,10 +264,30 @@ class Arena {
         return isset($this->spectators[$player->getUniqueId()->toString()]);
     }
 
-    public function getAllPlayers(): array {
+    public function getPlayers(): array {
         $players = [];
 
         foreach($this->players as $uuid => $player) {
+            $players[] = $player; 
+        }
+
+        return $players;
+    }
+
+    public function getSpectators(): array {
+        $players = [];
+
+        foreach($this->spectators as $uuid => $player) {
+            $players[] = $player; 
+        }
+
+        return $players;
+    }
+
+    public function getAllPlayers(): array {
+        $players = [];
+
+        foreach(array_merge($this->players, $this->spectators) as $uuid => $player) {
             $players[] = $player; 
         }
 
@@ -307,14 +331,6 @@ class Arena {
         $player->getInventory()->setHeldItemIndex($slot);
     }
 
-    public function getPlayerData(Player $player): ?PlayerData {
-        if(!isset($this->data[$player->getUniqueId()->toString()])) {
-            throw new \Exception("Player data was not found.");
-        }
-
-        return $this->data[$player->getUniqueId()->toString()];
-    }
-
     public function broadcast(string $text, $type = self::MESSAGE): void {
         foreach($this->getAllPlayers() as $player) {
             switch($type) {
@@ -341,6 +357,14 @@ class Arena {
         return $this->economy;
     }
 
+    public function getPlayerData(Player $player): ?PlayerData {
+        if(!isset($this->data[$player->getUniqueId()->toString()])) {
+            throw new \Exception("Player data was not found.");
+        }
+
+        return $this->data[$player->getUniqueId()->toString()];
+    }
+
     public function addKill(Player $killer, Player $died): void {
         $moneyReward = (int) ConfigManager::getValue("money-reward", 20);
         $economy = $this->getEconomy();
@@ -360,5 +384,13 @@ class Arena {
         $diedData = $this->getPlayerData($died);
 
         $diedData->set("deaths", $diedData->get("deaths") + 1);
+    }
+
+    public function getKills(Player $player): int {
+        return (int) $this->getPlayerData($player)->get("kills");
+    }
+
+    public function getDeaths(Player $player): int {
+        return (int) $this->getPlayerData($player)->get("deaths");
     }
 }

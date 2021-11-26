@@ -46,10 +46,12 @@ class JoinEntity extends Human {
 
     public function getNameTagCustom(): string {
         $replace = [
-            "{playing}"      => count(Arena::getInstance()->getAllPlayers()),
-            "{arena_status}" => Arena::getInstance()->isArenaLoaded() ? "§aOnline" : "§cOffline",
-            "{line}"         => "\n§r",
-            "&"              => "§"
+            "{playing}"       => count(Arena::getInstance()->getPlayers()),
+            "{spectating}"    => count(Arena::getInstance()->getSpectators()),
+            "{total_players}" => count(Arena::getInstance()->getAllPlayers()),
+            "{arena_status}"  => Arena::getInstance()->isArenaLoaded() ? "§aOnline" : "§cOffline",
+            "{line}"          => "\n§r",
+            "&"               => "§"
         ];
 
         return str_replace(array_keys($replace), array_values($replace), ConfigManager::getValue("join-npc-nametag", "&l&bCombo&3Fly{line}&fStatus&7: {arena_status}{line}&fPlaying&7: &c{playing}{line}&eClick to join!"));
@@ -85,11 +87,11 @@ class JoinEntity extends Human {
         
         $cooldownTime = $this->cooldown[$player->getUniqueId()->toString()];
 
-        if($cooldownTime > ($cooldownTime + 1)) { // TODO: Fix it (Wtf?)
-            unset($this->cooldown[$player->getUniqueId()->toString()]);
-            return false;
+        if(time() - $cooldownTime < 2) {
+            return true;
         }
 
-        return true;
+        unset($this->cooldown[$player->getUniqueId()->toString()]);
+        return false;
     }
 }

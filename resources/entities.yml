@@ -16,10 +16,15 @@
 # You can simplify '§' as '&'
 # You can use '{line}' to add a line break.
 #  - Tags information.
-#   - {playing}:      Shows the number of current players in the arena.
-#   - {arena_status}: Shows the status of the arena, this will
-#                     return either 'Online' or 'Offline'.
-join-npc-nametag: "&l&bCombo&3Fly{line}&fStatus&7: {arena_status}{line}&fPlaying&7: &c{playing}{line}&eClick to join!"
+#   - {playing}:             Shows the number of players currently 
+#                            in the arena.
+#   - {spectating}:          Shows the number of spectators currently 
+#                            in the arena.
+#   - {total_players}:       Shows the total number of spectators and 
+#                            players currently in the arena.
+#   - {arena_status}:        Shows the status of the arena, this will
+#                            return either 'Online' or 'Offline'.
+join-npc-nametag: "&l&bCombo&3Fly{line}&fStatus&7: {arena_status}{line}&fPlaying&7: &c{playing}{line}&fSpectating&7: &c{spectating}{line}&eClick to join!"
 
 # If activated the NPC will follow you with his eyes (It can cause lag).
 # Default: true

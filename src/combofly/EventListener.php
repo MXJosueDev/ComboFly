@@ -213,7 +213,7 @@ class EventListener implements Listener {
 
         $commandTime = self::$remove[$player->getUniqueId()->toString()];
 
-        if($commandTime > ($commandTime + (60 * 3))) {  // TODO: Fix it (Wtf?)
+        if(time() - $commandTime < (60 * 3)) {
             self::unsetRemoveEntity($player);
             return;
         }
@@ -253,11 +253,11 @@ class EventListener implements Listener {
         
         $cooldownTime = $this->cooldown[$player->getUniqueId()->toString()];
 
-        if($cooldownTime > ($cooldownTime + 1)) { // TODO: Fix it (Wtf?)
-            unset($this->cooldown[$player->getUniqueId()->toString()]);
+        if(time() - $cooldownTime < 2) {
             return true;
         }
 
+        unset($this->cooldown[$player->getUniqueId()->toString()]);
         return false;
     }
 }

@@ -32,6 +32,61 @@ scoreboard-title: "&l&bCombo&3Fly"
 #      otherwise we will complain about it in console.
 #
 #  - Tags information.
+#   - {date}:                Shows the current date. 
+#   - {player_kills}:        Shows the number of player kills.
+#   - {player_deaths}:       Shows the number of player deaths.
+#   - {player_ping}:         Shows the current ping of the player.
+#   - {player_display_name}: Shows the name that the player has 
+#                            to display.
+#   - {player_real_name}:    Shows the real username of the player.
+#   - {playing}:             Shows the number of players currently 
+#                            in the arena.
+#   - {spectating}:          Shows the number of spectators currently 
+#                            in the arena.
+#   - {total_players}:       Shows the total number of spectators and 
+#                            players currently in the arena.
 scoreboard-lines:
-  - "Test line"
+  - ""
+  - "&fPing&7: &c{player_ping}"
+  - ""
+  - "&fKills&7: &c{player_kills}"
+  - "&fDeaths&7: &c{player_deaths}"
+  - ""
+  - "&fPlayers&7: &c{playing}"
+  - "&fSpectators&7: &c{spectating}"
+
+# Lines that will be shown to the spectator on the scoreboard.
+# You can simplify '§' as '&'
+#  - Important things:
+#   -> The scoreboard are in ascending order. From 1-15
+#      From down to up.
+#   -> We have limited empty spaces due to mojang
+#   -> They must be in array.
+#   -> You can simplify '§' as '&'
+#   -> The maximum arrays in one scoreboard is 15, Please follow this
+#      otherwise we will complain about it in console.
+#
+#  - Tags information.
+#   - {player_kills}:        Shows the number of player kills.
+#   - {player_deaths}:       Shows the number of player deaths.
+#   - {player_ping}:         Shows the current ping of the player.
+#   - {player_display_name}: Shows the name that the player has 
+#                            to display.
+#   - {player_real_name}:    Shows the real username of the player.
+#   - {playing}:             Shows the number of players currently 
+#                            in the arena.
+#   - {spectating}:          Shows the number of spectators currently 
+#                            in the arena.
+#   - {total_players}:       Shows the total number of spectators and 
+#                            players currently in the arena.
+scoreboard-lines-spectator:
+  - "&cYou are dead!"
+  - ""
+  - "&fPing&7: &c{player_ping}"
+  - ""
+  - "&fKills&7: &c{player_kills}"
+  - "&fDeaths&7: &c{player_deaths}"
+  - ""
+  - "&fPlayers&7: &c{playing}"
+  - "&fSpectators&7: &c{spectating}"
 ...
