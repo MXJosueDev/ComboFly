@@ -80,7 +80,7 @@ class ScoreboardTask extends Task {
         }
 
         $replace = [
-            "{date}"                => date("d/m/Y");
+            "{date}"                => date("d/m/Y"),
             "{player_kills}"        => Arena::getInstance()->getKills($player),
             "{player_deaths}"       => Arena::getInstance()->getDeaths($player),
             "{player_ping}"         => $player->getPing(),
