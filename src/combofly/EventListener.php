@@ -178,30 +178,36 @@ class EventListener implements Listener {
                 break;
         }
 
-        if(!$event instanceof EntityDamageByEntityEvent)
-            return;
-        $damager = $event->getDamager();
-
-        if(!$damager instanceof Player || !Arena::getInstance()->isPlayer($damager))
-            return;
-
         if($player->getHealth() - $event->getFinalDamage() <= 0) {
             $event->setCancelled(true);
 
             Arena::getInstance()->addSpectator($player);
-            Arena::getInstance()->broadcast("§r§4{$player->getName()} §r§7was killed by §r§c{$damager->getName()}");
 
-            Arena::getInstance()->addKill($damager, $player);
-
-            Utils::strikeLightning($player, $damager);
-            $damager->batchDataPacket(Utils::addSound($damager, "random.pop"));
-            
             $player->sendTitle("§l§cYou died!", "§7Good luck next time.");
+
+            if($event instanceof EntityDamageByEntityEvent) {
+                $damager = $event->getDamager();
+
+                if(!$damager instanceof Player || !Arena::getInstance()->isPlayer($damager))
+                    return;
+                
+                Utils::strikeLightning($player, $damager);
+                $damager->batchDataPacket(Utils::addSound($damager, "random.pop"));
+
+                Arena::getInstance()->addKill($damager, $player);
+
+                Arena::getInstance()->broadcast("§r§4{$player->getName()} §r§7was killed by §r§c{$damager->getName()}");
+            } else {
+                Arena::getInstance()->broadcast("§r§4{$player->getName()} §r§7was die.");
+            }
+
             return;
         }
 
-        $event->setCancelled(false);
-        $event->setKnockBack((int) ConfigManager::getValue("knockback", 0.25));
+        if($event instanceof EntityDamageByEntityEvent) {
+            $event->setCancelled(false);
+            $event->setKnockBack((int) ConfigManager::getValue("knockback", 0.25));
+        }
     }
 
     public function onEntityRemove(EntityDamageByEntityEvent $event): void {

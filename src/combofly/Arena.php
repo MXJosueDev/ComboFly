@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace combofly;
 
 use combofly\tasks\ScoreboardTask;
-use combofly\tasks\asynq\SetKitTask;
+use combofly\tasks\async\SetKitTask;
 use combofly\utils\ConfigManager;
 use combofly\utils\Utils;
 use combofly\entity\JoinEntity;
@@ -134,7 +134,7 @@ class Arena {
         Utils::resetPlayer($player);
         $this->giveKit($player);
 
-        $level = ConfigManager::getValue("arena-level", false);
+        $level = Loader::getInstance()->getServer()->getLevelByName(ConfigManager::getValue("arena-level", false));
         $vector = ConfigManager::getValue("arena-pos", ["x" => 0, "y" => 0, "z" => 0]);
         $x = (float) $vector["x"];
         $y = (float) $vector["y"];
@@ -160,7 +160,7 @@ class Arena {
             if(!$this->isLobbyLoaded()) {
                 $player->teleport(Loader::getInstance()->getServer()->getDefaultLevel()->getSafeSpawn());
             } else {
-                $level = ConfigManager::getValue("lobby-level", false);
+                $level = Loader::getInstance()->getServer()->getLevelByName(ConfigManager::getValue("lobby-level", false));
                 $vector = ConfigManager::getValue("lobby-pos", ["x" => 0, "y" => 0, "z" => 0]);
                 $x = (float) $vector["x"];
                 $y = (float) $vector["y"];
@@ -184,10 +184,6 @@ class Arena {
 
     public function addSpectator(Player $player, bool $isDied = true): void {
         if($this->isSpectator($player)) return;
-
-        if($isDied) {
-            unset($this->spectators[$player->getUniqueId()->toString()]);
-        }
         
         $this->loadArena();
 
@@ -198,6 +194,10 @@ class Arena {
                 $this->quitPlayer($player, $isDied);
             }
             return;
+        }
+
+        if($isDied) {
+            unset($this->players[$player->getUniqueId()->toString()]);
         }
 
         $this->spectators[$player->getUniqueId()->toString()] = $player;
@@ -217,7 +217,7 @@ class Arena {
         $player->getInventory()->setItem($itemSlot, $item);
 
         if(!$isDied) {
-            $level = ConfigManager::getValue("arena-level", false);
+            $level = Loader::getInstance()->getServer()->getLevelByName(ConfigManager::getValue("arena-level", false));
             $vector = ConfigManager::getValue("arena-pos", ["x" => 0, "y" => 0, "z" => 0]);
             $x = (float) $vector["x"];
             $y = (float) $vector["y"];
@@ -243,7 +243,7 @@ class Arena {
             if(!$this->isLobbyLoaded()) {
                 $player->teleport(Loader::getInstance()->getServer()->getDefaultLevel()->getSafeSpawn());
             } else {
-                $level = ConfigManager::getValue("lobby-level", false);
+                $level = Loader::getInstance()->getServer()->getLevelByName(ConfigManager::getValue("lobby-level", false));
                 $vector = ConfigManager::getValue("lobby-pos", ["x" => 0, "y" => 0, "z" => 0]);
                 $x = (float) $vector["x"];
                 $y = (float) $vector["y"];
@@ -295,7 +295,25 @@ class Arena {
     }
 
     public function setKit(Player $player): void {
-        Loader::getInstance()->getServer()->getAsyncPool()->submitTask(new SetKitTask($player->getInventory(), $player->getArmorInventory(), strtolower($player->getName())));
+        // Loader::getInstance()->getServer()->getAsyncPool()->submitTask(new SetKitTask($player->getInventory(), $player->getArmorInventory(), strtolower($player->getName())));
+        $fileData = [];
+        $file = ConfigManager::getConfig("kit.yml");
+
+        $inventory = $player->getInventory()->getContents();
+        $armorInventory = $player->getArmorInventory()->getContents();
+
+        foreach($inventory as $slot => $item) {
+            $fileData["inventory"][$slot] = $item->jsonSerialize();
+        }
+
+        foreach($armorInventory as $slot => $item) {
+            $fileData["armorInventory"][$slot] = $item->jsonSerialize();
+        }
+
+        $fileData["slot"] = $player->getInventory()->getHeldItemIndex();
+
+        $file->setAll($fileData);
+        $file->save();
     } 
 
     public function giveKit(Player $player): void {

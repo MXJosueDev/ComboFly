@@ -34,7 +34,7 @@ class Utils {
         $player->getArmorInventory()->clearAll();
 
         $player->removeAllEffects();
-        $player->setHealth($player->getMaxHealth()) ;    
+        $player->setHealth($player->getMaxHealth());    
         
         $player->setXpLevel(0);
         $player->setXpProgress(0);

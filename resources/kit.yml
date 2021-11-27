@@ -1,1 +1,105 @@
-# TODO:
+---
+#    _____                _           ______ _       
+#   / ____|              | |         |  ____| |      
+#  | |     ___  _ __ ___ | |__   ___ | |__  | |_   _ 
+#  | |    / _ \| '_ ` _ \| '_ \ / _ \|  __| | | | | |
+#  | |___| (_) | | | | | | |_) | (_) | |    | | |_| |
+#   \_____\___/|_| |_| |_|_.__/ \___/|_|    |_|\__, |
+#                                               __/ |
+#                                              |___/ 
+
+# Please don't set this manually, use '/combofly setkit' in-game to do it.
+
+inventory:
+  0:
+    id: 276
+    nbt_b64: CgAACgcAZGlzcGxheQgEAE5hbWUdAMKnbMKnYkNvbWJvwqczRmx5IMKncsKnN1N3b3JkAAA=
+  1:
+    id: 368
+    count: 16
+  2:
+    id: 466
+    count: 16
+  3:
+    id: 373
+    damage: 16
+  4:
+    id: 373
+    damage: 16
+  5:
+    id: 373
+    damage: 16
+  6:
+    id: 373
+    damage: 16
+  7:
+    id: 373
+    damage: 16
+  8:
+    id: 373
+    damage: 16
+  12:
+    id: 373
+    damage: 16
+  13:
+    id: 373
+    damage: 16
+  14:
+    id: 373
+    damage: 16
+  15:
+    id: 373
+    damage: 16
+  16:
+    id: 373
+    damage: 16
+  17:
+    id: 373
+    damage: 16
+  21:
+    id: 373
+    damage: 16
+  22:
+    id: 373
+    damage: 16
+  23:
+    id: 373
+    damage: 16
+  24:
+    id: 373
+    damage: 16
+  25:
+    id: 373
+    damage: 16
+  26:
+    id: 373
+    damage: 16
+  30:
+    id: 373
+    damage: 16
+  31:
+    id: 373
+    damage: 16
+  32:
+    id: 373
+    damage: 16
+  33:
+    id: 373
+    damage: 16
+  34:
+    id: 373
+    damage: 16
+  35:
+    id: 373
+    damage: 16
+armorInventory:
+- id: 310
+  nbt_b64: CgAACgcAZGlzcGxheQgEAE5hbWUeAMKnbMKnYkNvbWJvwqczRmx5IMKncsKnN0hlbG1ldAAA
+- id: 311
+  nbt_b64: CgAACgcAZGlzcGxheQgEAE5hbWUiAMKnbMKnYkNvbWJvwqczRmx5IMKncsKnN0NoZXN0cGxhdGUAAA==
+- id: 312
+  nbt_b64: CgAACgcAZGlzcGxheQgEAE5hbWUgAMKnbMKnYkNvbWJvwqczRmx5IMKncsKnN0xlZ2dpbmdzAAA=
+- id: 313
+  nbt_b64: CgAACgcAZGlzcGxheQgEAE5hbWUdAMKnbMKnYkNvbWJvwqczRmx5IMKncsKnN0Jvb3RzAAA=
+slot: 0
+...

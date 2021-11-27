@@ -12,7 +12,7 @@ declare(strict_types=1);
  *                                            |___/ 
  */
 
-namespace combofly\tasks\asynq;
+namespace combofly\tasks\async;
 
 use combofly\Loader;
 use combofly\utils\ConfigManager;
@@ -33,7 +33,7 @@ class SetKitTask extends AsyncTask {
         $this->player = $player;
     }
 
-    public function onRun() {
+    public function onRun(): void {
         $fileData = [];
         $file = ConfigManager::getConfig("kit.yml");
 
@@ -54,7 +54,7 @@ class SetKitTask extends AsyncTask {
         $file->save();
     }
 
-    public function onCompletion(Server $server) {
+    public function onCompletion(Server $server): void {
         $player = $server->getPlayerExact($this->player);
 
         if(!is_null($player)) {
