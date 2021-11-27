@@ -84,7 +84,9 @@ class PlayerData implements \JsonSerializable {
     }
 
     public function getPath(): string {
-        return ConfigManager::getPath("data/{$this->getPlayer()->getUniqueId()->toString()}");
+        $uuid = is_null($this->getPlayer()) ? $this->getUuid() : $this->getPlayer()->getUniqueId()->toString();
+
+        return ConfigManager::getPath("data/{$uuid}");
     }
 
     public function set(string $key, $value): void {

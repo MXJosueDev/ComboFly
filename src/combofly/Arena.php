@@ -44,7 +44,7 @@ class Arena {
     public function __construct() {
         self::setInstance($this);
 
-        Loader::getInstance()->getServer()->getPluginManager()->registerEvents(new EventListener(), $this);
+        Loader::getInstance()->getServer()->getPluginManager()->registerEvents(new EventListener(), Loader::getInstance());
         
         Loader::getInstance()->getScheduler()->scheduleRepeatingTask(new ScoreboardTask(), (int) ConfigManager::getValue("scoreboard-update-interval", 1, "scoreboard.yml") * 20);
 
@@ -67,7 +67,7 @@ class Arena {
     }
 
     public function setArena(Position $pos): void {
-        ConfigManager::setValue("arena-level", $pos->getLevel());
+        ConfigManager::setValue("arena-level", $pos->getLevel()->getFolderName());
         ConfigManager::setValue("arena-pos", [
             "x" => $pos->getX(),
             "y" => $pos->getY(),
@@ -85,7 +85,7 @@ class Arena {
     }
     
     public function setLobby(Position $pos): void {
-        ConfigManager::setValue("lobby-level", $pos->getLevel());
+        ConfigManager::setValue("lobby-level", $pos->getLevel()->getFolderName());
         ConfigManager::setValue("lobby-pos", [
             "x" => $pos->getX(),
             "y" => $pos->getY(),
@@ -125,7 +125,7 @@ class Arena {
         $this->loadArena();
 
         if(!$this->isArenaLoaded()) {
-            $player->sendMessage(ConfigManager::getPrefix() . "§7Sorry, the arena is not enabled!");
+            $player->sendMessage(ConfigManager::getPrefix() . "§cSorry, the arena is not enabled!");
             return;
         }
 
@@ -140,7 +140,7 @@ class Arena {
         $y = (float) $vector["y"];
         $z = (float) $vector["z"];
 
-        $player->teleport(new Position($level, $x, $y, $z));
+        $player->teleport(new Position($x, $y, $z, $level));
 
         if(!$respawn)
             $this->broadcast("§c{$player->getName()} §r§7joined the arena!");
@@ -166,7 +166,7 @@ class Arena {
                 $y = (float) $vector["y"];
                 $z = (float) $vector["z"];
     
-                $player->teleport(new Position($level, $x, $y, $z));
+                $player->teleport(new Position($x, $y, $z, $level));
             }
         }
 
@@ -192,7 +192,7 @@ class Arena {
         $this->loadArena();
 
         if(!$this->isArenaLoaded()) {
-            $player->sendMessage(ConfigManager::getPrefix() . "§7Sorry, the arena is not enabled!");
+            $player->sendMessage(ConfigManager::getPrefix() . "§cSorry, the arena is not enabled!");
 
             if($isDied) {
                 $this->quitPlayer($player, $isDied);
@@ -223,7 +223,7 @@ class Arena {
             $y = (float) $vector["y"];
             $z = (float) $vector["z"];
 
-            $player->teleport(new Position($level, $x, $y, $z));
+            $player->teleport(new Position($x, $y, $z, $level));
 
             $this->broadcast("§c{$player->getName()} §r§7joined the arena! (Spectator)");
         }
@@ -249,7 +249,7 @@ class Arena {
                 $y = (float) $vector["y"];
                 $z = (float) $vector["z"];
     
-                $player->teleport(new Position($level, $x, $y, $z));
+                $player->teleport(new Position($x, $y, $z, $level));
             }
         }
 
@@ -392,5 +392,17 @@ class Arena {
 
     public function getDeaths(Player $player): int {
         return (int) $this->getPlayerData($player)->get("deaths");
+    }
+
+    public function shutdown(): void {
+        foreach($this->data as $uuid => $data) {
+            $data->save();
+            unset($this->data[$uuid]);
+        }
+
+        foreach($this->getAllPlayers() as $player) {
+            $this->quitPlayer($player);
+            $this->quitSpectator($player);
+        }
     }
 }

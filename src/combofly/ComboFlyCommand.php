@@ -66,35 +66,35 @@ class ComboFlyCommand extends PluginCommand {
                 if(!$this->hasPermission($sender, "combofly.command.setarena")) return;
 
                 Arena::getInstance()->setArena($sender);
-                $sender->sendMessage(ConfigManager::getPrefix() . "§7The arena location was configured correctly.");
+                $sender->sendMessage(ConfigManager::getPrefix() . "§aThe arena location was configured correctly.");
                 break;
             case "setlobby":
                 if(!$this->checkConsole($sender)) return;
                 if(!$this->hasPermission($sender, "combofly.command.setlobby")) return;
 
                 Arena::getInstance()->setLobby($sender);
-                $sender->sendMessage(ConfigManager::getPrefix() . "§7The lobby location was configured correctly.");
+                $sender->sendMessage(ConfigManager::getPrefix() . "§aThe lobby location was configured correctly.");
                 break;
             case "setkit":
                 if(!$this->checkConsole($sender)) return;
                 if(!$this->hasPermission($sender, "combofly.command.setkit")) return;
 
                 Arena::getInstance()->setKit($sender);
-                $sender->sendMessage(ConfigManager::getPrefix() . "§7The arena kit was configured correctly.");
+                $sender->sendMessage(ConfigManager::getPrefix() . "§aThe arena kit was configured correctly.");
                 break;
             case "setjoin":
                 if(!$this->checkConsole($sender)) return;
                 if(!$this->hasPermission($sender, "combofly.command.setjoin")) return;
 
                 EntityManager::setJoinNPC($sender);
-                $sender->sendMessage(ConfigManager::getPrefix() . "§7The JoinNPC was successfully placed.");
+                $sender->sendMessage(ConfigManager::getPrefix() . "§aThe JoinNPC was successfully placed.");
                 break;
             case "removejoin":
                 if(!$this->checkConsole($sender)) return;
                 if(!$this->hasPermission($sender, "combofly.command.removejoin")) return;
 
                 EventListener::setRemoveEntity($sender);
-                $sender->sendMessage(ConfigManager::getPrefix() . "§7Please hit the NPC you want to remove (Expires in 3 minutes).");
+                $sender->sendMessage(ConfigManager::getPrefix() . "§aPlease hit the NPC you want to remove (Expires in 3 minutes).");
                 break;
             case "debug":
                 if($sender instanceof Player) 

@@ -20,12 +20,17 @@ use pocketmine\utils\Config;
 class ConfigManager {
 
     public static function saveAll() {
-        self::saveFile("config.yml");
         self::ensureDirectory("data");
+        self::saveFile("settings.yml");
+        self::saveFile("entities.yml");
+        self::saveFile("kit.yml");
+        self::saveFile("menus.yml");
+        self::saveFile("scoreboard.yml");
     }
 
     public static function ensureDirectory(string $directory): void {
-        mkdir(self::getPath($directory));
+        if(!is_dir(self::getPath($directory)))
+            mkdir(self::getPath($directory));
     }
 
     public static function getDataFolder(): string {
@@ -36,24 +41,25 @@ class ConfigManager {
         return self::getDataFolder() . str_replace(["/"], [DIRECTORY_SEPARATOR], $path);
     }
 
-    public static function getValue(string $key, $default = null, string $file = "config.yml") {
+    public static function getValue(string $key, $default = null, string $file = "settings.yml") {
         return self::getConfig($file)->get($key, $default);
     }
 
-    public static function setValue(string $key, $value, string $file = "config.yml") {
-        self::getConfig($file)->set($key, $value);
-        self::getConfig($file)->save();
+    public static function setValue(string $key, $value, string $file = "settings.yml") {
+        $config = self::getConfig($file);
+        $config->set($key, $value);
+        $config->save();
     }
 
     public static function saveFile(string $filePath): void {
-        Loader::getInstance()->saveResource(self::getPath($filePath));
+        Loader::getInstance()->saveResource(str_replace(["/"], [DIRECTORY_SEPARATOR], $filePath));
     }
 
-    public static function getConfig(string $filePath = "config.yml"): Config {
+    public static function getConfig(string $filePath = "settings.yml"): Config {
         return new Config(self::getPath($filePath));
     }
 
     public static function getPrefix(): string {
-        return str_replace(["§"], ["&"], self::getValue("prefix")) . " §r";
+        return str_replace(["&"], ["§"], self::getValue("prefix", "&l&f[&r&bCombo&3Fly&r&l&f]") . " §r");
     }
 }

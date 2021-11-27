@@ -35,4 +35,8 @@ class Loader extends PluginBase {
 
         (new Arena());
     }
+
+    public function onDisable() {
+        Arena::getInstance()->shutdown();
+    }
 }
