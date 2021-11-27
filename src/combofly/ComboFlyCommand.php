@@ -129,12 +129,11 @@ class ComboFlyCommand extends PluginCommand {
     }
 
     private function hasPermission(Player $player, string $permission): bool {
-        if(!$player->hasPermission($permission)) {
-            $player->sendMessage(ConfigManager::getPrefix() . "§cYou do not have permission to use this command!");
-            return false;
-        }
+        if($player->hasPermission($permission) || $player->hasPermission("combofly.*"))
+            return true;
 
-        return true;
+        $player->sendMessage(ConfigManager::getPrefix() . "§cYou do not have permission to use this command!");
+        return false;
     }
 
     private function checkConsole(Player $player): bool {

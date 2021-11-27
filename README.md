@@ -35,6 +35,7 @@ Install the file named `ComboFly.phar` in the`/home/plugins/` folder, you can do
 
 | Permission | Description |
 |-|:-:|
+| **combofly.\*** | Allow to players use all ComboFly features. |
 | **combofly.command.join.with.command** | Allows join the arena by means of a command. |
 | **combofly.command.setarena** | Allows set where players appear in the arena. |
 | **combofly.command.setlobby** | Allows set where players appear when exiting the arena. |
