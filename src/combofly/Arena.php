@@ -134,6 +134,8 @@ class Arena {
         Utils::resetPlayer($player);
         $this->giveKit($player);
 
+        $player->setGamemode(Player::SURVIVAL);
+
         $level = Loader::getInstance()->getServer()->getLevelByName(ConfigManager::getValue("arena-level", false));
         $vector = ConfigManager::getValue("arena-pos", ["x" => 0, "y" => 0, "z" => 0]);
         $x = (float) $vector["x"];
@@ -215,6 +217,10 @@ class Arena {
         $item->getNamedTag()->setInt("spectator", 1);
 
         $player->getInventory()->setItem($itemSlot, $item);
+
+        $player->setGamemode(Player::SPECTATOR);
+
+        Utils::sendAdventureSettings($player);
 
         if(!$isDied) {
             $level = Loader::getInstance()->getServer()->getLevelByName(ConfigManager::getValue("arena-level", false));

@@ -21,6 +21,8 @@ use pocketmine\level\Location;
 use pocketmine\entity\Entity;
 use pocketmine\network\mcpe\protocol\AddActorPacket;
 use pocketmine\network\mcpe\protocol\PlaySoundPacket;
+use pocketmine\network\mcpe\protocol\AdventureSettingsPacket;
+use pocketmine\network\mcpe\protocol\types\PlayerPermissions;
 
 class Utils {
 
@@ -84,5 +86,24 @@ class Utils {
             if($player->getUniqueId()->toString() !== $killer->getUniqueId()->toString())
                 $player->batchDataPacket($sound);
         }
+    }
+
+    public static function sendAdventureSettings(Player $player): void {
+        $player->setAllowFlight(true);
+
+        $pk = new AdventureSettingsPacket();
+
+        $pk->setFlag(AdventureSettingsPacket::WORLD_IMMUTABLE, true);
+        $pk->setFlag(AdventureSettingsPacket::NO_PVP, true);
+        $pk->setFlag(AdventureSettingsPacket::AUTO_JUMP, $player->hasAutoJump());
+        $pk->setFlag(AdventureSettingsPacket::ALLOW_FLIGHT, $player->getAllowFlight());
+        $pk->setFlag(AdventureSettingsPacket::NO_CLIP, false);
+        $pk->setFlag(AdventureSettingsPacket::FLYING, $player->isFlying());
+
+        $pk->commandPermission = ($player->isOp() ? AdventureSettingsPacket::PERMISSION_OPERATOR : AdventureSettingsPacket::PERMISSION_NORMAL);
+        $pk->playerPermission = ($player->isOp() ? PlayerPermissions::OPERATOR : PlayerPermissions::MEMBER);
+        $pk->entityUniqueId = $player->getId();
+
+        $player->dataPacket($pk);
     }
 }
