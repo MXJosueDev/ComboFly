@@ -57,7 +57,7 @@ class ConfigManager {
                       'y' => 0,
                       'z' => 0,
                     ],
-                  ];
+                ];
                 break;
             case "entities.yml":
                 $defaults = [
