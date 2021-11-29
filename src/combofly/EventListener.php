@@ -166,8 +166,6 @@ class EventListener implements Listener {
         if($player->getHealth() - $event->getFinalDamage() <= 0) {
             $event->setCancelled(true);
 
-            Arena::getInstance()->addSpectator($player);
-
             $player->sendTitle("§l§cYou died!", "§7Good luck next time.");
 
             if($event instanceof EntityDamageByEntityEvent) {
@@ -182,8 +180,10 @@ class EventListener implements Listener {
                 Arena::getInstance()->addKill($damager, $player);
 
                 Arena::getInstance()->broadcast("§r§4{$player->getName()} §r§7was killed by §r§c{$damager->getName()}");
+                Arena::getInstance()->addSpectator($player);
             } else {
                 Arena::getInstance()->broadcast("§r§4{$player->getName()} §r§7was die.");
+                Arena::getInstance()->addSpectator($player);
             }
 
             return;
