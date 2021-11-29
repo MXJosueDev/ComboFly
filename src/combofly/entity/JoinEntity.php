@@ -54,7 +54,7 @@ class JoinEntity extends Human {
             "&"               => "§"
         ];
 
-        return str_replace(array_keys($replace), array_values($replace), ConfigManager::getValue("join-npc-nametag", "entities.yml");
+        return str_replace(array_keys($replace), array_values($replace), ConfigManager::getValue("join-npc-nametag", "entities.yml"));
     }
 
     public function attack(EntityDamageEvent $source): void {
