@@ -37,7 +37,7 @@ class ScoreboardTask extends Task {
     public function onRun(int $_) {
         $api = $this->getScoreboardAPI();
 
-        $title = str_replace(["&"], ["§"], ConfigManager::getValue("scoreboard-title", "&l&bCombo&3Fly", "scoreboard.yml"));
+        $title = str_replace(["&"], ["§"], ConfigManager::getValue("scoreboard-title", "scoreboard.yml"));
 
         foreach(Arena::getInstance()->getPlayers() as $player) {
             $api->new($player, $player->getName(), $title);
@@ -74,9 +74,9 @@ class ScoreboardTask extends Task {
         $lines = [];
 
         if(!$spectator) {
-            $lines = ConfigManager::getValue("scoreboard-lines", ["", "&cPlease configure me."], "scoreboard.yml");
+            $lines = ConfigManager::getValue("scoreboard-lines", "scoreboard.yml");
         } else {
-            $lines = ConfigManager::getValue("scoreboard-lines-spectator", ["", "&cPlease configure me."], "scoreboard.yml");
+            $lines = ConfigManager::getValue("scoreboard-lines-spectator", "scoreboard.yml");
         }
 
         $replace = [

@@ -46,7 +46,7 @@ class Arena {
 
         Loader::getInstance()->getServer()->getPluginManager()->registerEvents(new EventListener(), Loader::getInstance());
         
-        Loader::getInstance()->getScheduler()->scheduleRepeatingTask(new ScoreboardTask(), (int) ConfigManager::getValue("scoreboard-update-interval", 1, "scoreboard.yml") * 20);
+        Loader::getInstance()->getScheduler()->scheduleRepeatingTask(new ScoreboardTask(), (int) ConfigManager::getValue("scoreboard-update-interval", "scoreboard.yml") * 20);
 
         Entity::registerEntity(JoinEntity::class, true, ["ComboFlyJoinNPC", "combofly:join_npc"]);
 
@@ -60,7 +60,7 @@ class Arena {
     }
 
     public function loadArena(): void {
-        if(!ConfigManager::getValue("arena-level", false))
+        if(!ConfigManager::getValue("arena-level"))
             return;
     
         Loader::getInstance()->getServer()->loadLevel(ConfigManager::getValue("arena-level"));
@@ -78,10 +78,10 @@ class Arena {
     }
 
     public function loadLobby(): void {
-        if(!ConfigManager::getValue("lobby-level", false))
+        if(!ConfigManager::getValue("lobby-level"))
             return;
     
-        Loader::getInstance()->getServer()->loadLevel(ConfigManager::getValue("lobby-level", false));
+        Loader::getInstance()->getServer()->loadLevel(ConfigManager::getValue("lobby-level"));
     }
     
     public function setLobby(Position $pos): void {
@@ -96,17 +96,17 @@ class Arena {
     }
 
     public function isArenaLoaded(): bool {
-        if(!ConfigManager::getValue("arena-level", false))
+        if(!ConfigManager::getValue("arena-level"))
             return false;
 
-        return Loader::getInstance()->getServer()->isLevelLoaded(ConfigManager::getValue("arena-level", false));
+        return Loader::getInstance()->getServer()->isLevelLoaded(ConfigManager::getValue("arena-level"));
     }
 
     public function isLobbyLoaded(): bool {
-        if(!ConfigManager::getValue("lobby-level", false))
+        if(!ConfigManager::getValue("lobby-level"))
             return true;
 
-        return Loader::getInstance()->getServer()->isLevelLoaded(ConfigManager::getValue("lobby-level", false));
+        return Loader::getInstance()->getServer()->isLevelLoaded(ConfigManager::getValue("lobby-level"));
     }
 
     public function respawn(Player $player): void {
@@ -136,8 +136,8 @@ class Arena {
 
         $player->setGamemode(Player::SURVIVAL);
 
-        $level = Loader::getInstance()->getServer()->getLevelByName(ConfigManager::getValue("arena-level", false));
-        $vector = ConfigManager::getValue("arena-pos", ["x" => 0, "y" => 0, "z" => 0]);
+        $level = Loader::getInstance()->getServer()->getLevelByName(ConfigManager::getValue("arena-level"));
+        $vector = ConfigManager::getValue("arena-pos");
         $x = (float) $vector["x"];
         $y = (float) $vector["y"];
         $z = (float) $vector["z"];
@@ -154,7 +154,7 @@ class Arena {
 
         Utils::resetPlayer($player);
 
-        if(!ConfigManager::getValue("lobby-level", false)) {
+        if(!ConfigManager::getValue("lobby-level")) {
             $player->teleport(Loader::getInstance()->getServer()->getDefaultLevel()->getSafeSpawn());
         } else {
             $this->loadLobby();
@@ -162,8 +162,8 @@ class Arena {
             if(!$this->isLobbyLoaded()) {
                 $player->teleport(Loader::getInstance()->getServer()->getDefaultLevel()->getSafeSpawn());
             } else {
-                $level = Loader::getInstance()->getServer()->getLevelByName(ConfigManager::getValue("lobby-level", false));
-                $vector = ConfigManager::getValue("lobby-pos", ["x" => 0, "y" => 0, "z" => 0]);
+                $level = Loader::getInstance()->getServer()->getLevelByName(ConfigManager::getValue("lobby-level"));
+                $vector = ConfigManager::getValue("lobby-pos");
                 $x = (float) $vector["x"];
                 $y = (float) $vector["y"];
                 $z = (float) $vector["z"];
@@ -207,7 +207,7 @@ class Arena {
         
         Utils::resetPlayer($player);
 
-        $itemData = ConfigManager::getValue("spectator-item", ["slot" => 4, "id" => 345, "meta" => 0, "name" => "&r&l&cNavigator", "lore" => "Right click to open the menu."]);
+        $itemData = ConfigManager::getValue("spectator-item");
         $itemSlot = $itemData["slot"];
         $itemID = $itemData["id"];
         $itemMeta = $itemData["meta"];
@@ -224,8 +224,8 @@ class Arena {
         Utils::sendAdventureSettings($player);
 
         if(!$isDied) {
-            $level = Loader::getInstance()->getServer()->getLevelByName(ConfigManager::getValue("arena-level", false));
-            $vector = ConfigManager::getValue("arena-pos", ["x" => 0, "y" => 0, "z" => 0]);
+            $level = Loader::getInstance()->getServer()->getLevelByName(ConfigManager::getValue("arena-level"));
+            $vector = ConfigManager::getValue("arena-pos");
             $x = (float) $vector["x"];
             $y = (float) $vector["y"];
             $z = (float) $vector["z"];
@@ -242,7 +242,7 @@ class Arena {
 
         Utils::resetPlayer($player);
 
-        if(!ConfigManager::getValue("lobby-level", false)) {
+        if(!ConfigManager::getValue("lobby-level")) {
             $player->teleport(Loader::getInstance()->getServer()->getDefaultLevel()->getSafeSpawn());
         } else {
             $this->loadLobby();
@@ -250,8 +250,8 @@ class Arena {
             if(!$this->isLobbyLoaded()) {
                 $player->teleport(Loader::getInstance()->getServer()->getDefaultLevel()->getSafeSpawn());
             } else {
-                $level = Loader::getInstance()->getServer()->getLevelByName(ConfigManager::getValue("lobby-level", false));
-                $vector = ConfigManager::getValue("lobby-pos", ["x" => 0, "y" => 0, "z" => 0]);
+                $level = Loader::getInstance()->getServer()->getLevelByName(ConfigManager::getValue("lobby-level"));
+                $vector = ConfigManager::getValue("lobby-pos");
                 $x = (float) $vector["x"];
                 $y = (float) $vector["y"];
                 $z = (float) $vector["z"];
@@ -391,7 +391,7 @@ class Arena {
     }
 
     public function addKill(Player $killer, Player $died): void {
-        $moneyReward = (int) ConfigManager::getValue("money-reward", 20);
+        $moneyReward = (int) ConfigManager::getValue("money-reward");
         $economy = $this->getEconomy();
 
         if(!is_null($economy) && $moneyReward > 0) {

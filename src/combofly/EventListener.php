@@ -53,40 +53,44 @@ class EventListener implements Listener {
         if(Arena::getInstance()->isPlayer($player))
             Arena::getInstance()->quitPlayer($player, false);
 
+        if(Arena::getInstance()->isSpectator($player))
+            Arena::getInstance()->quitSpectator($player);
+
         unset(Arena::getInstance()->data[$player->getUniqueId()->toString()]);
     }
 
     public function onPlayerExhaust(PlayerExhaustEvent $event): void {
         $player = $event->getPlayer();
 
-        if(!$player instanceof Player || !Arena::getInstance()->isPlayer($player))
+        if(!$player instanceof Player)
             return;
 
-        $player->setFood($player->getMaxFood());
+        if(Arena::getInstance()->isPlayer($player) || Arena::getInstance()->isSpectator($player)) {
+            $player->setFood($player->getMaxFood());
+        }
     }
 
     public function onPlayerDropItem(PlayerDropItemEvent $event): void {
         $player = $event->getPlayer();
 
-        if(!Arena::getInstance()->isPlayer($player))
-            return;
-
-        $event->setCancelled();
+        if(Arena::getInstance()->isPlayer($player) || Arena::getInstance()->isSpectator($player)) {
+            $event->setCancelled();
+        }
     }
     
     public function onPlayerDeath(PlayerDeathEvent $event): void {
         $player = $event->getPlayer();
 
-        if(!Arena::getInstance()->isPlayer($player))
-            return;
-
-        Arena::getInstance()->quitPlayer($player, false);
+        if(Arena::getInstance()->isPlayer($player) || Arena::getInstance()->isSpectator($player)) {
+            Arena::getInstance()->quitPlayer($player, false);
+            Arena::getInstance()->quitSpectator($player);
+        }
     }
 
     public function onPlayerMove(PlayerMoveEvent $event): void {
         $player = $event->getPlayer();
 
-        if(!ConfigManager::getValue("npc-rotation", true, "entities.yml"))
+        if(!ConfigManager::getValue("npc-rotation", "entities.yml"))
             return;
 
         $expandedBoundingBox = $player->getBoundingBox()->expandedCopy(15, 15, 15);
@@ -137,17 +141,25 @@ class EventListener implements Listener {
     public function onEntityLevelChange(EntityLevelChangeEvent $event): void {
         $player = $event->getEntity();
 
-        if(!$player instanceof Player || !Arena::getInstance()->isPlayer($player))
+        if(!$player instanceof Player)
             return;
 
-        if($event->getTarget()->getFolderName() !== ConfigManager::getValue("arena-level", false)) {
-            Arena::getInstance()->quitPlayer($player, false);
+        if(Arena::getInstance()->isPlayer($player) || Arena::getInstance()->isSpectator($player)) {
+            if($event->getTarget()->getFolderName() !== ConfigManager::getValue("arena-level")) {
+                Arena::getInstance()->quitPlayer($player, false);
+                Arena::getInstance()->quitSpectator($player);
+            }
         }
     }
 
     public function onEntityDamage(EntityDamageEvent $event): void {
         $player = $event->getEntity();
         $cause = $event->getCause();
+
+        if($player instanceof Player && Arena::getInstance()->isSpectator($player) && $cause === EntityDamageEvent::CAUSE_VOID) {
+            $event->setCancelled();
+            Arena::getInstance()->quitSpectator($player);
+        }
 
         if(!$player instanceof Player || !Arena::getInstance()->isPlayer($player))
             return;
@@ -158,10 +170,13 @@ class EventListener implements Listener {
                 break;
             case EntityDamageEvent::CAUSE_VOID:
                 $event->setCancelled();
-                Arena::getInstance()->quitPlayer($player);
                 Arena::getInstance()->broadcast("§r§4{$player->getName()} §r§7was killed by the void.");
+                Arena::getInstance()->quitPlayer($player);
                 break;
         }
+
+        if($event->isCancelled())
+            return;
 
         if($player->getHealth() - $event->getFinalDamage() <= 0) {
             $event->setCancelled(true);
@@ -191,26 +206,24 @@ class EventListener implements Listener {
 
         if($event instanceof EntityDamageByEntityEvent) {
             $event->setCancelled(false);
-            $event->setKnockBack((int) ConfigManager::getValue("knockback", 0.25));
+            $event->setKnockBack((int) ConfigManager::getValue("knockback"));
         }
     }
 
     public function onBlockPlace(BlockPlaceEvent $event): void {
         $player = $event->getPlayer();
 
-        if(!Arena::getInstance()->isPlayer($player))
-            return;
-
-        $event->setCancelled();
+        if(Arena::getInstance()->isPlayer($player) || Arena::getInstance()->isSpectator($player)) {
+            $event->setCancelled();
+        }
     }
 
     public function onBlockBreak(BlockBreakEvent $event): void {
         $player = $event->getPlayer();
 
-        if(!Arena::getInstance()->isPlayer($player))
-            return;
-
-        $event->setCancelled();
+        if(Arena::getInstance()->isPlayer($player) || Arena::getInstance()->isSpectator($player)) {
+            $event->setCancelled();
+        }
     }
 
     private function setCooldown(Player $player): void {

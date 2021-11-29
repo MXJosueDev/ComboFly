@@ -39,7 +39,7 @@ class SpectatorForm extends SimpleForm {
             }
         });
 
-        $formData = ConfigManager::getValue("spectator-menu", ["title" => "&l&bSpectator", "content" => "&7You want to do?", "buttons" => ["continue" => "&cContinue Spectating", "respawn" => "&cRespawn", "go-to-lobby" => "&cGo to lobby"]], "menus.yml");
+        $formData = ConfigManager::getValue("spectator-menu", "menus.yml");
         $formTitle = str_replace(["&"], ["§"], $formData["title"]);
         $formContent = str_replace(["&"], ["§"], $formData["content"]);
         $formButtonContinue = str_replace(["&"], ["§"], $formData["buttons"]["continue"] . "\n&r&7Click to select!");

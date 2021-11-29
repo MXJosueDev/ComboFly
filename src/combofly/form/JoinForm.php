@@ -36,7 +36,7 @@ class JoinForm extends SimpleForm {
             }
         });
 
-        $formData = ConfigManager::getValue("join-menu", ["title" => "&l&bCombo&3Fly", "content" => "&7How do you want to join the arena?", "buttons" => ["player" => "&cPlayer", "spectator" => "&cSpectator"]], "menus.yml");
+        $formData = ConfigManager::getValue("join-menu", "menus.yml");
         $formTitle = str_replace(["&"], ["§"], $formData["title"]);
         $formContent = str_replace(["&"], ["§"], $formData["content"]);
         $formButtonPlayer = str_replace(["&"], ["§"], $formData["buttons"]["player"] . "\n&r&7Click to select!");

@@ -26,7 +26,7 @@ class JoinEntity extends Human {
 
     private $cooldown = [];
 
-    public function entityBaseTick(int $tickDiff = 1) : bool {
+    public function entityBaseTick(int $tickDiff = 1): bool {
         if($this->closed) {
         	return false;
         }
@@ -54,7 +54,7 @@ class JoinEntity extends Human {
             "&"               => "§"
         ];
 
-        return str_replace(array_keys($replace), array_values($replace), ConfigManager::getValue("join-npc-nametag", "&l&bCombo&3Fly{line}&fStatus&7: {arena_status}{line}&fPlaying&7: &c{playing}{line}&fSpectating&7: &c{spectating}{line}&eClick to join!"));
+        return str_replace(array_keys($replace), array_values($replace), ConfigManager::getValue("join-npc-nametag", "entities.yml");
     }
 
     public function attack(EntityDamageEvent $source): void {
