@@ -33,7 +33,7 @@ class SpectatorForm extends SimpleForm {
                 case 1:
                     Arena::getInstance()->respawn($player);
                     break;
-                case 3:
+                case 2:
                     Arena::getInstance()->quitSpectator($player);
                     break;
             }

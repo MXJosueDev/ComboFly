@@ -185,7 +185,8 @@ class Arena {
     }
 
     public function addSpectator(Player $player, bool $isDied = true): void {
-        if($this->isSpectator($player)) return;
+        if($this->isSpectator($player))
+            return;
         
         $this->loadArena();
 
