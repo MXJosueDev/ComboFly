@@ -352,7 +352,7 @@ class Arena {
             $slot = $kitData["slot"];
 
         $player->getInventory()->setContents($inventory);
-        $player->getArmorInventory()->setContents($inventory);
+        $player->getArmorInventory()->setContents($armorInventory);
         $player->getInventory()->setHeldItemIndex($slot);
     }
 
