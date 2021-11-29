@@ -172,12 +172,12 @@ class Arena {
             }
         }
 
+        if(!$isDied)
+            $this->broadcast("§c{$player->getName()} §r§7left the arena!");
+
         unset($this->players[$player->getUniqueId()->toString()]);
 
         ScoreboardTask::getInstance()->getScoreboardAPI()->remove($player);
-
-        if(!$isDied)
-            $this->broadcast("§c{$player->getName()} §r§7left the arena!");
     }
 
     public function isPlayer(Player $player): bool {
@@ -260,11 +260,11 @@ class Arena {
             }
         }
 
+        $this->broadcast("§c{$player->getName()} §r§7left the arena! (Spectator)");
+
         unset($this->spectators[$player->getUniqueId()->toString()]);
 
         ScoreboardTask::getInstance()->getScoreboardAPI()->remove($player);
-
-        $this->broadcast("§c{$player->getName()} §r§7left the arena! (Spectator)");
     }
 
     public function isSpectator(Player $player): bool {
