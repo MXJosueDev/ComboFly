@@ -236,7 +236,7 @@ class Arena {
     }
 
     public function quitSpectator(Player $player): void {
-        if(!$this->isSpectator($player))
+        if(!$this->isSpectator($player)) 
             return;
 
         Utils::resetPlayer($player);

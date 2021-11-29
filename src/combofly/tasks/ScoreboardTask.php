@@ -96,7 +96,7 @@ class ScoreboardTask extends Task {
             if(empty($value)) 
                 $value = self::EMPTY_CACHE[$line] ?? "";
 
-            $lines[$line] = str_replace(array_keys($replace), array_values($replace), $value);
+            $lines[$line] = ' ' . str_replace(array_keys($replace), array_values($replace), $value) . ' ';
         }
 
         return $lines;

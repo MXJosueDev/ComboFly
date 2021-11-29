@@ -68,7 +68,7 @@ class JoinEntity extends Human {
                 
                 $player = $source->getDamager();
 
-                if($player instanceof Player && !$this->isCooldown($player)) {
+                if($player instanceof Player && !$this->isCooldown($player) && !EntityManager::isRemoveEntity($player)) {
                     $this->setCooldown($player);
 
                     (new JoinForm($player));
@@ -84,7 +84,7 @@ class JoinEntity extends Human {
                     return;
                 }
 
-                $entity->flagForDespawn();
+                $this->flagForDespawn();
                 EntityManager::unsetRemoveEntity($player);
 
                 $player->sendMessage(ConfigManager::getPrefix() . "§aThe NPC removed successfully.");

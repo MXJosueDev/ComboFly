@@ -22,10 +22,10 @@ class ConfigManager {
     public static function saveAll() {
         self::ensureDirectory("data");
         self::saveFile("settings.yml");
+        self::saveFile("scoreboard.yml");
         self::saveFile("entities.yml");
         self::saveFile("kit.yml");
         self::saveFile("menus.yml");
-        self::saveFile("scoreboard.yml");
     }
 
     public static function ensureDirectory(string $directory): void {
