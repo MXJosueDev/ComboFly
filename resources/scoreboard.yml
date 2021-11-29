@@ -18,6 +18,7 @@ scoreboard-update-interval: 1
 
 # Scoreboard title that will be shown to the player (sidebar).
 # You can simplify '§' as '&'
+# Default: &l&bCombo&3Fly
 scoreboard-title: "&l&bCombo&3Fly"
 
 # Lines that will be shown to the player on the scoreboard.
