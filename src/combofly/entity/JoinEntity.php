@@ -73,6 +73,21 @@ class JoinEntity extends Human {
 
                     (new JoinForm($player));
                 }
+
+                if(!$player instanceof Player || !EntityManager::isRemoveEntity($player))
+                    return;
+
+                $commandTime = EntityManager::$remove[$player->getUniqueId()->toString()];
+                
+                if(time() - $commandTime > (60 * 3)) {
+                    EntityManager::unsetRemoveEntity($player);
+                    return;
+                }
+
+                $entity->flagForDespawn();
+                EntityManager::unsetRemoveEntity($player);
+
+                $player->sendMessage(ConfigManager::getPrefix() . "§aThe NPC removed successfully.");
                 break;
         }
     }

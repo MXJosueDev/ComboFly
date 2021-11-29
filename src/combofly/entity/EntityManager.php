@@ -20,6 +20,21 @@ use pocketmine\math\Vector3;
 
 class EntityManager {
 
+    public static $remove = [];
+
+    public static function setRemoveEntity(Player $player): void {
+        self::$remove[$player->getUniqueId()->toString()] = time();
+    }
+
+    public static function unsetRemoveEntity(Player $player): void {
+        if(self::isRemoveEntity($player))
+            unset(self::$remove[$player->getUniqueId()->toString()]);
+    }
+
+    public static function isRemoveEntity(Player $player): bool {
+        return isset(self::$remove[$player->getUniqueId()->toString()]);
+    }
+
     public static function setJoinNPC(Player $player): void {
         $player->getLevel()->loadChunk((int) $player->getX(), (int) $player->getZ());
 

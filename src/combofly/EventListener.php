@@ -37,21 +37,6 @@ use pocketmine\math\Vector2;
 
 class EventListener implements Listener {
 
-    public static $remove = [];
-
-    public static function setRemoveEntity(Player $player): void {
-        self::$remove[$player->getUniqueId()->toString()] = time();
-    }
-
-    public static function unsetRemoveEntity(Player $player): void {
-        if(self::isRemoveEntity($player))
-            unset(self::$remove[$player->getUniqueId()->toString()]);
-    }
-
-    public static function isRemoveEntity(Player $player): bool {
-        return isset(self::$remove[$player->getUniqueId()->toString()]);
-    }
-
     private $cooldown = [];
 
     public function onPlayerJoin(PlayerJoinEvent $event): void {
@@ -207,27 +192,6 @@ class EventListener implements Listener {
         if($event instanceof EntityDamageByEntityEvent) {
             $event->setCancelled(false);
             $event->setKnockBack((int) ConfigManager::getValue("knockback", 0.25));
-        }
-    }
-
-    public function onEntityRemove(EntityDamageByEntityEvent $event): void {
-        $entity = $event->getEntity();
-        $player = $event->getDamager();
-        
-        if(!$player instanceof Player || !self::isRemoveEntity($player))
-            return;
-
-        $commandTime = self::$remove[$player->getUniqueId()->toString()];
-
-        if(time() - $commandTime > (60 * 3)) {
-            self::unsetRemoveEntity($player);
-            return;
-        }
-
-        if($entity instanceof JoinEntity) {
-            $entity->flagForDespawn();
-            self::unsetRemoveEntity($player);
-            $player->sendMessage(ConfigManager::getPrefix() . "§aThe NPC removed successfully.");
         }
     }
 
