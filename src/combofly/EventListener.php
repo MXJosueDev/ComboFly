@@ -164,7 +164,7 @@ class EventListener implements Listener {
                 $event->setCancelled();
                 Arena::getInstance()->quitSpectator($player);
             }
-        } else if(Arena::getInstance()->isPlayer($player) {
+        } else if(Arena::getInstance()->isPlayer($player)) {
             switch($cause) {
                 case EntityDamageEvent::CAUSE_FALL:
                     $event->setCancelled();
