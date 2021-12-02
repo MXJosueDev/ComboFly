@@ -56,7 +56,7 @@ spectator-item:
   # Default: &r&l&cNavigator
   name: "&r&l&cNavigator"
   # Default: &r&o&7Right click to open the menu.
-  lore: "Right click to open the menu."
+  lore: "&r&o&7Right click to open the menu."
 
 # -------------------
 # - Lobby settings. -

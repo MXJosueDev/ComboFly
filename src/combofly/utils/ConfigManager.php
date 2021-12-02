@@ -49,7 +49,7 @@ class ConfigManager {
                       'meta' => 0,
                       'id' => 345,
                       'name' => '&r&l&cNavigator',
-                      'lore' => 'Right click to open the menu.',
+                      'lore' => '&r&o&7Right click to open the menu.',
                     ],
                     'lobby-level' => false,
                     'lobby-pos' => [

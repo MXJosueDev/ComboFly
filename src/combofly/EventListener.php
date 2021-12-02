@@ -156,57 +156,58 @@ class EventListener implements Listener {
         $player = $event->getEntity();
         $cause = $event->getCause();
 
-        if($player instanceof Player && Arena::getInstance()->isSpectator($player) && $cause === EntityDamageEvent::CAUSE_VOID) {
-            $event->setCancelled();
-            Arena::getInstance()->quitSpectator($player);
-        }
-
-        if(!$player instanceof Player || !Arena::getInstance()->isPlayer($player))
+        if(!$player instanceof Player)
             return;
 
-        switch($cause) {
-            case EntityDamageEvent::CAUSE_FALL:
+        if(Arena::getInstance()->isSpectator($player) && $cause === EntityDamageEvent::CAUSE_VOID) {
+            if($cause === EntityDamageEvent::CAUSE_VOID) {
                 $event->setCancelled();
-                break;
-            case EntityDamageEvent::CAUSE_VOID:
-                $event->setCancelled();
-                Arena::getInstance()->broadcast("§r§4{$player->getName()} §r§7was killed by the void.");
-                Arena::getInstance()->quitPlayer($player);
-                break;
-        }
-
-        if($event->isCancelled())
-            return;
-
-        if($player->getHealth() - $event->getFinalDamage() <= 0) {
-            $event->setCancelled(true);
-
-            $player->sendTitle("§l§cYou died!", "§7Good luck next time.");
-
-            if($event instanceof EntityDamageByEntityEvent) {
-                $damager = $event->getDamager();
-
-                if(!$damager instanceof Player || !Arena::getInstance()->isPlayer($damager))
-                    return;
-                
-                Utils::strikeLightning($player, $damager);
-                $damager->batchDataPacket(Utils::addSound($damager, "random.pop"));
-
-                Arena::getInstance()->addKill($damager, $player);
-
-                Arena::getInstance()->broadcast("§r§4{$player->getName()} §r§7was killed by §r§c{$damager->getName()}");
-                Arena::getInstance()->addSpectator($player);
-            } else {
-                Arena::getInstance()->broadcast("§r§4{$player->getName()} §r§7was die.");
-                Arena::getInstance()->addSpectator($player);
+                Arena::getInstance()->quitSpectator($player);
             }
-
-            return;
-        }
-
-        if($event instanceof EntityDamageByEntityEvent) {
-            $event->setCancelled(false);
-            $event->setKnockBack((int) ConfigManager::getValue("knockback"));
+        } else if(Arena::getInstance()->isPlayer($player) {
+            switch($cause) {
+                case EntityDamageEvent::CAUSE_FALL:
+                    $event->setCancelled();
+                    break;
+                case EntityDamageEvent::CAUSE_VOID:
+                    $event->setCancelled();
+                    Arena::getInstance()->broadcast("§r§4{$player->getName()} §r§7was killed by the void.");
+                    Arena::getInstance()->quitPlayer($player);
+                    break;
+            }
+    
+            if($event->isCancelled())
+                return;
+    
+            if($player->getHealth() - $event->getFinalDamage() <= 0) {
+                $event->setCancelled(true);
+    
+                $player->sendTitle("§l§cYou died!", "§7Good luck next time.");
+    
+                if($event instanceof EntityDamageByEntityEvent) {
+                    $damager = $event->getDamager();
+    
+                    if(!$damager instanceof Player || !Arena::getInstance()->isPlayer($damager))
+                        return;
+                    
+                    Utils::strikeLightning($player, $damager);
+                    $damager->batchDataPacket(Utils::addSound($damager, "random.pop"));
+    
+                    Arena::getInstance()->addKill($damager, $player);
+    
+                    Arena::getInstance()->broadcast("§r§4{$player->getName()} §r§7was killed by §r§c{$damager->getName()}");
+                } else {
+                    Arena::getInstance()->broadcast("§r§4{$player->getName()} §r§7was die.");
+                }
+    
+                Arena::getInstance()->addSpectator($player);
+                return;
+            }
+    
+            if($event instanceof EntityDamageByEntityEvent) {
+                $event->setCancelled(false);
+                $event->setKnockBack((int) ConfigManager::getValue("knockback"));
+            }
         }
     }
 

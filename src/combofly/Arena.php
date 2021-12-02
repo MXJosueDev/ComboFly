@@ -119,7 +119,7 @@ class Arena {
     }
 
     public function addPlayer(Player $player, bool $respawn = false): void {
-        if($this->isPlayer($player))
+        if($this->isPlayer($player) || $this->isSpectator($player))
             return;
         
         $this->loadArena();
@@ -185,7 +185,7 @@ class Arena {
     }
 
     public function addSpectator(Player $player, bool $isDied = true): void {
-        if($this->isSpectator($player))
+        if($this->isSpectator($player) || $this->isPlayer($player))
             return;
         
         $this->loadArena();
