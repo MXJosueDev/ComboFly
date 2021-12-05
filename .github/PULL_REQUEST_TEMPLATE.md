@@ -1,3 +1,5 @@
+<!-- Please read https://github.com/MXJosueDev/ComboFly/blob/main/CONTRIBUTING.md before creating this Pull Request -->
+
 <!-- Failure to complete the required fields will result in the issue being closed. -->
 Please make sure your pull request complies with these guidelines:
 - * [ ] Use same formatting
