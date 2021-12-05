@@ -49,25 +49,27 @@ Install the file named `ComboFly.phar` in the`/home/plugins/` folder, you can do
 
 | Tag | Description |
 |-|:-:|
-| {player_kills} | Shows the number of player kills. |
-| {player_deaths} | Shows the number of player deaths. |
-| {player_ping} | Shows the current ping of the player. |
-| {player_display_name} | Shows the name that the player has to display. |
-| {player_real_name} | Shows the real username of the player. |
-| {playing} | Shows the number of players currently in the arena. |
-| {spectating} | Shows the number of spectators currently in the arena. |
-| {total_players} | Shows the total number of spectators and players currently in the arena. |
+| **{player_kills}** | Shows the number of player kills. |
+| **{player_deaths}** | Shows the number of player deaths. |
+| **{player_ping}** | Shows the current ping of the player. |
+| **{player_display_name}** | Shows the name that the player has to display. |
+| **{player_real_name}** | Shows the real username of the player. |
+| **{playing}** | Shows the number of players currently in the arena. |
+| **{spectating}** | Shows the number of spectators currently in the arena. |
+| **{total_players}** | Shows the total number of spectators and players currently in the arena. |
 
 ## Entities
 
 ### Tags
 
+#### JoinNPC
+
 | Tag | Description |
 |-|:-:|
-| {playing} | Shows the number of players currently in the arena. |
-| {spectating} | Shows the number of spectators currently in the arena. |
-| {total_players} | Shows the total number of spectators and players currently in the arena. |
-| {arena_status} | Shows the status of the arena, this will return either 'Online' or 'Offline'. |
+| **{playing}** | Shows the number of players currently in the arena. |
+| **{spectating}** | Shows the number of spectators currently in the arena. |
+| **{total_players}** | Shows the total number of spectators and players currently in the arena. |
+| **{arena_status}** | Shows the status of the arena, this will return either 'Online' or 'Offline'. |
 
 ## Features
 
