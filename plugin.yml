@@ -3,7 +3,7 @@ name: ComboFly
 description: ComboFly MiniGame, plugin for Pocketmine-MP.
 config-version: 0.1-Beta
 main: combofly\Loader
-api: 3.25.x
+api: 3.26.x
 softdepend: [EconomyAPI]
 author: MXJosueDev
 website: https://github.com/MXJosueDev/ComboFly

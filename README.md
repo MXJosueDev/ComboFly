@@ -1,6 +1,6 @@
 # ComboFly
 
-ComboFly is an open source plugin and is made for [PocketMine-MP](https://github.com/pmmp/PocketMine-MP) 3.25.x.
+ComboFly is an open source plugin and is made for [PocketMine-MP](https://github.com/pmmp/PocketMine-MP) 3.26.x.
 
 It is currently under testing.
 
@@ -75,6 +75,7 @@ Install the file named `ComboFly.phar` in the`/home/plugins/` folder, you can do
 
 | List |
 |-|
+| Fully customizable |
 | Spectator mode |
 | Economy Integration |
 | Scoreboard Support |
@@ -91,6 +92,7 @@ Install the file named `ComboFly.phar` in the`/home/plugins/` folder, you can do
 | SQLite3 Support |
 | MySQL Support |
 | Tops Floating Text |
+| UI configuration menus |
 
 ## License
 
