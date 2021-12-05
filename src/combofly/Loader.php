@@ -29,7 +29,7 @@ class Loader extends PluginBase {
     }
 
     public function onEnable() {
-        ConfigManager::saveAll();
+        ConfigManager::init();
 
         $this->getServer()->getCommandMap()->register("combofly", new ComboFlyCommand());
 
