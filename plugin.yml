@@ -1,37 +1,34 @@
 ---
 name: ComboFly
 description: ComboFly MiniGame, plugin for Pocketmine-MP.
+src-namespace-prefix: combofly
 version: 0.1-Beta
 main: combofly\Loader
-api: 3.26.x
+api: 4.x.x
 softdepend: [EconomyAPI]
 author: MXJosueDev
 website: https://github.com/MXJosueDev/ComboFly
 
 permissions:
-  combofly:
-    children:
-      combofly.*:
-        description: Allow to players use all ComboFly features.
-        default: op
-      combofly.command:
-        children:
-          combofly.command.join.with.command:
-            description: Allows join the arena by means of a command.
-            default: op
-          combofly.command.setarena:
-            description: Allows set where players appear in the arena.
-            default: op
-          combofly.command.setlobby:
-            description: Allows set where players appear when exiting the arena.
-            default: op
-          combofly.command.setkit:
-            description: Allows configure the kit with which the players appear in the arena.
-            default: op
-          combofly.command.setjoin:
-            description: Allows put the JoinNPC in your current location.
-            default: op
-          combofly.command.removejoin:
-            description: Allows remove the JoinNPC.
-            default: op
+  combofly.*:
+    description: Allow to players use all ComboFly features.
+    default: op
+  combofly.command.join.with.command:
+    description: Allows join the arena by means of a command.
+    default: op
+  combofly.command.setarena:
+    description: Allows set where players appear in the arena.
+    default: op
+  combofly.command.setlobby:
+    description: Allows set where players appear when exiting the arena.
+    default: op
+  combofly.command.setkit:
+    description: Allows configure the kit with which the players appear in the arena.
+    default: op
+  combofly.command.setjoin:
+    description: Allows put the JoinNPC in your current location.
+    default: op
+  combofly.command.removejoin:
+    description: Allows remove the JoinNPC.
+    default: op
 ...
