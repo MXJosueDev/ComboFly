@@ -2,7 +2,7 @@
 
 ComboFly is an open source plugin and is made for [PocketMine-MP](https://github.com/pmmp/PocketMine-MP) 3.26.x.
 
-It is currently under testing.
+It is currently upgrading from PM3 to PM4.
 
 ## Installation
 
