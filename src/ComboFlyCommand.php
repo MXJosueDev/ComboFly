@@ -17,17 +17,17 @@ namespace combofly;
 use combofly\utils\ConfigManager;
 use combofly\entity\EntityManager;
 use combofly\form\JoinForm;
-use pocketmine\command\PluginCommand;
+use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
 use pocketmine\network\mcpe\protocol\ProtocolInfo;
 use pocketmine\utils\Utils;
 use pocketmine\plugin\Plugin;
 
-class ComboFlyCommand extends PluginCommand {
+class ComboFlyCommand extends Command {
 
     public function __construct() {
-        parent::__construct("combofly", Loader::getInstance());
+        parent::__construct("combofly");
 
         $this->setDescription("Look at the available commands and get help from the command.");
         $this->setAliases(["cf"]);
@@ -44,15 +44,15 @@ class ComboFlyCommand extends PluginCommand {
         switch($subCommand) {
             case "help":
                 $sender->sendMessage("
-                §7=================== §l§bCombo§3Fly §r§7===================§r\n
-                §r/{$label} help: §r§cGet help on the sub-commands.§r\n
-                §r/{$label} join§7: §r§cJoin the arena by means of a command.§r\n
-                §r/{$label} setarena§7: §r§cSet where players appear in the arena.§r\n
-                §r/{$label} setlobby§7: §r§cSet where players appear when exiting the arena.§r\n
-                §r/{$label} setkit§7: §r§cConfigure the kit with which the players appear in the arena (The kit will be configured with your inventory).§r\n
-                §r/{$label} setjoin§7: §r§cPut the JoinNPC in your current location.§r\n
-                §r/{$label} removejoin§7: §r§cRemove the JoinNPC (Hit it).§r\n
-                §7=================== §l§bCombo§3Fly §r§7===================§r\n
+§7=================== §l§bCombo§3Fly §r§7===================§r\n
+§r/{$label} help: §r§cGet help on the sub-commands.§r\n
+§r/{$label} join§7: §r§cJoin the arena by means of a command.§r\n
+§r/{$label} setarena§7: §r§cSet where players appear in the arena.§r\n
+§r/{$label} setlobby§7: §r§cSet where players appear when exiting the arena.§r\n
+§r/{$label} setkit§7: §r§cConfigure the kit with which the players appear in the arena (The kit will be configured with your inventory).§r\n
+§r/{$label} setjoin§7: §r§cPut the JoinNPC in your current location.§r\n
+§r/{$label} removejoin§7: §r§cRemove the JoinNPC (Hit it).§r\n
+§7=================== §l§bCombo§3Fly §r§7===================§r\n
                 ");
                 break;
             case "join":
@@ -65,14 +65,14 @@ class ComboFlyCommand extends PluginCommand {
                 if(!$this->checkConsole($sender)) return;
                 if(!$this->hasPermission($sender, "combofly.command.setarena")) return;
 
-                Arena::getInstance()->setArena($sender);
+                Arena::getInstance()->setArena($sender->asPosition());
                 $sender->sendMessage(ConfigManager::getPrefix() . "§aThe arena location was configured correctly.");
                 break;
             case "setlobby":
                 if(!$this->checkConsole($sender)) return;
                 if(!$this->hasPermission($sender, "combofly.command.setlobby")) return;
 
-                Arena::getInstance()->setLobby($sender);
+                Arena::getInstance()->setLobby($sender->asPosition());
                 $sender->sendMessage(ConfigManager::getPrefix() . "§aThe lobby location was configured correctly.");
                 break;
             case "setkit":

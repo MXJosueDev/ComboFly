@@ -66,7 +66,7 @@ class EventListener implements Listener {
             return;
 
         if(Arena::getInstance()->isPlayer($player) || Arena::getInstance()->isSpectator($player)) {
-            $player->setFood($player->getMaxFood());
+            $player->getHungerManager()->setFood($player->getHungerManager()->getMaxFood());
         }
     }
 
