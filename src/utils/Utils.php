@@ -16,6 +16,7 @@ namespace combofly\utils;
 
 use combofly\Loader;
 use pocketmine\player\Player;
+use pocketmine\player\GameMode;
 use pocketmine\math\Vector3;
 use pocketmine\level\Location;
 use pocketmine\entity\Entity;
@@ -35,16 +36,13 @@ class Utils {
         $player->getInventory()->clearAll();
         $player->getArmorInventory()->clearAll();
 
-        $player->removeAllEffects();
+        $player->getEffectManager()->clear();
         $player->setHealth($player->getMaxHealth());    
-        
-        $player->setXpLevel(0);
-        $player->setXpProgress(0);
 
         $player->setAllowFlight(false);
         $player->setFlying(false);
                
-        $player->setGamemode(Player::SURVIVAL);
+        $player->setGamemode(GameMode::SURVIVAL());
     }
 
     public static function addSound(Vector3 $vector, string $sound, ?array $players = null) {
