@@ -35,9 +35,9 @@ money-reward: 20
 # Default: 0.25
 knockback: 0.25
 
-# Level the player will be teleported to (set to false to disable the arena).
+# World the player will be teleported to (set to false to disable the arena).
 # Default: false
-arena-level: false
+arena-world: false
 
 # Coordinates to which the player will be teleported.
 # Default: x: 0, y: 0, z: 0
@@ -65,9 +65,9 @@ spectator-item:
 # - Lobby settings. -
 # -------------------
 
-# Level the player will be teleported to (set to false to teleport to the default level).
+# World the player will be teleported to (set to false to teleport to the default world).
 # Default: false
-lobby-level: false
+lobby-world: false
 
 # Coordinates to which the player will be teleported.
 # Default: x: 0, y: 0, z: 0

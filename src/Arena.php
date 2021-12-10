@@ -23,7 +23,7 @@ use onebone\economyapi\EconomyAPI;
 use pocketmine\Player;
 use pocketmine\entity\Entity;
 use pocketmine\item\Item;
-use pocketmine\level\Position;
+use pocketmine\world\Position;
 use pocketmine\utils\SingletonTrait;
 
 class Arena {
@@ -60,14 +60,14 @@ class Arena {
     }
 
     public function loadArena(): void {
-        if(!ConfigManager::getValue("arena-level"))
+        if(!ConfigManager::getValue("arena-world"))
             return;
     
-        Loader::getInstance()->getServer()->loadLevel(ConfigManager::getValue("arena-level"));
+        Loader::getInstance()->getServer()->getWorldManager()->loadWorld(ConfigManager::getValue("arena-world"));
     }
 
     public function setArena(Position $pos): void {
-        ConfigManager::setValue("arena-level", $pos->getLevel()->getFolderName());
+        ConfigManager::setValue("arena-world", $pos->getWorld()->getFolderName());
         ConfigManager::setValue("arena-pos", [
             "x" => $pos->getX(),
             "y" => $pos->getY(),
@@ -78,14 +78,14 @@ class Arena {
     }
 
     public function loadLobby(): void {
-        if(!ConfigManager::getValue("lobby-level"))
+        if(!ConfigManager::getValue("lobby-world"))
             return;
     
-        Loader::getInstance()->getServer()->loadLevel(ConfigManager::getValue("lobby-level"));
+        Loader::getInstance()->getServer()->getWorldManager()->loadWorld(ConfigManager::getValue("lobby-world"));
     }
     
     public function setLobby(Position $pos): void {
-        ConfigManager::setValue("lobby-level", $pos->getLevel()->getFolderName());
+        ConfigManager::setValue("lobby-world", $pos->getWorld()->getFolderName());
         ConfigManager::setValue("lobby-pos", [
             "x" => $pos->getX(),
             "y" => $pos->getY(),
@@ -96,17 +96,17 @@ class Arena {
     }
 
     public function isArenaLoaded(): bool {
-        if(!ConfigManager::getValue("arena-level"))
+        if(!ConfigManager::getValue("arena-world"))
             return false;
 
-        return Loader::getInstance()->getServer()->isLevelLoaded(ConfigManager::getValue("arena-level"));
+        return Loader::getInstance()->getServer()->getWorldManager()->isWorldLoaded(ConfigManager::getValue("arena-world"));
     }
 
     public function isLobbyLoaded(): bool {
-        if(!ConfigManager::getValue("lobby-level"))
+        if(!ConfigManager::getValue("lobby-world"))
             return true;
 
-        return Loader::getInstance()->getServer()->isLevelLoaded(ConfigManager::getValue("lobby-level"));
+        return Loader::getInstance()->getServer()->getWorldManager()->isWorldLoaded(ConfigManager::getValue("lobby-world"));
     }
 
     public function respawn(Player $player): void {
@@ -136,13 +136,13 @@ class Arena {
 
         $player->setGamemode(Player::SURVIVAL);
 
-        $level = Loader::getInstance()->getServer()->getLevelByName(ConfigManager::getValue("arena-level"));
+        $world = Loader::getInstance()->getServer()->getWorldManager()->getWorldByName(ConfigManager::getValue("arena-world"));
         $vector = ConfigManager::getValue("arena-pos");
         $x = (float) $vector["x"];
         $y = (float) $vector["y"];
         $z = (float) $vector["z"];
 
-        $player->teleport(new Position($x, $y, $z, $level));
+        $player->teleport(new Position($x, $y, $z, $world));
 
         if(!$respawn)
             $this->broadcast("§c{$player->getName()} §r§7joined the arena!");
@@ -154,21 +154,21 @@ class Arena {
 
         Utils::resetPlayer($player);
 
-        if(!ConfigManager::getValue("lobby-level")) {
-            $player->teleport(Loader::getInstance()->getServer()->getDefaultLevel()->getSafeSpawn());
+        if(!ConfigManager::getValue("lobby-world")) {
+            $player->teleport(Loader::getInstance()->getServer()->getWorldManager()->getDefaultWorld()->getSafeSpawn());
         } else {
             $this->loadLobby();
 
             if(!$this->isLobbyLoaded()) {
-                $player->teleport(Loader::getInstance()->getServer()->getDefaultLevel()->getSafeSpawn());
+                $player->teleport(Loader::getInstance()->getServer()->getWorldManager()->getDefaultWorld()->getSafeSpawn());
             } else {
-                $level = Loader::getInstance()->getServer()->getLevelByName(ConfigManager::getValue("lobby-level"));
+                $world = Loader::getInstance()->getServer()->getWorldManager()->getWorldByName(ConfigManager::getValue("lobby-world"));
                 $vector = ConfigManager::getValue("lobby-pos");
                 $x = (float) $vector["x"];
                 $y = (float) $vector["y"];
                 $z = (float) $vector["z"];
     
-                $player->teleport(new Position($x, $y, $z, $level));
+                $player->teleport(new Position($x, $y, $z, $world));
             }
         }
 
@@ -224,13 +224,13 @@ class Arena {
         Utils::sendAdventureSettings($player);
 
         if(!$isDied) {
-            $level = Loader::getInstance()->getServer()->getLevelByName(ConfigManager::getValue("arena-level"));
+            $world = Loader::getInstance()->getServer()->getWorldManager()->getWorldByName(ConfigManager::getValue("arena-world"));
             $vector = ConfigManager::getValue("arena-pos");
             $x = (float) $vector["x"];
             $y = (float) $vector["y"];
             $z = (float) $vector["z"];
 
-            $player->teleport(new Position($x, $y, $z, $level));
+            $player->teleport(new Position($x, $y, $z, $world));
 
             $this->broadcast("§c{$player->getName()} §r§7joined the arena! (Spectator)");
         }
@@ -242,21 +242,21 @@ class Arena {
 
         Utils::resetPlayer($player);
 
-        if(!ConfigManager::getValue("lobby-level")) {
-            $player->teleport(Loader::getInstance()->getServer()->getDefaultLevel()->getSafeSpawn());
+        if(!ConfigManager::getValue("lobby-world")) {
+            $player->teleport(Loader::getInstance()->getServer()->getWorldManager()->getDefaultWorld()->getSafeSpawn());
         } else {
             $this->loadLobby();
 
             if(!$this->isLobbyLoaded()) {
-                $player->teleport(Loader::getInstance()->getServer()->getDefaultLevel()->getSafeSpawn());
+                $player->teleport(Loader::getInstance()->getServer()->getWorldManager()->getDefaultWorld()->getSafeSpawn());
             } else {
-                $level = Loader::getInstance()->getServer()->getLevelByName(ConfigManager::getValue("lobby-level"));
+                $world = Loader::getInstance()->getServer()->getWorldManager()->getWorldByName(ConfigManager::getValue("lobby-world"));
                 $vector = ConfigManager::getValue("lobby-pos");
                 $x = (float) $vector["x"];
                 $y = (float) $vector["y"];
                 $z = (float) $vector["z"];
     
-                $player->teleport(new Position($x, $y, $z, $level));
+                $player->teleport(new Position($x, $y, $z, $world));
             }
         }
 
