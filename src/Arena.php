@@ -21,6 +21,7 @@ use combofly\utils\Utils;
 use combofly\entity\JoinEntity;
 use onebone\economyapi\EconomyAPI;
 use pocketmine\player\Player;
+use pocketmine\player\GameMode;
 use pocketmine\entity\Entity;
 use pocketmine\item\Item;
 use pocketmine\world\Position;
@@ -134,7 +135,7 @@ class Arena {
         Utils::resetPlayer($player);
         $this->giveKit($player);
 
-        $player->setGamemode(Player::SURVIVAL);
+        $player->setGamemode(GameMode::SURVIVAL());
 
         $world = Loader::getInstance()->getServer()->getWorldManager()->getWorldByName(ConfigManager::getValue("arena-world"));
         $vector = ConfigManager::getValue("arena-pos");
@@ -219,7 +220,7 @@ class Arena {
 
         $player->getInventory()->setItem($itemSlot, $item);
 
-        $player->setGamemode(Player::SPECTATOR);
+        $player->setGamemode(GameMode::SPECTATOR());
 
         Utils::sendAdventureSettings($player);
 
