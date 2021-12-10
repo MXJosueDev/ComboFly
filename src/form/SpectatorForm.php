@@ -17,7 +17,7 @@ namespace combofly\form;
 use combofly\Arena;
 use combofly\utils\ConfigManager;
 use combofly\api\form\jojoe77777\FormAPI\SimpleForm;
-use pocketmine\Player;
+use pocketmine\player\Player;
 
 class SpectatorForm extends SimpleForm {
 

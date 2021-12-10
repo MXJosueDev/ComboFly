@@ -17,7 +17,7 @@ namespace combofly\entity;
 use combofly\Arena;
 use combofly\form\JoinForm;
 use combofly\utils\ConfigManager;
-use pocketmine\Player;
+use pocketmine\player\Player;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\entity\Human;

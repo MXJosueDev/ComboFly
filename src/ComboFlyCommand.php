@@ -19,7 +19,7 @@ use combofly\entity\EntityManager;
 use combofly\form\JoinForm;
 use pocketmine\command\PluginCommand;
 use pocketmine\command\CommandSender;
-use pocketmine\Player;
+use pocketmine\player\Player;
 use pocketmine\network\mcpe\protocol\ProtocolInfo;
 use pocketmine\utils\Utils;
 use pocketmine\plugin\Plugin;

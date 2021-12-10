@@ -19,7 +19,7 @@ use combofly\api\scoreboard\ScoreboardAPI;
 use combofly\utils\ConfigManager;
 use pocketmine\scheduler\Task;
 use pocketmine\utils\SingletonTrait;
-use pocketmine\Player;
+use pocketmine\player\Player;
 
 class ScoreboardTask extends Task {
     use SingletonTrait;

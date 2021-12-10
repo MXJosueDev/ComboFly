@@ -18,7 +18,7 @@ use combofly\utils\Utils;
 use combofly\utils\ConfigManager;
 use combofly\entity\JoinEntity;
 use combofly\form\SpectatorForm;
-use pocketmine\Player;
+use pocketmine\player\Player;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerQuitEvent;
@@ -27,7 +27,7 @@ use pocketmine\event\player\PlayerDropItemEvent;
 use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerInteractEvent;
-use pocketmine\event\entity\EntityLevelChangeEvent;
+use pocketmine\event\entity\EntityTeleportEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\block\BlockPlaceEvent;
@@ -95,7 +95,7 @@ class EventListener implements Listener {
 
         $expandedBoundingBox = $player->getBoundingBox()->expandedCopy(15, 15, 15);
         
-        foreach($player->getLevel()->getNearbyEntities($expandedBoundingBox, $player) as $entity) {
+        foreach($player->getWorld()->getNearbyEntities($expandedBoundingBox, $player) as $entity) {
             if($entity instanceof JoinEntity) {
                 $xdiff = $player->x - $entity->x;
                 $zdiff = $player->z - $entity->z;
@@ -138,14 +138,16 @@ class EventListener implements Listener {
         }
     }
 
-    public function onEntityLevelChange(EntityLevelChangeEvent $event): void {
+    public function onEntityTeleport(EntityTeleportEvent $event): void {
+        if($event->getFrom()->getWorld()->getFolderName() === $event->getTo()->getWorld()->getFolderName())
+            return;
         $player = $event->getEntity();
 
         if(!$player instanceof Player)
             return;
 
         if(Arena::getInstance()->isPlayer($player) || Arena::getInstance()->isSpectator($player)) {
-            if($event->getTarget()->getFolderName() !== ConfigManager::getValue("arena-level")) {
+            if($event->getTo()->getWorld()->getFolderName() !== ConfigManager::getValue("arena-world")) {
                 Arena::getInstance()->quitPlayer($player, false);
                 Arena::getInstance()->quitSpectator($player);
             }

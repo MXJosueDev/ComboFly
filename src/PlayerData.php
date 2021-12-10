@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace combofly;
 
 use combofly\utils\ConfigManager;
-use pocketmine\Player;
+use pocketmine\player\Player;
 
 class PlayerData implements \JsonSerializable {
 

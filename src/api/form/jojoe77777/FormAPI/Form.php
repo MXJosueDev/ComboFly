@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace combofly\api\form\jojoe77777\FormAPI;
 
 use pocketmine\form\Form as IForm;
-use pocketmine\Player;
+use pocketmine\player\Player;
 
 abstract class Form implements IForm{
 

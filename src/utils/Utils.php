@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace combofly\utils;
 
 use combofly\Loader;
-use pocketmine\Player;
+use pocketmine\player\Player;
 use pocketmine\math\Vector3;
 use pocketmine\level\Location;
 use pocketmine\entity\Entity;
@@ -63,7 +63,7 @@ class Utils {
     } 
 
     public static function strikeLightning(Location $location, Player $killer): void{
-        $level = $location->getLevel();
+        $level = $location->getWorld();
 
         $light = new AddActorPacket();
         $light->metadata = [];
