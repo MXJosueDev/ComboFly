@@ -74,7 +74,7 @@ class EventListener implements Listener {
         $player = $event->getPlayer();
 
         if(Arena::getInstance()->isPlayer($player) || Arena::getInstance()->isSpectator($player)) {
-            $event->setCancelled();
+            $event->cancel();
         }
     }
     
@@ -97,19 +97,19 @@ class EventListener implements Listener {
         
         foreach($player->getWorld()->getNearbyEntities($expandedBoundingBox, $player) as $entity) {
             if($entity instanceof JoinEntity) {
-                $xdiff = $player->x - $entity->x;
-                $zdiff = $player->z - $entity->z;
+                $xdiff = $player->getPosition()->x - $entity->getPosition()->x;
+                $zdiff = $player->getPosition()->z - $entity->getPosition()->z;
                 $angle = atan2($zdiff, $xdiff);
                 $yaw = (($angle * 180) / M_PI) - 90;
-                $ydiff = $player->y - $entity->y;
-                $v = new Vector2($entity->x, $entity->z);
-                $dist = $v->distance($player->x, $player->z);
+                $ydiff = $player->getPosition()->y - $entity->getPosition()->y;
+                $v = new Vector2($entity->getPosition()->x, $entity->getPosition()->z);
+                $dist = $v->distance($player->getPosition()->x, $player->getPosition()->z);
                 $angle = atan2($dist, $ydiff);
                 $pitch = (($angle * 180) / M_PI) - 90;
         
                 $pk = new MovePlayerPacket();
                 $pk->entityRuntimeId = $entity->getId();
-                $pk->position = $entity->asVector3()->add(0, $entity->getEyeHeight(), 0);
+                $pk->position = $entity->getPosition()->asVector3()->add(0, $entity->getEyeHeight(), 0);
                 $pk->yaw = $yaw;
                 $pk->pitch = $pitch;
                 $pk->headYaw = $yaw;
@@ -126,7 +126,7 @@ class EventListener implements Listener {
         if(!Arena::getInstance()->isSpectator($player))
             return;
         
-        if($event->getAction() === PlayerInteractEvent::RIGHT_CLICK_BLOCK || $event->getAction() === PlayerInteractEvent::RIGHT_CLICK_AIR) {
+        if($event->getAction() === PlayerInteractEvent::RIGHT_CLICK_BLOCK) {
             if(is_null($event->getItem()->getNamedTagEntry("spectator")))
                 return;
             
@@ -163,16 +163,16 @@ class EventListener implements Listener {
 
         if(Arena::getInstance()->isSpectator($player) && $cause === EntityDamageEvent::CAUSE_VOID) {
             if($cause === EntityDamageEvent::CAUSE_VOID) {
-                $event->setCancelled();
+                $event->cancel();
                 Arena::getInstance()->quitSpectator($player);
             }
         } else if(Arena::getInstance()->isPlayer($player)) {
             switch($cause) {
                 case EntityDamageEvent::CAUSE_FALL:
-                    $event->setCancelled();
+                    $event->cancel();
                     break;
                 case EntityDamageEvent::CAUSE_VOID:
-                    $event->setCancelled();
+                    $event->cancel();
                     Arena::getInstance()->broadcast("§r§4{$player->getName()} §r§7was killed by the void.");
                     Arena::getInstance()->quitPlayer($player);
                     break;
@@ -182,7 +182,7 @@ class EventListener implements Listener {
                 return;
     
             if($player->getHealth() - $event->getFinalDamage() <= 0) {
-                $event->setCancelled(true);
+                $event->cancel();
     
                 $player->sendTitle("§l§cYou died!", "§7Good luck next time.");
     
@@ -207,7 +207,7 @@ class EventListener implements Listener {
             }
     
             if($event instanceof EntityDamageByEntityEvent) {
-                $event->setCancelled(false);
+                $event->uncancel();
                 $event->setKnockBack((int) ConfigManager::getValue("knockback"));
             }
         }
@@ -217,7 +217,7 @@ class EventListener implements Listener {
         $player = $event->getPlayer();
 
         if(Arena::getInstance()->isPlayer($player) || Arena::getInstance()->isSpectator($player)) {
-            $event->setCancelled();
+            $event->cancel();
         }
     }
 
@@ -225,7 +225,7 @@ class EventListener implements Listener {
         $player = $event->getPlayer();
 
         if(Arena::getInstance()->isPlayer($player) || Arena::getInstance()->isSpectator($player)) {
-            $event->setCancelled();
+            $event->cancel();
         }
     }
 
