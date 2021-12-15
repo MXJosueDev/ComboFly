@@ -34,7 +34,7 @@ class ScoreboardTask extends Task {
         $this->scoreboardAPI = new ScoreboardAPI();
     }
 
-    public function onRun(int $_) {
+    public function onRun() {
         $api = $this->getScoreboardAPI();
 
         $title = str_replace(["&"], ["§"], ConfigManager::getValue("scoreboard-title", "scoreboard.yml"));
@@ -83,7 +83,7 @@ class ScoreboardTask extends Task {
             "{date}"                => date("d/m/Y"),
             "{player_kills}"        => Arena::getInstance()->getKills($player),
             "{player_deaths}"       => Arena::getInstance()->getDeaths($player),
-            "{player_ping}"         => $player->getPing(),
+            "{player_ping}"         => $player->getPing(), // FIXME
             "{player_display_name}" => $player->getDisplayName(),
             "{player_real_name}"    => $player->getName(),
             "{playing}"             => count(Arena::getInstance()->getPlayers()),

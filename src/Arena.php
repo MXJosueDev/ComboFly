@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace combofly;
 
 use combofly\tasks\ScoreboardTask;
-use combofly\tasks\async\SetKitTask;
 use combofly\utils\ConfigManager;
 use combofly\utils\Utils;
 use combofly\entity\JoinEntity;
@@ -67,7 +66,11 @@ class Arena {
         Loader::getInstance()->getServer()->getWorldManager()->loadWorld(ConfigManager::getValue("arena-world"));
     }
 
-    public function setArena(Position $pos): void {
+    public function setArena($player): void {
+        if($player instanceof Player)
+            return;
+        $pos = $player->getPosition();
+
         ConfigManager::setValue("arena-world", $pos->getWorld()->getFolderName());
         ConfigManager::setValue("arena-pos", [
             "x" => $pos->getX(),
@@ -85,7 +88,11 @@ class Arena {
         Loader::getInstance()->getServer()->getWorldManager()->loadWorld(ConfigManager::getValue("lobby-world"));
     }
     
-    public function setLobby(Position $pos): void {
+    public function setLobby($player): void {
+        if($player instanceof Player)
+            return;
+        $pos = $player->getPosition();
+
         ConfigManager::setValue("lobby-world", $pos->getWorld()->getFolderName());
         ConfigManager::setValue("lobby-pos", [
             "x" => $pos->getX(),

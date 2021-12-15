@@ -18,7 +18,7 @@ use combofly\Loader;
 use pocketmine\player\Player;
 use pocketmine\player\GameMode;
 use pocketmine\math\Vector3;
-use pocketmine\level\Location;
+use pocketmine\world\Location;
 use pocketmine\entity\Entity;
 use pocketmine\network\mcpe\protocol\AddActorPacket;
 use pocketmine\network\mcpe\protocol\PlaySoundPacket;
@@ -36,7 +36,7 @@ class Utils {
         $player->getInventory()->clearAll();
         $player->getArmorInventory()->clearAll();
 
-        $player->getEffectManager()->clear();
+        $player->getEffects()->clear();
         $player->setHealth($player->getMaxHealth());    
 
         $player->setAllowFlight(false);
@@ -55,10 +55,12 @@ class Utils {
         $pk->pitch = 1;
 
         if(!is_null($players))
-            Loader::getInstance()->getServer()->broadcastPacket($players, $pk);
+            Loader::getInstance()->getServer()->broadcastPackets($players, [$pk]);
 
         return $pk;
     } 
+
+    /** It is currently fixing
 
     public static function strikeLightning(Location $location, Player $killer): void{
         $level = $location->getWorld();
@@ -76,15 +78,15 @@ class Utils {
         $light->yaw = $location->getYaw();
         $light->pitch = $location->getPitch();
 
-        Loader::getInstance()->getServer()->broadcastPacket($level->getPlayers(), $light);
+        Loader::getInstance()->getServer()->broadcastPackets($level->getPlayers(), [$light]);
 		
         $sound = self::addSound($location, "ambient.weather.thunder");
 
         foreach($level->getPlayers() as $player) {
             if($player->getUniqueId()->toString() !== $killer->getUniqueId()->toString())
-                $player->batchDataPacket($sound);
+                $player->getNetworkSession()->sendDataPacket($sound);
         }
-    }
+    } */
 
     public static function sendAdventureSettings(Player $player): void {
         $player->setAllowFlight(true);
@@ -98,10 +100,10 @@ class Utils {
         $pk->setFlag(AdventureSettingsPacket::NO_CLIP, false);
         $pk->setFlag(AdventureSettingsPacket::FLYING, $player->isFlying());
 
-        $pk->commandPermission = ($player->isOp() ? AdventureSettingsPacket::PERMISSION_OPERATOR : AdventureSettingsPacket::PERMISSION_NORMAL);
-        $pk->playerPermission = ($player->isOp() ? PlayerPermissions::OPERATOR : PlayerPermissions::MEMBER);
-        $pk->entityUniqueId = $player->getId();
+        $pk->commandPermission = ($player->getServer()->isOp($player->getName()) ? AdventureSettingsPacket::PERMISSION_OPERATOR : AdventureSettingsPacket::PERMISSION_NORMAL);
+        $pk->playerPermission = ($player->getServer()->isOp($player->getName()) ? PlayerPermissions::OPERATOR : PlayerPermissions::MEMBER);
+        $pk->targetActorUniqueId = $player->getId();
 
-        $player->dataPacket($pk);
+        $player->getNetworkSession()->sendDataPacket($pk);
     }
 }

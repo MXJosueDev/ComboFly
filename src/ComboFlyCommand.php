@@ -65,14 +65,14 @@ class ComboFlyCommand extends Command {
                 if(!$this->checkConsole($sender)) return;
                 if(!$this->hasPermission($sender, "combofly.command.setarena")) return;
 
-                Arena::getInstance()->setArena($sender->getPosition());
+                Arena::getInstance()->setArena($sender);
                 $sender->sendMessage(ConfigManager::getPrefix() . "§aThe arena location was configured correctly.");
                 break;
             case "setlobby":
                 if(!$this->checkConsole($sender)) return;
                 if(!$this->hasPermission($sender, "combofly.command.setlobby")) return;
 
-                Arena::getInstance()->setLobby($sender->getPosition());
+                Arena::getInstance()->setLobby($sender);
                 $sender->sendMessage(ConfigManager::getPrefix() . "§aThe lobby location was configured correctly.");
                 break;
             case "setkit":

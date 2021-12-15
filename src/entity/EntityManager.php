@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace combofly\entity;
 
 use pocketmine\player\Player;
-use pocketmine\entity\Entity;
+use pocketmine\entity\EntityFactory;
 use pocketmine\math\Vector3;
 
 class EntityManager {
@@ -36,17 +36,18 @@ class EntityManager {
     }
 
     public static function setJoinNPC(Player $player): void {
-        $player->getWorld()->loadChunk((int) $player->getX(), (int) $player->getZ());
+        $pos = $player->getPosition();
+        $player->getWorld()->loadChunk((int) $pos->getX(), (int) $pos->getZ());
 
-        $nbt = Entity::createBaseNBT(new Vector3($player->getX(), $player->getY(), $player->getZ()));
-        $nbt->setTag(clone $player->namedtag->getCompoundTag("Skin"));
+        $nbt = EntityFactory::createBaseNBT(new Vector3($pos->getX(), $pos->getY(), $pos->getZ()));
+        $nbt->setTag(clone $player->NamedTag()->getTag->getCompoundTag("Skin"));
         
         $human = new JoinEntity($player->getWorld(), $nbt);
         $human->setNameTag("");
         $human->setNameTagVisible(true);
         $human->setNameTagAlwaysVisible(true);
-        $human->yaw = $player->getYaw();
-        $human->pitch = $player->getPitch();
+        $human->getLocation()->yaw = $player->getLocation()->getYaw();
+        $human->getLocation()->pitch = $player->getLocation()->getPitch();
         
         $human->spawnToAll();
     }

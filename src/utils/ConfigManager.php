@@ -29,7 +29,7 @@ class ConfigManager {
         self::fixConfigs();
     }
 
-    public function fixConfigs(): void {
+    public static function fixConfigs(): void {
         $configs = ["settings.yml" => ConfigVersions::SETTINGS, "scoreboard.yml" => ConfigVersions::SCOREBOARD, "entities.yml" => ConfigVersions::ENTITIES, "kit.yml" => ConfigVersions::KIT, "menus.yml" => ConfigVersions::MENUS];
 
         foreach($configs as $configFile => $configVersion) {
@@ -46,7 +46,7 @@ class ConfigManager {
         }
     }
 
-    public static function getDefault(?string $key, string $file, bool $all = false): string {
+    public static function getDefault(?string $key, string $file, bool $all = false) {
         $defaults = [];
 
         switch($file) {

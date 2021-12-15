@@ -41,7 +41,7 @@ class ScoreboardAPI {
 		$pk->criteriaName = self::CRITERIA_NAME;
 		$pk->sortOrder = self::SORT_ORDER;
 
-		$player->batchDataPacket($pk);
+		$player->getNetworkSession()->sendDataPacket($pk);
 		$this->scoreboards[$player->getName()] = $objectiveName;
 	}
 	
@@ -52,14 +52,14 @@ class ScoreboardAPI {
 			$pk = new RemoveObjectivePacket();
 			$pk->objectiveName = $objectiveName;
 
-			$player->batchDataPacket($pk);
+			$player->getNetworkSession()->sendDataPacket($pk);
 			unset($this->scoreboards[$player->getName()]);
 		}
 	}
 	
 	public function setLine(Player $player, int $score, string $message): void {
 		if(!isset($this->scoreboards[$player->getName()])){
-			throw new \InvalidKeyException("You not have set to scoreboards");
+			throw new \Exception("You not have set to scoreboards");
 		}
 
 		if($score > 15 || $score < 1){
@@ -79,7 +79,7 @@ class ScoreboardAPI {
 		$pk->type = $pk::TYPE_CHANGE;
 		$pk->entries[] = $entry;
 		
-		$player->batchDataPacket($pk);
+		$player->getNetworkSession()->sendDataPacket($pk);
 	}
 	
 	public function getObjectiveName(Player $player): ?string {
