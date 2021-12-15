@@ -39,7 +39,7 @@ class EntityManager {
         $pos = $player->getPosition();
         $player->getWorld()->loadChunk((int) $pos->getX(), (int) $pos->getZ());
 
-        $nbt = EntityFactory::createBaseNBT(new Vector3($pos->getX(), $pos->getY(), $pos->getZ()));
+        /* $nbt = EntityFactory::createBaseNBT(new Vector3($pos->getX(), $pos->getY(), $pos->getZ()));
         $nbt->setTag(clone $player->NamedTag()->getTag->getCompoundTag("Skin"));
         
         $human = new JoinEntity($player->getWorld(), $nbt);
@@ -49,6 +49,6 @@ class EntityManager {
         $human->getLocation()->yaw = $player->getLocation()->getYaw();
         $human->getLocation()->pitch = $player->getLocation()->getPitch();
         
-        $human->spawnToAll();
+        $human->spawnToAll(); */
     }
 }
