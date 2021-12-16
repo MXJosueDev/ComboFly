@@ -8,6 +8,32 @@ It is currently upgrading from PM3 to PM4.
 
 Install the file named `ComboFly.phar` in the`/home/plugins/` folder, you can download this file from [Poggit](https://poggit.pmmp.io/plugins).
 
+## Developers
+
+Please see <a href="https://github.com/MXJosueDev/ComboFly/blob/PM4/CONTRIBUTING.md">CONTRIBUTING</a>.
+
+### API
+
+- Get Kills, Deaths and PlayerData of Player
+```php
+<?php
+
+use combofly\Arena; /* Class in which the API methods are.*/
+use pocketmine\Server;
+
+$arena = Arena::getInstance(); /* Getting the instance of the object. */
+
+$player = "MXJosuepro033"; /* Getting a player to get their kills. */
+
+/* The $player parameter can have a Player instance or be a string 
+   with the player's name (If you query the data for the player's name
+   and it is offline, it must have played before or it will return `0` or `null` 
+   depending on the method used). */
+$playerData = $arena->getPlayerData($player); /* It will return an object with instance of `combofly\PlayerData`. */
+$playerKills = $arena->getKills($player); /* This will return the number of kills of the player. */
+$playerDeaths = $arena->getDeaths($player); /* This will return the number of deaths of the player. */
+```
+
 ## Command
 
 ### Command info

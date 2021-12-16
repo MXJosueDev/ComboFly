@@ -42,9 +42,9 @@ class EventListener implements Listener {
     public function onPlayerJoin(PlayerJoinEvent $event): void {
         $player = $event->getPlayer();
 
-        $playerData = new PlayerData($player->getName());
+        $playerData = new PlayerData($player->getName(), $player->getUniqueId()->toString());
 
-        Arena::getInstance()->data[$player->getUniqueId()->toString()] = $playerData;  
+        Arena::getInstance()->data[$player->getUniqueId()->toString()] = $playerData;
     }
 
     public function onPlayerQuit(PlayerQuitEvent $event): void {

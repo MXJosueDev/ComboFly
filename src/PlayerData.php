@@ -19,7 +19,19 @@ use pocketmine\player\Player;
 
 class PlayerData implements \JsonSerializable {
 
-    public static function generateBasicData(Player $player = null, string $key = null) {
+    public static function getPlayerDataByName(string $name): ?PlayerData {
+        foreach(glob(ConfigManager::getPath("data/*")) as $dataUuid) {
+            $file = file_get_contents(ConfigManager::getPath("data/{$dataUuid}"));
+            $data = json_decode($file, true);
+
+            if($data["player"] == $name)
+                return (new PlayerData($name, $data["uuid"]));
+        }
+
+        return null;
+    }
+
+    public static function generateBasicData(string $player = null, $uuid = null, string $key = null) {
         $def = [
             "player" => "Unknown",
             "uuid"   => "Unknown",
@@ -27,10 +39,12 @@ class PlayerData implements \JsonSerializable {
             "deaths" => 0
         ];
 
-        if(!is_null($player)) {
-            $def["player"] = $player->getName();
-            $def["uuid"] = $player->getUniqueId()->toString();
-        }
+        if(!is_null($player)) 
+            $def["player"] = $player;
+
+        if(!is_null($uuid)) {
+            $def["uuid"] = $uuid;
+
 
         if(is_null($key))
             return $def;
@@ -39,28 +53,25 @@ class PlayerData implements \JsonSerializable {
     }
 
     public $player;
+    public $uuid;
+
     private $data;
 
-    public function __construct(string $player) {
+    public function __construct(string $player, $uuid) {
         $this->player = $player;
+        $this->uuid = $uuid;
 
         $player = $this->getPlayer();
 
         if(!is_file($this->getPath())) {
-            $this->data = self::generateBasicData($player);
+            $this->data = self::generateBasicData($player, $uuid);
             $this->save();
         }
-
-        $uuid = $player->getUniqueId()->toString();
 
         $file = file_get_contents(ConfigManager::getPath("data/{$uuid}"));
         $this->data = json_decode($file, true);
         
         $this->updateData();
-    }
-
-    public function getUuid() {
-        return $this->get("uuid");
     }
 
     public function updateData(): void {
@@ -73,18 +84,20 @@ class PlayerData implements \JsonSerializable {
         }
     }
 
+    public function getUsername(): ?string {
+        return $this->player;
+    }
+
+    public function getUuid() {
+        return $this->uuid;
+    }
+
     public function getPlayer(): ?Player {
-        $player = Loader::getInstance()->getServer()->getPlayerExact($this->player);
-
-        if(is_null($player)) {
-            throw new \Exception("The player must be online!");
-        }
-
-        return $player;
+        return Loader::getInstance()->getServer()->getPlayerExact($this->getUsername());
     }
 
     public function getPath(): string {
-        $uuid = is_null($this->getPlayer()) ? $this->getUuid() : $this->getPlayer()->getUniqueId()->toString();
+        $uuid = $this->getUuid();
 
         return ConfigManager::getPath("data/{$uuid}");
     }
@@ -95,7 +108,7 @@ class PlayerData implements \JsonSerializable {
     }
 
     public function get(string $key) {
-        return isset($this->data[$key]) ? $this->data[$key] : self::generateBasicData(null, $key);
+        return isset($this->data[$key]) ? $this->data[$key] : self::generateBasicData(null, null, $key);
     }
 
     public function save(): void {

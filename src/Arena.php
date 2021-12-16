@@ -490,34 +490,45 @@ class Arena {
      * Get the PlayerData class that contains the basic data of the player.
      *
      * @see PlayerData
-     * @param  Player          $player Player to get data
+     * @param  string|Player   $player Player to get data
      * @return PlayerData|null
      */
-    public function getPlayerData(Player $player): ?PlayerData {
-        if(!isset($this->data[$player->getUniqueId()->toString()])) {
-            throw new \Exception("Player data was not found.");
+    public function getPlayerData($player): ?PlayerData {
+        if($player instanceof Player) {
+            if($player->isOnline()) {
+                return $this->data[$player->getUniqueId()->toString()];
+            }
+        } else if(is_string($player) && !is_null($uuid)) {
+            if(!is_null(Loader::getInstance()->getServer()->getPlayerExact($player))) {
+                return $this->data[Loader::getInstance()->getServer()->getPlayerExact($player)->getUniqueId()->toString()];
+            } else {
+                return PlayerData::getPlayerDataByName($player);
+            }
         }
 
-        return $this->data[$player->getUniqueId()->toString()];
+        return null;
     }
 
     /**
      * Add a kill to a player.
      *
-     * @param  Player $killer Player to add the kill
-     * @param  Player $died   Player who was killed and to which a death is added.
+     * @param  string|Player $killer Player to add the kill
+     * @param  string|Player $died   Player who was killed and to which a death is added.
      */
-    public function addKill(Player $killer, Player $died): void {
+    public function addKill($killer, $died): void {
         $moneyReward = (int) ConfigManager::getValue("money-reward");
         $economy = $this->getEconomy();
 
-        if(!is_null($economy) && $moneyReward > 0) {
+        if($killer instanceof Player && !is_null($economy) && $moneyReward > 0) {
             $economy->addMoney($killer, $moneyReward);
             $killer->sendPopup("§r§6+{$moneyReward} coins!");
         }
 
         $killerData = $this->getPlayerData($killer);
         
+        if(is_null($killerData))
+            return;
+
         $killerData->set("kills", $killerData->get("kills") + 1);
         $this->addDeath($died);
     }
@@ -525,10 +536,13 @@ class Arena {
     /**
      * Add a death to a player.
      *
-     * @param  Player $died Player to which death is added.
+     * @param  string|Player $died Player to which death is added.
      */
-    public function addDeath(Player $died): void {
+    public function addDeath($died): void {
         $diedData = $this->getPlayerData($died);
+
+        if(is_null($diedData))
+            return;
 
         $diedData->set("deaths", $diedData->get("deaths") + 1);
     }
@@ -536,21 +550,29 @@ class Arena {
     /**
      * Obtain the kills of a player.
      *
-     * @param  Player $player
+     * @param  string|Player $player
      * @return int
      */
-    public function getKills(Player $player): int {
-        return (int) $this->getPlayerData($player)->get("kills");
+    public function getKills($player): int {
+        $playerData = $this->getPlayerData($player);
+
+        if(is_null($playerData))
+            return 0;
+        return (int) $playerData->get("kills");
     }
 
     /**
      * Obtain the deaths of a player.
      *
-     * @param  Player $player
+     * @param  string|Player $player
      * @return int
      */
-    public function getDeaths(Player $player): int {
-        return (int) $this->getPlayerData($player)->get("deaths");
+    public function getDeaths($player): int {
+        $playerData = $this->getPlayerData($player);
+
+        if(is_null($playerData))
+            return 0;
+        return (int) $playerData->get("deaths");
     }
 
     public function shutdown(): void {
