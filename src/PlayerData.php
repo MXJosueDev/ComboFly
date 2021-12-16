@@ -42,7 +42,7 @@ class PlayerData implements \JsonSerializable {
         if(!is_null($player)) 
             $def["player"] = $player;
 
-        if(!is_null($uuid)) {
+        if(!is_null($uuid))
             $def["uuid"] = $uuid;
 
 
