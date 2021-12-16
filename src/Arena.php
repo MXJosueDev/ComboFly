@@ -21,10 +21,14 @@ use combofly\entity\JoinEntity;
 use onebone\economyapi\EconomyAPI;
 use pocketmine\player\Player;
 use pocketmine\player\GameMode;
-use pocketmine\entity\Entity;
+use pocketmine\entity\EntityFactory;
+use pocketmine\entity\EntityDataHelper;
+use pocketmine\entity\Human;
 use pocketmine\item\Item;
+use pocketmine\world\World;
 use pocketmine\world\Position;
 use pocketmine\utils\SingletonTrait;
+use pocketmine\nbt\tag\CompoundTag;
 
 class Arena {
     use SingletonTrait;
@@ -48,7 +52,9 @@ class Arena {
         
         Loader::getInstance()->getScheduler()->scheduleRepeatingTask(new ScoreboardTask(), (int) ConfigManager::getValue("scoreboard-update-interval", "scoreboard.yml") * 20);
 
-        Entity::registerEntity(JoinEntity::class, true, ["ComboFlyJoinNPC", "combofly:join_npc"]);
+        EntityFactory::getInstance()->register(JoinEntity::class, function(World $world, CompoundTag $nbt): JoinEntity {
+			return new JoinEntity(EntityDataHelper::parseLocation($nbt, $world), Human::parseSkinNBT($nbt), $nbt);
+		}, ['ComboFlyJoinNPC', 'combofly:join_npc']);
 
         $this->loadArena();
 
