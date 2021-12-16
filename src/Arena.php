@@ -66,6 +66,12 @@ class Arena {
         Loader::getInstance()->getServer()->getWorldManager()->loadWorld(ConfigManager::getValue("arena-world"));
     }
 
+    /**
+     * Set where players appear in the arena.
+     *
+     * @param  Player $player From this variable the position is obtained
+     * @return void
+     */
     public function setArena($player): void {
         if($player instanceof Player)
             return;
@@ -87,7 +93,13 @@ class Arena {
     
         Loader::getInstance()->getServer()->getWorldManager()->loadWorld(ConfigManager::getValue("lobby-world"));
     }
-    
+  
+    /**
+     * Set where players appear when exiting the arena.
+     *
+     * @param  Player $player From this variable the position is obtained
+     * @return void
+     */
     public function setLobby($player): void {
         if($player instanceof Player)
             return;
@@ -103,6 +115,11 @@ class Arena {
         $this->loadLobby();
     }
 
+    /**
+     * Know if the arena is loaded.
+     *
+     * @return bool `true` if it is loaded and `false` if not
+     */
     public function isArenaLoaded(): bool {
         if(!ConfigManager::getValue("arena-world"))
             return false;
@@ -110,6 +127,11 @@ class Arena {
         return Loader::getInstance()->getServer()->getWorldManager()->isWorldLoaded(ConfigManager::getValue("arena-world"));
     }
 
+    /**
+     * Know if the lobby is loaded.
+     *
+     * @return bool `true` if it is loaded and `false` if not
+     */
     public function isLobbyLoaded(): bool {
         if(!ConfigManager::getValue("lobby-world"))
             return true;
@@ -117,6 +139,11 @@ class Arena {
         return Loader::getInstance()->getServer()->getWorldManager()->isWorldLoaded(ConfigManager::getValue("lobby-world"));
     }
 
+    /**
+     * Respawn a player if they are in spectator mode.
+     *
+     * @param  Player $player Player who is currently in spectator mode.
+     */
     public function respawn(Player $player): void {
         if(!$this->isSpectator($player))
             return;
@@ -126,6 +153,12 @@ class Arena {
         $this->addPlayer($player, true);
     }
 
+    /**
+     * Add a player to the arena.
+     *
+     * @param  Player $player  Player to be added
+     * @param  bool   $respawn `true` if the player respawn (this is only used by @method void respawn())
+     */ 
     public function addPlayer(Player $player, bool $respawn = false): void {
         if($this->isPlayer($player) || $this->isSpectator($player))
             return;
@@ -156,6 +189,12 @@ class Arena {
             $this->broadcast("§c{$player->getName()} §r§7joined the arena!");
     }
 
+    /**
+     * Take a player out of the arena.
+     *
+     * @param  Player $player Player to be removed
+     * @param  bool   $isDied If the player is dead
+     */
     public function quitPlayer(Player $player, bool $isDied = true): void {
         if(!$this->isPlayer($player))
             return;
@@ -188,10 +227,21 @@ class Arena {
         ScoreboardTask::getInstance()->getScoreboardAPI()->remove($player);
     }
 
+    /**
+     * Know if a player is in the arena.
+     *
+     * @return bool `true` if it is playing and `false` if not
+     */ 
     public function isPlayer(Player $player): bool {
         return isset($this->players[$player->getUniqueId()->toString()]);
     }
 
+    /**
+     * Add a player to spectate the arena.
+     *
+     * @param  Player $player  Player to be added
+     * @param  bool   $isDied `true` if the player was added as a spectator due to being killed (This is only used by events)
+     */ 
     public function addSpectator(Player $player, bool $isDied = true): void {
         if($this->isSpectator($player) || $this->isPlayer($player))
             return;
@@ -244,6 +294,11 @@ class Arena {
         }
     }
 
+    /**
+     * Take a spectator out of the arena.
+     *
+     * @param  Player $player Player to be removed
+     */
     public function quitSpectator(Player $player): void {
         if(!$this->isSpectator($player)) 
             return;
@@ -275,10 +330,20 @@ class Arena {
         ScoreboardTask::getInstance()->getScoreboardAPI()->remove($player);
     }
 
+    /**
+     * Know if a player is spectating the arena.
+     *
+     * @return bool `true` if it is spectating and `false` if not
+     */ 
     public function isSpectator(Player $player): bool {
         return isset($this->spectators[$player->getUniqueId()->toString()]);
     }
 
+    /**
+     * Get an array with the players that are currently playing.
+     *
+     * @return array<Player>
+     */
     public function getPlayers(): array {
         $players = [];
 
@@ -289,6 +354,11 @@ class Arena {
         return $players;
     }
 
+    /**
+     * Get an array with the players that are currently spectating.
+     *
+     * @return array<Player>
+     */
     public function getSpectators(): array {
         $players = [];
 
@@ -299,6 +369,11 @@ class Arena {
         return $players;
     }
 
+    /**
+     * Get an array with the players and spectators who are currently playing.
+     *
+     * @return array<Player>
+     */
     public function getAllPlayers(): array {
         $players = [];
 
@@ -309,8 +384,12 @@ class Arena {
         return $players;
     }
 
+    /**
+     * Set the kit with which the players appear in the arena.
+     *
+     * @param  Player $player From this variable the inventory and the inventory of the armor is obtained
+     */
     public function setKit(Player $player): void {
-        // Loader::getInstance()->getServer()->getAsyncPool()->submitTask(new SetKitTask($player->getInventory(), $player->getArmorInventory(), strtolower($player->getName())));
         $fileData = [];
         $file = ConfigManager::getConfig("kit.yml");
 
@@ -331,6 +410,11 @@ class Arena {
         $file->save();
     } 
 
+    /**
+     * Place the kit configured for the arena on the player.
+     *
+     * @param  Player $player Player to place the kit
+     */
     public function giveKit(Player $player): void {
         $inventory = [];
         $armorInventory = [];
@@ -364,6 +448,12 @@ class Arena {
         $player->getInventory()->setHeldItemIndex($slot);
     }
 
+    /**
+     * Send a global message to all players and spectators in the arena.
+     *
+     * @param  string $text Message to send
+     * @param         $type Type of message to send
+     */
     public function broadcast(string $text, $type = self::MESSAGE): void {
         foreach($this->getAllPlayers() as $player) {
             switch($type) {
@@ -390,6 +480,13 @@ class Arena {
         return $this->economy;
     }
 
+    /**
+     * Get the PlayerData class that contains the basic data of the player.
+     *
+     * @see PlayerData
+     * @param  Player          $player Player to get data
+     * @return PlayerData|null
+     */
     public function getPlayerData(Player $player): ?PlayerData {
         if(!isset($this->data[$player->getUniqueId()->toString()])) {
             throw new \Exception("Player data was not found.");
@@ -398,6 +495,12 @@ class Arena {
         return $this->data[$player->getUniqueId()->toString()];
     }
 
+    /**
+     * Add a kill to a player.
+     *
+     * @param  Player $killer Player to add the kill
+     * @param  Player $died   Player who was killed and to which a death is added.
+     */
     public function addKill(Player $killer, Player $died): void {
         $moneyReward = (int) ConfigManager::getValue("money-reward");
         $economy = $this->getEconomy();
@@ -413,16 +516,33 @@ class Arena {
         $this->addDeath($died);
     }
 
+    /**
+     * Add a death to a player.
+     *
+     * @param  Player $died Player to which death is added.
+     */
     public function addDeath(Player $died): void {
         $diedData = $this->getPlayerData($died);
 
         $diedData->set("deaths", $diedData->get("deaths") + 1);
     }
 
+    /**
+     * Obtain the kills of a player.
+     *
+     * @param  Player $player
+     * @return int
+     */
     public function getKills(Player $player): int {
         return (int) $this->getPlayerData($player)->get("kills");
     }
 
+    /**
+     * Obtain the deaths of a player.
+     *
+     * @param  Player $player
+     * @return int
+     */
     public function getDeaths(Player $player): int {
         return (int) $this->getPlayerData($player)->get("deaths");
     }
