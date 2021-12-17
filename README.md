@@ -14,12 +14,29 @@ Please see <a href="https://github.com/MXJosueDev/ComboFly/blob/PM4/CONTRIBUTING
 
 ### API
 
+- Broadcast Message
+```php
+<?php
+
+use combofly\Arena; /* Class in which the API methods are.*/
+
+$arena = Arena::getInstance(); /* Getting the instance of the object. */
+
+/* The second parameter is the type of message to send, you can find the types
+   in `combofly\Arena` or this is the list:
+    - MESSAGE  
+    - TITLE  
+    - SUBTITLE
+    - TIP   
+    - POPUP */
+$arena->broadcast("Your message here.", Arena::MESSAGE); /* Global message to players and spectators in the arena. */
+```
+
 - Get Kills, Deaths and PlayerData of Player
 ```php
 <?php
 
 use combofly\Arena; /* Class in which the API methods are.*/
-use pocketmine\Server;
 
 $arena = Arena::getInstance(); /* Getting the instance of the object. */
 
