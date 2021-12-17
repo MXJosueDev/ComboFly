@@ -8,49 +8,6 @@ It is currently upgrading from PM3 to PM4.
 
 Install the file named `ComboFly.phar` in the`/home/plugins/` folder, you can download this file from [Poggit](https://poggit.pmmp.io/plugins).
 
-## Developers
-
-Please see <a href="https://github.com/MXJosueDev/ComboFly/blob/PM4/CONTRIBUTING.md">CONTRIBUTING</a>.
-
-### API
-
-- Broadcast Message
-```php
-<?php
-
-use combofly\Arena; /* Class in which the API methods are.*/
-
-$arena = Arena::getInstance(); /* Getting the instance of the object. */
-
-/* The second parameter is the type of message to send, you can find the types
-   in `combofly\Arena` or this is the list:
-    - MESSAGE  
-    - TITLE  
-    - SUBTITLE
-    - TIP   
-    - POPUP */
-$arena->broadcast("Your message here.", Arena::MESSAGE); /* Global message to players and spectators in the arena. */
-```
-
-- Get Kills, Deaths and PlayerData of Player
-```php
-<?php
-
-use combofly\Arena; /* Class in which the API methods are.*/
-
-$arena = Arena::getInstance(); /* Getting the instance of the object. */
-
-$player = "MXJosuepro033"; /* Getting a player to get their kills. */
-
-/* The $player parameter can have a `pocketmine\player\Player` instance or be a string 
-   with the player's name (If you query the data for the player's name
-   and it is offline, it must have played before or it will return `0` or `null` 
-   depending on the method used). */
-$playerData = $arena->getPlayerData($player); /* It will return an object with instance of `combofly\PlayerData`. */
-$playerKills = $arena->getKills($player); /* This will return the number of kills of the player. */
-$playerDeaths = $arena->getDeaths($player); /* This will return the number of deaths of the player. */
-```
-
 ## Command
 
 ### Command info
@@ -136,6 +93,181 @@ $playerDeaths = $arena->getDeaths($player); /* This will return the number of de
 | MySQL Support |
 | Tops Floating Text |
 | UI configuration menus |
+
+## Developers
+
+Please see <a href="https://github.com/MXJosueDev/ComboFly/blob/PM4/CONTRIBUTING.md">CONTRIBUTING</a>.
+
+### API
+
+- Set up the arena
+```php
+<?php
+
+use combofly\Arena; /* Class in which the API methods are.*/
+use pocketmine\world\Position;
+use pocketmine\Server;
+
+$arena = Arena::getInstance(); /* Getting the instance of the object. */
+
+$world = Server::getInstance()->getWorldManager()->getWorldByName("ComboFlyArena"); /* Object with instance of `pocketmine\world\World`. */
+$pos = new Position(0, 100, 0 $world); /* Object instantiated to `pocketmine\world\Position`. */
+
+$arena->setArena($pos); /* Set the position in which players will appear in the arena. */
+```
+
+- Set up the lobby
+```php
+<?php
+
+use combofly\Arena; /* Class in which the API methods are.*/
+use pocketmine\world\Position;
+use pocketmine\Server;
+
+$arena = Arena::getInstance(); /* Getting the instance of the object. */
+
+$world = Server::getInstance()->getWorldManager()->getDefaultWorld(); /* Object with instance of `pocketmine\world\World`. */
+$pos = new Position(0, 100, 0 $world); /* Object instantiated to `pocketmine\world\Position`. */
+
+$arena->setLobby($pos); /* Sets the position players will appear in when they exit the arena. */
+```
+
+- Known if arena or lobby is loaded
+```php
+<?php
+
+use combofly\Arena; /* Class in which the API methods are.*/
+
+$arena = Arena::getInstance(); /* Getting the instance of the object. */
+
+/* Returns `true` if it is loaded and` false` if not. */
+$isArenaLoaded = $arena->isArenaLoaded(); 
+$isLobbyLoaded = $arena->isLobbyLoaded(); 
+```
+
+- Add players or spectators to the arena
+```php
+<?php
+
+use combofly\Arena; /* Class in which the API methods are.*/
+use pocketmine\Server;
+
+$arena = Arena::getInstance(); /* Getting the instance of the object. */
+
+$player = Server::getInstance()->getPlayerExact("MXJosuepro033"); /* Player to add. */
+
+/* This adds the player to the arena. */
+$arena->addPlayer($player); 
+$arena->addSpectator($player); 
+```
+
+- Remove players or spectators to the arena
+```php
+<?php
+
+use combofly\Arena; /* Class in which the API methods are.*/
+use pocketmine\Server;
+
+$arena = Arena::getInstance(); /* Getting the instance of the object. */
+
+$player = Server::getInstance()->getPlayerExact("MXJosuepro033"); /* Player to remove. */
+
+/* This remove the player to the arena. */
+$arena->quitPlayer($player); 
+$arena->quitSpectator($player); 
+```
+
+- Know if a player is a player or a spectator in the arena
+```php
+<?php
+
+use combofly\Arena; /* Class in which the API methods are.*/
+use pocketmine\Server;
+
+$arena = Arena::getInstance(); /* Getting the instance of the object. */
+
+$player = Server::getInstance()->getPlayerExact("MXJosuepro033"); /* Player. */
+
+/* This returns `true` if it is and` false` if not. */
+$arena->isPlayer($player); 
+$arena->isSpectator($player); 
+```
+
+- Get the list of players, spectators, or all players
+```php
+<?php
+
+use combofly\Arena; /* Class in which the API methods are.*/
+
+$arena = Arena::getInstance(); /* Getting the instance of the object. */
+
+$players = $arena->getPlayers(); /* Returns an array with the list of players. */
+$spectators = $arena->getSpectators(); /* Returns an array with the list of spectators. */
+$all = $arena->getAllPlayers(); /* Returns an array with the list of players and spectators. */
+```
+
+- Set up the players kit when entering the arena
+```php
+<?php
+
+use combofly\Arena; /* Class in which the API methods are.*/
+
+$arena = Arena::getInstance(); /* Getting the instance of the object. */
+
+$player = Server::getInstance()->getPlayerExact("MXJosuepro033"); /* From this variable the Inventory and the Armor Inventory are obtained. */
+
+$arena->setKit($player); /* This sets up the arena kit. */
+```
+
+- Give the arena kit to a player
+```php
+<?php
+
+use combofly\Arena; /* Class in which the API methods are.*/
+
+$arena = Arena::getInstance(); /* Getting the instance of the object. */
+
+$player = Server::getInstance()->getPlayerExact("MXJosuepro033"); /* Player to give the kit. */
+
+$arena->giveKit($player); /* This resets the player's inventory and gives him the items. */
+```
+
+- Broadcast Message
+```php
+<?php
+
+use combofly\Arena; /* Class in which the API methods are.*/
+
+$arena = Arena::getInstance(); /* Getting the instance of the object. */
+
+/* The second parameter is the type of message to send, you can find the types
+   in `combofly\Arena` or this is the list:
+    - MESSAGE  
+    - TITLE  
+    - SUBTITLE
+    - TIP   
+    - POPUP */
+$arena->broadcast("Your message here.", Arena::MESSAGE); /* Global message to players and spectators in the arena. */
+```
+
+- Get Kills, Deaths and PlayerData of Player
+```php
+<?php
+
+use combofly\Arena; /* Class in which the API methods are.*/
+
+$arena = Arena::getInstance(); /* Getting the instance of the object. */
+
+$player = "MXJosuepro033"; /* Getting a player to get their kills. */
+
+/* The $player parameter can have a `pocketmine\player\Player` instance or be a string 
+   with the player's name (If you query the data for the player's name
+   and it is offline, it must have played before or it will return `0` or `null` 
+   depending on the method used). */
+$playerData = $arena->getPlayerData($player); /* It will return an object with instance of `combofly\PlayerData`. */
+$playerKills = $arena->getKills($player); /* This will return the number of kills of the player. */
+$playerDeaths = $arena->getDeaths($player); /* This will return the number of deaths of the player. */
+```
 
 ## License
 

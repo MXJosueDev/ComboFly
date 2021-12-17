@@ -23,8 +23,9 @@ use pocketmine\player\Player;
 use pocketmine\network\mcpe\protocol\ProtocolInfo;
 use pocketmine\utils\Utils;
 use pocketmine\plugin\Plugin;
+use pocketmine\plugin\PluginOwned;
 
-class ComboFlyCommand extends Command {
+class ComboFlyCommand extends Command implements PluginOwned {
 
     public function __construct() {
         parent::__construct("combofly");
@@ -143,5 +144,9 @@ class ComboFlyCommand extends Command {
         }
 
         return true;
+    }
+
+    public function getOwningPlugin(): Plugin {
+        return Loader::getInstance();
     }
 }

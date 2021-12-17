@@ -21,7 +21,7 @@ interface ConfigDefaults {
         'provider' => 'json',
         'money-reward' => 20,
         'knockback' => 0.25,
-        'arena-level' => false,
+        'arena-world' => false,
         'arena-pos' => [
           'x' => 0,
           'y' => 0,
@@ -34,7 +34,7 @@ interface ConfigDefaults {
           'name' => '&r&l&cNavigator',
           'lore' => '&r&o&7Right click to open the menu.',
         ],
-        'lobby-level' => false,
+        'lobby-world' => false,
         'lobby-pos' => [
           'x' => 0,
           'y' => 0,

@@ -75,13 +75,12 @@ class Arena {
     /**
      * Set where players appear in the arena.
      *
-     * @param  Player $player From this variable the position is obtained
+     * @param  Position|Player $pos From this variable the position is obtained
      * @return void
      */
-    public function setArena($player): void {
-        if($player instanceof Player)
-            return;
-        $pos = $player->getPosition();
+    public function setArena($pos): void {
+        if($pos instanceof Player) 
+            $pos = $pos->getPosition();
 
         ConfigManager::setValue("arena-world", $pos->getWorld()->getFolderName());
         ConfigManager::setValue("arena-pos", [
@@ -103,13 +102,12 @@ class Arena {
     /**
      * Set where players appear when exiting the arena.
      *
-     * @param  Player $player From this variable the position is obtained
+     * @param  Position|Player $pos From this variable the position is obtained
      * @return void
      */
-    public function setLobby($player): void {
-        if($player instanceof Player)
-            return;
-        $pos = $player->getPosition();
+    public function setLobby($pos): void {
+        if($pos instanceof Player) 
+            $pos = $pos->getPosition();
 
         ConfigManager::setValue("lobby-world", $pos->getWorld()->getFolderName());
         ConfigManager::setValue("lobby-pos", [
