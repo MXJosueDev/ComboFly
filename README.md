@@ -25,7 +25,7 @@ $arena = Arena::getInstance(); /* Getting the instance of the object. */
 
 $player = "MXJosuepro033"; /* Getting a player to get their kills. */
 
-/* The $player parameter can have a pocketmine\player\Player instance or be a string 
+/* The $player parameter can have a `pocketmine\player\Player` instance or be a string 
    with the player's name (If you query the data for the player's name
    and it is offline, it must have played before or it will return `0` or `null` 
    depending on the method used). */
