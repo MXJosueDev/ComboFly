@@ -53,8 +53,8 @@ class Arena {
         Loader::getInstance()->getScheduler()->scheduleRepeatingTask(new ScoreboardTask(), (int) ConfigManager::getValue("scoreboard-update-interval", "scoreboard.yml") * 20);
 
         EntityFactory::getInstance()->register(JoinEntity::class, function(World $world, CompoundTag $nbt): JoinEntity {
-			return new JoinEntity(EntityDataHelper::parseLocation($nbt, $world), Human::parseSkinNBT($nbt), $nbt);
-		}, ['ComboFlyJoinNPC', 'combofly:join_npc']);
+            return new JoinEntity(EntityDataHelper::parseLocation($nbt, $world), Human::parseSkinNBT($nbt), $nbt);
+        }, ['ComboFlyJoinNPC', 'combofly:join_npc']);
 
         $this->loadArena();
 
