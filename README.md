@@ -6,7 +6,7 @@ It is currently upgrading from PM3 to PM4.
 
 ## Installation
 
-Install the file named `ComboFly.phar` in the`/home/plugins/` folder, you can download this file from [Poggit](https://poggit.pmmp.io/plugins).
+Install the file named `ComboFly.phar` in the`/home/plugins/` folder, you can download this file from [Poggit](https://poggit.pmmp.io/ComboFly).
 
 ## Command
 
