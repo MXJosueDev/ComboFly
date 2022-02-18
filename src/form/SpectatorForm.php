@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-/*
+/**
  *   _____                _           ______ _       
  *  / ____|              | |         |  ____| |      
  * | |     ___  _ __ ___ | |__   ___ | |__  | |_   _ 
@@ -16,29 +16,13 @@ namespace combofly\form;
 
 use combofly\Arena;
 use combofly\utils\ConfigManager;
-use combofly\api\form\jojoe77777\FormAPI\SimpleForm;
+use combofly\api\dktapps\pmforms\MenuForm;
+use combofly\api\dktapps\pmforms\MenuOption;
 use pocketmine\player\Player;
 
-class SpectatorForm extends SimpleForm {
+class SpectatorForm {
 
     public function __construct(Player $player) {
-        parent::__construct(function(Player $player, int $data = null) {
-            if(is_null($data))
-                return;
-            
-            switch($data) {
-                case 0:
-                    // NOOP
-                    break;
-                case 1:
-                    Arena::getInstance()->respawn($player);
-                    break;
-                case 2:
-                    Arena::getInstance()->quitSpectator($player);
-                    break;
-            }
-        });
-
         $formData = ConfigManager::getValue("spectator-menu", "menus.yml");
         $formTitle = str_replace(["&"], ["§"], $formData["title"]);
         $formContent = str_replace(["&"], ["§"], $formData["content"]);
@@ -46,13 +30,31 @@ class SpectatorForm extends SimpleForm {
         $formButtonRespawn = str_replace(["&"], ["§"], $formData["buttons"]["respawn"] . "\n&r&7Click to select!");
         $formButtonLobby = str_replace(["&"], ["§"], $formData["buttons"]["go-to-lobby"] . "\n&r&7Click to select!");
 
-        $this->setTitle($formTitle);
-        $this->setContent($formContent);
+        $form = new MenuForm(
+            $formTitle,
+            $formContent,
 
-        $this->addButton($formButtonContinue);
-        $this->addButton($formButtonRespawn);
-        $this->addButton($formButtonLobby);
+            [
+                new MenuOption($formButtonContinue),
+                new MenuOption($formButtonRespawn),
+                new MenuOption($formButtonLobby)
+            ],
+            
+            function(Player $submitter, int $selected): void {
+                switch($selected) {
+                    case 0:
+                        // NOOP
+                        break;
+                    case 1:
+                        Arena::getInstance()->respawn($player);
+                        break;
+                    case 2:
+                        Arena::getInstance()->quitSpectator($player);
+                        break;
+                }
+            }
+        );
 
-        $this->sendToPlayer($player);
+        $player->sendForm($form);
     }
 }

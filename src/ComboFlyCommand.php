@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-/*
+/**
  *   _____                _           ______ _       
  *  / ____|              | |         |  ____| |      
  * | |     ___  _ __ ___ | |__   ___ | |__  | |_   _ 
@@ -53,6 +53,7 @@ class ComboFlyCommand extends Command implements PluginOwned {
 §r/{$label} setkit§7: §r§cConfigure the kit with which the players appear in the arena (The kit will be configured with your inventory).§r\n
 §r/{$label} setjoin§7: §r§cPut the JoinNPC in your current location.§r\n
 §r/{$label} removejoin§7: §r§cRemove the JoinNPC (Hit it).§r\n
+§r/{$label} debug§7: §r§cGet the information you need to report a bug on github (It only runs from the console).§r\n
 §7=================== §l§bCombo§3Fly §r§7===================§r\n
                 ");
                 break;

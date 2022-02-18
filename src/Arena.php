@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-/*
+/**
  *   _____                _           ______ _       
  *  / ____|              | |         |  ____| |      
  * | |     ___  _ __ ___ | |__   ___ | |__  | |_   _ 
@@ -346,7 +346,7 @@ class Arena {
     /**
      * Get an array with the players that are currently playing.
      *
-     * @return array<Player>
+     * @return Player[]
      */
     public function getPlayers(): array {
         $players = [];
@@ -361,7 +361,7 @@ class Arena {
     /**
      * Get an array with the players that are currently spectating.
      *
-     * @return array<Player>
+     * @return Player[]
      */
     public function getSpectators(): array {
         $players = [];
@@ -376,7 +376,7 @@ class Arena {
     /**
      * Get an array with the players and spectators who are currently playing.
      *
-     * @return array<Player>
+     * @return Player[]
      */
     public function getAllPlayers(): array {
         $players = [];

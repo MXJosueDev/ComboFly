@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-/*
+/**
  *   _____                _           ______ _       
  *  / ____|              | |         |  ____| |      
  * | |     ___  _ __ ___ | |__   ___ | |__  | |_   _ 
@@ -97,6 +97,9 @@ class EventListener implements Listener {
         
         foreach($player->getWorld()->getNearbyEntities($expandedBoundingBox, $player) as $entity) {
             if($entity instanceof JoinEntity) {
+                // TODO: Move this to JoinEntity tick for best optimization
+
+                // Pitch and Yaw calculations
                 $xdiff = $player->getPosition()->x - $entity->getPosition()->x;
                 $zdiff = $player->getPosition()->z - $entity->getPosition()->z;
                 $angle = atan2($zdiff, $xdiff);
@@ -107,13 +110,20 @@ class EventListener implements Listener {
                 $angle = atan2($dist, $ydiff);
                 $pitch = (($angle * 180) / M_PI) - 90;
         
-                $pk = new MovePlayerPacket();
-                $pk->actorRuntimeId = $entity->getId();
-                $pk->position = $entity->getPosition()->asVector3()->add(0, $entity->getEyeHeight(), 0);
-                $pk->yaw = $yaw;
-                $pk->pitch = $pitch;
-                $pk->headYaw = $yaw;
-                $pk->onGround = $entity->onGround;
+                // Package Creation
+                $pk = MovePlayerPacket::create(
+                    $entity->getId(),
+                    $entity->getPosition()->asVector3()->add(0, $entity->getEyeHeight(), 0),
+                    $pitch,
+                    $yaw,
+                    $headYaw,
+                    MovePlayerPacket::NORMAL,
+                    $entity->onGround,
+                    0,
+                    0,
+                    0,
+                    0
+                );
                 
                 $player->getNetworkSession()->sendDataPacket($pk);
             }
@@ -192,7 +202,7 @@ class EventListener implements Listener {
                     if(!$damager instanceof Player || !Arena::getInstance()->isPlayer($damager))
                         return;
                     
-                    // Utils::strikeLightning($player, $damager);
+                    Utils::strikeLightning($player->getLocation(), $damager);
                     $damager->getNetworkSession()->sendDataPacket(Utils::addSound($damager, "random.pop"));
     
                     Arena::getInstance()->addKill($damager, $player);

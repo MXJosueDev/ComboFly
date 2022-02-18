@@ -29,7 +29,7 @@ Install the file named `ComboFly.phar` in the`/home/plugins/` folder, you can do
 | **/combofly setkit** | Configure the kit with which the players appear in the arena (The kit will be configured with your inventory). | combofly.command.setkit |
 | **/combofly setjoin** | Put the JoinNPC in your current location. | combofly.command.setjoin |
 | **/combofly removejoin** | Remove the JoinNPC (Hit it). | combofly.command.removejoin |
-| **/combofly debug** | Debug info for bug report. | No permission. |
+| **/combofly debug** | Get the information you need to report a bug on github (It only runs from the console). | No permission. |
 
 ## Permissions
 
@@ -94,9 +94,19 @@ Install the file named `ComboFly.phar` in the`/home/plugins/` folder, you can do
 | Tops Floating Text |
 | UI configuration menus |
 
+## Libraries
+
+List of libraries used in this plugin.
+
+Note: All libraries are already integrated so you don't have to do extra installations.
+
+### Library
+- [pmforms - dktapps](https://github.com/dktapps-pm-pl/pmforms)
+- [ScoreboardAPI - SabyMC](https://github.com/SabyMC/Implements/blob/main/src/scoreboard/ScoreboardAPI.php)
+
 ## Developers
 
-Please see <a href="https://github.com/MXJosueDev/ComboFly/blob/PM4/CONTRIBUTING.md">CONTRIBUTING</a>.
+Please see [CONTRIBUTING](https://github.com/MXJosueDev/ComboFly/blob/PM4/CONTRIBUTING.md).
 
 ### API
 

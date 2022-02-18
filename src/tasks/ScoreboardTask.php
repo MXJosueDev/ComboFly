@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-/*
+/**
  *   _____                _           ______ _       
  *  / ____|              | |         |  ____| |      
  * | |     ___  _ __ ___ | |__   ___ | |__  | |_   _ 
@@ -31,42 +31,22 @@ class ScoreboardTask extends Task {
     public function __construct() {
         self::setInstance($this);
         
-        $this->scoreboardAPI = new ScoreboardAPI();
+        $this->scoreboardAPI = ScoreboardAPI::getInstance();
     }
 
-    public function onRun() : void {
+    public function onRun(): void {
         $api = $this->getScoreboardAPI();
 
         $title = str_replace(["&"], ["§"], ConfigManager::getValue("scoreboard-title", "scoreboard.yml"));
 
         foreach(Arena::getInstance()->getPlayers() as $player) {
-            $api->new($player, $player->getName(), $title);
-
-            $lines = $this->getLines($player);
-            $i = 0;
-
-            foreach($lines as $line) {
-                if($i < 15) {
-                    $i++;
-                    
-                    $api->setLine($player, $i, $line);
-                }
-            }
+            $api->sendNew($player, $title);
+            $api->setLines($this->getLines($player));
         }
 
         foreach(Arena::getInstance()->getSpectators() as $player) {
-            $api->new($player, $player->getName(), $title);
-
-            $lines = $this->getLines($player, true);
-            $i = 0;
-
-            foreach($lines as $line) {
-                if($i < 15) {
-                    $i++;
-                    
-                    $api->setLine($player, $i, $line);
-                }
-            }
+            $api->sendNew($player, $title);
+            $api->setLines($this->getLines($player), true);
         }
     }
 
@@ -83,7 +63,7 @@ class ScoreboardTask extends Task {
             "{date}"                => date("d/m/Y"),
             "{player_kills}"        => Arena::getInstance()->getKills($player),
             "{player_deaths}"       => Arena::getInstance()->getDeaths($player),
-            "{player_ping}"         => $player->getPing(), // FIXME
+            "{player_ping}"         => $player->getNetworkSession()->getPing(),
             "{player_display_name}" => $player->getDisplayName(),
             "{player_real_name}"    => $player->getName(),
             "{playing}"             => count(Arena::getInstance()->getPlayers()),
