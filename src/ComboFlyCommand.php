@@ -137,7 +137,7 @@ class ComboFlyCommand extends Command implements PluginOwned {
         return false;
     }
 
-    private function checkConsole(Player $player): bool {
+    private function checkConsole(CommandSender $player): bool {
         if(!$player instanceof Player) {
             $player->sendMessage(ConfigManager::getPrefix() . "§cPlease use this command within the game.");
             return false;

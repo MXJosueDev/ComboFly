@@ -34,7 +34,7 @@ class ScoreboardTask extends Task {
         $this->scoreboardAPI = new ScoreboardAPI();
     }
 
-    public function onRun() {
+    public function onRun() : void {
         $api = $this->getScoreboardAPI();
 
         $title = str_replace(["&"], ["§"], ConfigManager::getValue("scoreboard-title", "scoreboard.yml"));
