@@ -28,7 +28,8 @@ use pocketmine\network\mcpe\protocol\types\entity\EntityIds;
 
 class Utils {
 
-    public static function resetPlayer(Player $player): void {
+    public static function resetPlayer(Player $player): void 
+    {
         $player->setSprinting(false);
         $player->setSneaking(false);
 
@@ -46,7 +47,8 @@ class Utils {
         $player->setGamemode(GameMode::SURVIVAL());
     }
 
-    public static function addSound(Vector3 $vector, string $sound, ?array $players = null): PlaySoundPacket {
+    public static function addSound(Vector3 $vector, string $sound, ?array $players = null): PlaySoundPacket 
+    {
         $pk = PlaySoundPacket::create(
             $sound,
             $vector->getX(),
@@ -62,7 +64,8 @@ class Utils {
         return $pk;
     } 
 
-    public static function strikeLightning(Location $location, Player $killer): void {
+    public static function strikeLightning(Location $location, Player $killer): void 
+    {
         $level = $location->getWorld();
 
         $light = AddActorPacket::create(
@@ -90,7 +93,8 @@ class Utils {
     } 
 
     // Source from: https://github.com/larryTheCoder/SkyWarsForPE/blob/11d3f734a9c716a968c5747aaf5a427d960de97f/src/larryTheCoder/arena/api/Arena.php#L496
-    public static function sendAdventureSettings(Player $player): void {
+    public static function sendAdventureSettings(Player $player): void 
+    {
         $player->setAllowFlight(true);
 
         $pk = AdventureSettingsPacket::create(

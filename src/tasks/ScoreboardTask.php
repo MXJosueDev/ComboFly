@@ -28,13 +28,15 @@ class ScoreboardTask extends Task {
 
     private $scoreboardAPI;
 
-    public function __construct() {
+    public function __construct() 
+    {
         self::setInstance($this);
         
         $this->scoreboardAPI = ScoreboardAPI::getInstance();
     }
 
-    public function onRun(): void {
+    public function onRun(): void 
+    {
         $api = $this->getScoreboardAPI();
 
         $title = str_replace(["&"], ["§"], ConfigManager::getValue("scoreboard-title", "scoreboard.yml"));
@@ -50,7 +52,8 @@ class ScoreboardTask extends Task {
         }
     }
 
-    public function getLines(Player $player, bool $spectator = false): array {
+    public function getLines(Player $player, bool $spectator = false): array 
+    {
         $lines = [];
 
         if(!$spectator) {
@@ -82,7 +85,8 @@ class ScoreboardTask extends Task {
         return $lines;
     }
 
-    public function getScoreboardAPI(): ScoreboardAPI {
+    public function getScoreboardAPI(): ScoreboardAPI 
+    {
         return $this->scoreboardAPI;
     }
 }

@@ -25,7 +25,6 @@ use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\player\PlayerExhaustEvent;
 use pocketmine\event\player\PlayerDropItemEvent;
 use pocketmine\event\player\PlayerDeathEvent;
-use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\entity\EntityTeleportEvent;
 use pocketmine\event\entity\EntityDamageEvent;
@@ -39,7 +38,8 @@ class EventListener implements Listener {
 
     private $cooldown = [];
 
-    public function onPlayerJoin(PlayerJoinEvent $event): void {
+    public function onPlayerJoin(PlayerJoinEvent $event): void 
+    {
         $player = $event->getPlayer();
 
         $playerData = new PlayerData($player->getName(), $player->getUniqueId()->toString());
@@ -47,7 +47,8 @@ class EventListener implements Listener {
         Arena::getInstance()->data[$player->getUniqueId()->toString()] = $playerData;
     }
 
-    public function onPlayerQuit(PlayerQuitEvent $event): void {
+    public function onPlayerQuit(PlayerQuitEvent $event): void 
+    {
         $player = $event->getPlayer();
 
         if(Arena::getInstance()->isPlayer($player))
@@ -59,7 +60,8 @@ class EventListener implements Listener {
         unset(Arena::getInstance()->data[$player->getUniqueId()->toString()]);
     }
 
-    public function onPlayerExhaust(PlayerExhaustEvent $event): void {
+    public function onPlayerExhaust(PlayerExhaustEvent $event): void 
+    {
         $player = $event->getPlayer();
 
         if(!$player instanceof Player)
@@ -70,7 +72,8 @@ class EventListener implements Listener {
         }
     }
 
-    public function onPlayerDropItem(PlayerDropItemEvent $event): void {
+    public function onPlayerDropItem(PlayerDropItemEvent $event): void 
+    {
         $player = $event->getPlayer();
 
         if(Arena::getInstance()->isPlayer($player) || Arena::getInstance()->isSpectator($player)) {
@@ -78,7 +81,8 @@ class EventListener implements Listener {
         }
     }
     
-    public function onPlayerDeath(PlayerDeathEvent $event): void {
+    public function onPlayerDeath(PlayerDeathEvent $event): void 
+    {
         $player = $event->getPlayer();
 
         if(Arena::getInstance()->isPlayer($player) || Arena::getInstance()->isSpectator($player)) {
@@ -87,50 +91,8 @@ class EventListener implements Listener {
         }
     }
 
-    public function onPlayerMove(PlayerMoveEvent $event): void {
-        $player = $event->getPlayer();
-
-        if(!ConfigManager::getValue("npc-rotation", "entities.yml"))
-            return;
-
-        $expandedBoundingBox = $player->getBoundingBox()->expandedCopy(15, 15, 15);
-        
-        foreach($player->getWorld()->getNearbyEntities($expandedBoundingBox, $player) as $entity) {
-            if($entity instanceof JoinEntity) {
-                // TODO: Move this to JoinEntity tick for best optimization
-
-                // Pitch and Yaw calculations
-                $xdiff = $player->getPosition()->x - $entity->getPosition()->x;
-                $zdiff = $player->getPosition()->z - $entity->getPosition()->z;
-                $angle = atan2($zdiff, $xdiff);
-                $yaw = (($angle * 180) / M_PI) - 90;
-                $ydiff = $player->getPosition()->y - $entity->getPosition()->y;
-                $v = new Vector2($entity->getPosition()->x, $entity->getPosition()->z);
-                $dist = $v->distance(new Vector2($player->getPosition()->x, $player->getPosition()->z));
-                $angle = atan2($dist, $ydiff);
-                $pitch = (($angle * 180) / M_PI) - 90;
-        
-                // Package Creation
-                $pk = MovePlayerPacket::create(
-                    $entity->getId(),
-                    $entity->getPosition()->asVector3()->add(0, $entity->getEyeHeight(), 0),
-                    $pitch,
-                    $yaw,
-                    $headYaw,
-                    MovePlayerPacket::NORMAL,
-                    $entity->onGround,
-                    0,
-                    0,
-                    0,
-                    0
-                );
-                
-                $player->getNetworkSession()->sendDataPacket($pk);
-            }
-        }
-    }
-
-    public function onPlayerInteract(PlayerInteractEvent $event): void {
+    public function onPlayerInteract(PlayerInteractEvent $event): void 
+    {
         $player = $event->getPlayer();
 
         if(!Arena::getInstance()->isSpectator($player))
@@ -148,7 +110,8 @@ class EventListener implements Listener {
         }
     }
 
-    public function onEntityTeleport(EntityTeleportEvent $event): void {
+    public function onEntityTeleport(EntityTeleportEvent $event): void 
+    {
         if($event->getFrom()->getWorld()->getFolderName() === $event->getTo()->getWorld()->getFolderName())
             return;
         $player = $event->getEntity();
@@ -164,7 +127,8 @@ class EventListener implements Listener {
         }
     }
 
-    public function onEntityDamage(EntityDamageEvent $event): void {
+    public function onEntityDamage(EntityDamageEvent $event): void 
+    {
         $player = $event->getEntity();
         $cause = $event->getCause();
 
@@ -223,7 +187,8 @@ class EventListener implements Listener {
         }
     }
 
-    public function onBlockPlace(BlockPlaceEvent $event): void {
+    public function onBlockPlace(BlockPlaceEvent $event): void 
+    {
         $player = $event->getPlayer();
 
         if(Arena::getInstance()->isPlayer($player) || Arena::getInstance()->isSpectator($player)) {
@@ -231,7 +196,8 @@ class EventListener implements Listener {
         }
     }
 
-    public function onBlockBreak(BlockBreakEvent $event): void {
+    public function onBlockBreak(BlockBreakEvent $event): void 
+    {
         $player = $event->getPlayer();
 
         if(Arena::getInstance()->isPlayer($player) || Arena::getInstance()->isSpectator($player)) {
@@ -239,11 +205,13 @@ class EventListener implements Listener {
         }
     }
 
-    private function setCooldown(Player $player): void {
+    private function setCooldown(Player $player): void 
+    {
         $this->cooldown[$player->getUniqueId()->toString()] = time();
     }
 
-    private function isCooldown(Player $player): bool {
+    private function isCooldown(Player $player): bool 
+    {
         if(!isset($this->cooldown[$player->getUniqueId()->toString()]))
             return false;
         

@@ -19,7 +19,8 @@ use pocketmine\player\Player;
 
 class PlayerData implements \JsonSerializable {
 
-    public static function getPlayerDataByName(string $name): ?PlayerData {
+    public static function getPlayerDataByName(string $name): ?PlayerData 
+    {
         foreach(glob(ConfigManager::getPath("data/*")) as $dataUuid) {
             $file = file_get_contents(ConfigManager::getPath("data/{$dataUuid}"));
             $data = json_decode($file, true);
@@ -31,7 +32,8 @@ class PlayerData implements \JsonSerializable {
         return null;
     }
 
-    public static function generateBasicData(string $player = null, $uuid = null, string $key = null) {
+    public static function generateBasicData(string $player = null, $uuid = null, string $key = null) 
+    {
         $def = [
             "player" => "Unknown",
             "uuid"   => "Unknown",
@@ -57,7 +59,8 @@ class PlayerData implements \JsonSerializable {
 
     private $data;
 
-    public function __construct(string $player, $uuid) {
+    public function __construct(string $player, $uuid) 
+    {
         $this->player = $player;
         $this->uuid = $uuid;
 
@@ -74,7 +77,8 @@ class PlayerData implements \JsonSerializable {
         $this->updateData();
     }
 
-    public function updateData(): void {
+    public function updateData(): void 
+    {
         $player = $this->getPlayer();
 
         $updateKeys = ["player"];
@@ -84,42 +88,51 @@ class PlayerData implements \JsonSerializable {
         }
     }
 
-    public function getUsername(): ?string {
+    public function getUsername(): ?string 
+    {
         return $this->player;
     }
 
-    public function getUuid() {
+    public function getUuid() 
+    {
         return $this->uuid;
     }
 
-    public function getPlayer(): ?Player {
+    public function getPlayer(): ?Player 
+    {
         return Loader::getInstance()->getServer()->getPlayerExact($this->getUsername());
     }
 
-    public function getPath(): string {
+    public function getPath(): string 
+    {
         $uuid = $this->getUuid();
 
         return ConfigManager::getPath("data/{$uuid}");
     }
 
-    public function set(string $key, $value): void {
+    public function set(string $key, $value): void 
+    {
         $this->data[$key] = $value;
         $this->save();
     }
 
-    public function get(string $key) {
+    public function get(string $key) 
+    {
         return isset($this->data[$key]) ? $this->data[$key] : self::generateBasicData(null, null, $key);
     }
 
-    public function save(): void {
+    public function save(): void 
+    {
         file_put_contents($this->getPath(), json_encode($this));
     }
 
-    public function jsonSerialize() {
+    public function jsonSerialize() 
+    {
         return $this->data;
     }
 
-    public function __destruct() {
+    public function __destruct() 
+    {
         $this->save();
     }
 }

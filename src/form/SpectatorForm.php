@@ -22,7 +22,8 @@ use pocketmine\player\Player;
 
 class SpectatorForm {
 
-    public function __construct(Player $player) {
+    public function __construct(Player $player) 
+    {
         $formData = ConfigManager::getValue("spectator-menu", "menus.yml");
         $formTitle = str_replace(["&"], ["§"], $formData["title"]);
         $formContent = str_replace(["&"], ["§"], $formData["content"]);

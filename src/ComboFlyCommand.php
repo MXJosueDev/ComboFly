@@ -27,14 +27,16 @@ use pocketmine\plugin\PluginOwned;
 
 class ComboFlyCommand extends Command implements PluginOwned {
 
-    public function __construct() {
+    public function __construct() 
+    {
         parent::__construct("combofly");
 
         $this->setDescription("Look at the available commands and get help from the command.");
         $this->setAliases(["cf"]);
     }
 
-    public function execute(CommandSender $sender, string $label, array $args): void {
+    public function execute(CommandSender $sender, string $label, array $args): void 
+    {
         if(!isset($args[0])) {
             $sender->sendMessage(ConfigManager::getPrefix() . "§7Please use §r'/{$label} help' §7to get help for the command.");
             return;
@@ -130,7 +132,8 @@ class ComboFlyCommand extends Command implements PluginOwned {
         }
     }
 
-    private function hasPermission(Player $player, string $permission): bool {
+    private function hasPermission(Player $player, string $permission): bool 
+    {
         if($player->hasPermission($permission) || $player->hasPermission("combofly.*"))
             return true;
 
@@ -138,7 +141,8 @@ class ComboFlyCommand extends Command implements PluginOwned {
         return false;
     }
 
-    private function checkConsole(CommandSender $player): bool {
+    private function checkConsole(CommandSender $player): bool 
+    {
         if(!$player instanceof Player) {
             $player->sendMessage(ConfigManager::getPrefix() . "§cPlease use this command within the game.");
             return false;
@@ -147,7 +151,8 @@ class ComboFlyCommand extends Command implements PluginOwned {
         return true;
     }
 
-    public function getOwningPlugin(): Plugin {
+    public function getOwningPlugin(): Plugin 
+    {
         return Loader::getInstance();
     }
 }

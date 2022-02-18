@@ -73,6 +73,7 @@ interface ConfigDefaults {
         'config-version' => ConfigVersions::ENTITIES,
         'join-npc-nametag' => '&l&bCombo&3Fly{line}&fStatus&7: {arena_status}{line}&fPlaying&7: &c{playing}{line}&fSpectating&7: &c{spectating}{line}&eClick to join!',
         'npc-rotation' => true,
+        'npc-rotation-rate' => 0.5,
     ];
     
     const KIT = [

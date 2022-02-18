@@ -26,7 +26,8 @@ class JoinEntity extends Human {
 
     private $cooldown = [];
 
-    protected function entityBaseTick(int $tickDiff = 1): bool {
+    protected function entityBaseTick(int $tickDiff = 1): bool 
+    {
         if($this->closed) {
         	return false;
         }
@@ -40,11 +41,53 @@ class JoinEntity extends Human {
             $this->setScale(1);
             $this->setImmobile(true);
         }
+
+        $every = (float) ConfigManager::getValue("npc-rotation-rate", "entities.yml") * 20;
+
+        // Rotation
+        if($this->ticksLived % $every === 0) {
+            if(!ConfigManager::getValue("npc-rotation", "entities.yml")) return;
+
+            $expandedBoundingBox = $this->getBoundingBox()->expandedCopy(15, 15, 15);
+        
+            foreach($this->getWorld()->getNearbyEntities($expandedBoundingBox, $this) as $player) {
+                if($player instanceof Player) {
+                    // Pitch and Yaw calculations
+                    $xdiff = $player->getPosition()->x - $this->getPosition()->x;
+                    $zdiff = $player->getPosition()->z - $this->getPosition()->z;
+                    $angle = atan2($zdiff, $xdiff);
+                    $yaw = (($angle * 180) / M_PI) - 90;
+                    $ydiff = $player->getPosition()->y - $this->getPosition()->y;
+                    $v = new Vector2($this->getPosition()->x, $this->getPosition()->z);
+                    $dist = $v->distance(new Vector2($player->getPosition()->x, $player->getPosition()->z));
+                    $angle = atan2($dist, $ydiff);
+                    $pitch = (($angle * 180) / M_PI) - 90;
+            
+                    // Package Creation
+                    $pk = MovePlayerPacket::create(
+                        $this->getId(),
+                        $this->getPosition()->asVector3()->add(0, $this->getEyeHeight(), 0),
+                        $pitch,
+                        $yaw,
+                        $headYaw,
+                        MovePlayerPacket::NORMAL,
+                        $this->onGround,
+                        0,
+                        0,
+                        0,
+                        0
+                    );
+                    
+                    $player->getNetworkSession()->sendDataPacket($pk);
+                }
+            }
+        }
         
         return $hasUpdate;
     }
 
-    public function getNameTagCustom(): string {
+    public function getNameTagCustom(): string 
+    {
         $replace = [
             "{playing}"       => count(Arena::getInstance()->getPlayers()),
             "{spectating}"    => count(Arena::getInstance()->getSpectators()),
@@ -57,7 +100,8 @@ class JoinEntity extends Human {
         return str_replace(array_keys($replace), array_values($replace), ConfigManager::getValue("join-npc-nametag", "entities.yml"));
     }
 
-    public function attack(EntityDamageEvent $source): void {
+    public function attack(EntityDamageEvent $source): void 
+    {
         switch($source->getCause()) {
             case EntityDamageEvent::CAUSE_VOID:
                 parent::attack($source);
@@ -92,11 +136,13 @@ class JoinEntity extends Human {
         }
     }
 
-    private function setCooldown(Player $player): void {
+    private function setCooldown(Player $player): void 
+    {
         $this->cooldown[$player->getUniqueId()->toString()] = time();
     }
 
-    private function isCooldown(Player $player): bool {
+    private function isCooldown(Player $player): bool 
+    {
         if(!isset($this->cooldown[$player->getUniqueId()->toString()]))
             return false;
         

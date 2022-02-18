@@ -32,4 +32,8 @@ join-npc-nametag: "&l&bCombo&3Fly{line}&fStatus&7: {arena_status}{line}&fPlaying
 # If activated the NPC will follow you with his eyes (It can cause lag).
 # Default: true
 npc-rotation: true
+
+# How often the npc rotation is updated (In seconds, can be an integer or a float).
+# Default: 0.5
+npc-rotation-rate: 0.5
 ...

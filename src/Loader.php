@@ -24,11 +24,13 @@ use pocketmine\utils\TextFormat as TF;
 class Loader extends PluginBase {
     use SingletonTrait;
     
-    public function onLoad(): void {
+    public function onLoad(): void 
+    {
         self::setInstance($this);        
     }
 
-    public function onEnable(): void {
+    public function onEnable(): void 
+    {
         ConfigManager::init();
 
         $this->getServer()->getCommandMap()->register("combofly", new ComboFlyCommand());
@@ -36,7 +38,8 @@ class Loader extends PluginBase {
         (new Arena());
     }
 
-    public function onDisable(): void {
+    public function onDisable(): void 
+    {
         Arena::getInstance()->shutdown();
     }
 }
