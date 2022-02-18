@@ -47,7 +47,7 @@ class Utils {
     }
 
     public static function addSound(Vector3 $vector, string $sound, ?array $players = null): PlaySoundPacket {
-        $pk = new PlaySoundPacket::create(
+        $pk = PlaySoundPacket::create(
             $sound,
             $vector->getX(),
             $vector->getY(),
