@@ -46,39 +46,39 @@ class JoinEntity extends Human {
 
         // Rotation
         if($this->ticksLived % $every === 0) {
-            if(!ConfigManager::getValue("npc-rotation", "entities.yml")) return;
-
-            $expandedBoundingBox = $this->getBoundingBox()->expandedCopy(15, 15, 15);
+            if((bool) ConfigManager::getValue("npc-rotation", "entities.yml")) {
+                $expandedBoundingBox = $this->getBoundingBox()->expandedCopy(15, 15, 15);
         
-            foreach($this->getWorld()->getNearbyEntities($expandedBoundingBox, $this) as $player) {
-                if($player instanceof Player) {
-                    // Pitch and Yaw calculations
-                    $xdiff = $player->getPosition()->x - $this->getPosition()->x;
-                    $zdiff = $player->getPosition()->z - $this->getPosition()->z;
-                    $angle = atan2($zdiff, $xdiff);
-                    $yaw = (($angle * 180) / M_PI) - 90;
-                    $ydiff = $player->getPosition()->y - $this->getPosition()->y;
-                    $v = new Vector2($this->getPosition()->x, $this->getPosition()->z);
-                    $dist = $v->distance(new Vector2($player->getPosition()->x, $player->getPosition()->z));
-                    $angle = atan2($dist, $ydiff);
-                    $pitch = (($angle * 180) / M_PI) - 90;
-            
-                    // Package Creation
-                    $pk = MovePlayerPacket::create(
-                        $this->getId(),
-                        $this->getPosition()->asVector3()->add(0, $this->getEyeHeight(), 0),
-                        $pitch,
-                        $yaw,
-                        $headYaw,
-                        MovePlayerPacket::NORMAL,
-                        $this->onGround,
-                        0,
-                        0,
-                        0,
-                        0
-                    );
-                    
-                    $player->getNetworkSession()->sendDataPacket($pk);
+                foreach($this->getWorld()->getNearbyEntities($expandedBoundingBox, $this) as $player) {
+                    if($player instanceof Player) {
+                        // Pitch and Yaw calculations
+                        $xdiff = $player->getPosition()->x - $this->getPosition()->x;
+                        $zdiff = $player->getPosition()->z - $this->getPosition()->z;
+                        $angle = atan2($zdiff, $xdiff);
+                        $yaw = (($angle * 180) / M_PI) - 90;
+                        $ydiff = $player->getPosition()->y - $this->getPosition()->y;
+                        $v = new Vector2($this->getPosition()->x, $this->getPosition()->z);
+                        $dist = $v->distance(new Vector2($player->getPosition()->x, $player->getPosition()->z));
+                        $angle = atan2($dist, $ydiff);
+                        $pitch = (($angle * 180) / M_PI) - 90;
+                
+                        // Package Creation
+                        $pk = MovePlayerPacket::create(
+                            $this->getId(),
+                            $this->getPosition()->asVector3()->add(0, $this->getEyeHeight(), 0),
+                            $pitch,
+                            $yaw,
+                            $headYaw,
+                            MovePlayerPacket::NORMAL,
+                            $this->onGround,
+                            0,
+                            0,
+                            0,
+                            0
+                        );
+                        
+                        $player->getNetworkSession()->sendDataPacket($pk);
+                    }
                 }
             }
         }
