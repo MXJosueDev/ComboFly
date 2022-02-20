@@ -68,7 +68,7 @@ class JoinEntity extends Human {
                             $this->getPosition()->asVector3()->add(0, $this->getEyeHeight(), 0),
                             $pitch,
                             $yaw,
-                            $headYaw,
+                            $yaw,
                             MovePlayerPacket::NORMAL,
                             $this->onGround,
                             0,

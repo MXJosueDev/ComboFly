@@ -26,73 +26,73 @@ use pocketmine\network\mcpe\protocol\SetScorePacket;
 use pocketmine\network\mcpe\protocol\types\ScorePacketEntry;
 
 final class ScoreboardAPI {
-	use SingletonTrait;
+    use SingletonTrait;
 
-	const DISPLAY_SLOT = SetDisplayObjectivePacket::DISPLAY_SLOT_SIDEBAR;
-	const CRITERIA_NAME = 'dummy';
-	const SORT_ORDER = SetDisplayObjectivePacket::SORT_ORDER_ASCENDING;
+    const DISPLAY_SLOT = SetDisplayObjectivePacket::DISPLAY_SLOT_SIDEBAR;
+    const CRITERIA_NAME = 'dummy';
+    const SORT_ORDER = SetDisplayObjectivePacket::SORT_ORDER_ASCENDING;
 
-	private $scoreboards = [];
+    private $scoreboards = [];
 
-	public function sendNew(Player $player, string $title): void
-	{
-		if($this->hasScoreboard($player)) {
-			$this->remove($player);
-		}
+    public function sendNew(Player $player, string $title): void
+    {
+        if($this->hasScoreboard($player)) {
+            $this->remove($player);
+        }
 
-		$pk = SetDisplayObjectivePacket::create(
-			self::DISPLAY_SLOT,
-			$player->getName(),
-			TF::colorize($title),
-			self::CRITERIA_NAME,
-			self::SORT_ORDER
-		);
+        $pk = SetDisplayObjectivePacket::create(
+            self::DISPLAY_SLOT,
+            $player->getName(),
+            TF::colorize($title),
+            self::CRITERIA_NAME,
+            self::SORT_ORDER
+        );
 
-		$player->getNetworkSession()->sendDataPacket($pk);
-		$this->scoreboards[$player->getName()] = $player;
-	}
+        $player->getNetworkSession()->sendDataPacket($pk);
+        $this->scoreboards[$player->getName()] = $player;
+    }
 
-	public function remove(Player $player): void 
-	{
-		if($this->hasScoreboard($player)) {
-			$pk = RemoveObjectivePacket::create($player->getName());
+    public function remove(Player $player): void 
+    {
+        if($this->hasScoreboard($player)) {
+            $pk = RemoveObjectivePacket::create($player->getName());
 
-			$player->getNetworkSession()->sendDataPacket($pk);
-			unset($this->scoreboards[$player->getName()]);
-		}
-	}
+            $player->getNetworkSession()->sendDataPacket($pk);
+            unset($this->scoreboards[$player->getName()]);
+        }
+    }
 
 
-	public function setLines(Player $player, array $lines): void
-	{
-		foreach($lines as $score => $line) {
-			if($score >= 15) break;
-			$this->setLine($player, $score + 1, $line);
-		}
-	}
+    public function setLines(Player $player, array $lines): void
+    {
+        foreach($lines as $score => $line) {
+            if($score >= 15) break;
+            $this->setLine($player, $score + 1, $line);
+        }
+    }
 
-	public function setLine(Player $player, int $score, string $message): void
-	{
-		if(!$this->hasScoreboard($player)) return;
-		if($score > 15 || $score < 1) return;
+    public function setLine(Player $player, int $score, string $message): void
+    {
+        if(!$this->hasScoreboard($player)) return;
+        if($score > 15 || $score < 1) return;
 
-		$entry = new ScorePacketEntry();
-		$entry->objectiveName = $player->getName();
-		$entry->type = ScorePacketEntry::TYPE_FAKE_PLAYER;
-		$entry->customName = $message;
-		$entry->score = $score;
-		$entry->scoreboardId = $score;
+        $entry = new ScorePacketEntry();
+        $entry->objectiveName = $player->getName();
+        $entry->type = ScorePacketEntry::TYPE_FAKE_PLAYER;
+        $entry->customName = $message;
+        $entry->score = $score;
+        $entry->scoreboardId = $score;
 
-		$pk = new SetScorePacket(
-			SetScorePacket::TYPE_CHANGE,
-			[$entry]
-		);
+        $pk = new SetScorePacket(
+            SetScorePacket::TYPE_CHANGE,
+            [$entry]
+        );
 
-		$player->getNetworkSession()->sendDataPacket($pk);
-	}
+        $player->getNetworkSession()->sendDataPacket($pk);
+    }
 
-	private function hasScoreboard(Player $player): bool
-	{
-		return isset($this->scoreboards[$player->getName()]);
-	}
+    private function hasScoreboard(Player $player): bool
+    {
+        return isset($this->scoreboards[$player->getName()]);
+    }
 }
