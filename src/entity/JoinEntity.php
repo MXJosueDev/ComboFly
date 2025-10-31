@@ -21,6 +21,8 @@ use pocketmine\player\Player;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\entity\Human;
+use pocketmine\math\Vector2;
+use pocketmine\network\mcpe\protocol\MovePlayerPacket;
 
 class JoinEntity extends Human {
 

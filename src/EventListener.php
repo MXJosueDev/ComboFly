@@ -182,7 +182,7 @@ class EventListener implements Listener {
     
             if($event instanceof EntityDamageByEntityEvent) {
                 $event->uncancel();
-                $event->setKnockBack((int) ConfigManager::getValue("knockback"));
+                $event->setKnockBackStrength((float) ConfigManager::getValue("knockback"));
             }
         }
     }
