@@ -25,6 +25,11 @@ use pocketmine\entity\EntityFactory;
 use pocketmine\entity\EntityDataHelper;
 use pocketmine\entity\Human;
 use pocketmine\item\Item;
+use pocketmine\item\ItemFactory;
+use pocketmine\item\LegacyStringToItemParser;
+use pocketmine\item\StringToItemParser;
+use pocketmine\data\SavedDataLoadingException;
+use pocketmine\nbt\TreeRoot;
 use pocketmine\world\World;
 use pocketmine\world\Position;
 use pocketmine\utils\SingletonTrait;
@@ -288,8 +293,10 @@ class Arena {
         $itemName = str_replace(["&"], ["§"], $itemData["name"]);
         $itemLore = str_replace(["&"], ["§"], $itemData["lore"]);
 
-        $item = Item::get($itemID, $itemMeta)->setCustomName($itemName)->setLore([$itemLore]);
-        $item->getNamedTag()->setInt("spectator", 1);
+        $item = ItemFactory::getInstance()->get($itemID, $itemMeta)->setCustomName($itemName)->setLore([$itemLore]);
+        $tag = $item->getNamedTag();
+        $tag->setInt("spectator", 1);
+        $item->setNamedTag($tag);
 
         $player->getInventory()->setItem($itemSlot, $item);
 
@@ -419,11 +426,11 @@ class Arena {
         $armorInventory = $player->getArmorInventory()->getContents();
 
         foreach($inventory as $slot => $item) {
-            $fileData["inventory"][$slot] = $item->jsonSerialize();
+            $fileData["inventory"][$slot] = $item->nbtSerialize();
         }
 
         foreach($armorInventory as $slot => $item) {
-            $fileData["armorInventory"][$slot] = $item->jsonSerialize();
+            $fileData["armorInventory"][$slot] = $item->nbtSerialize();
         }
 
         $fileData["slot"] = $player->getInventory()->getHeldItemIndex();
@@ -452,14 +459,22 @@ class Arena {
         }
 
         if(isset($kitData["inventory"])) {
-            foreach($kitData["inventory"] as $slot => $item) {
-                $inventory[$slot] = Item::jsonDeserialize($item);
+            foreach($kitData["inventory"] as $slot => $itemData) {
+                try {
+                    $inventory[$slot] = Item::nbtDeserialize($itemData);
+                } catch (SavedDataLoadingException $e) {
+                    Loader::getInstance()->getLogger()->error("Failed to deserialize item: " . $e->getMessage());
+                }
             }
         }
 
         if(isset($kitData["armorInventory"])) {
-            foreach($kitData["armorInventory"] as $slot => $item) {
-                $armorInventory[$slot] = Item::jsonDeserialize($item);
+            foreach($kitData["armorInventory"] as $slot => $itemData) {
+                try {
+                    $armorInventory[$slot] = Item::nbtDeserialize($itemData);
+                } catch (SavedDataLoadingException $e) {
+                    Loader::getInstance()->getLogger()->error("Failed to deserialize item: " . $e->getMessage());
+                }
             }
         }
 
