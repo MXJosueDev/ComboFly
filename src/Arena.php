@@ -500,16 +500,16 @@ class Arena {
                     $player->sendMessage(ConfigManager::getPrefix() . $text);
                     break;
                 case self::TITLE:
-                    $player->sendTitle($text);
+                    $player->sendTitle($text, "", -1, -1, -1);
                     break;
                 case self::SUBTITLE:
-                    $player->sendSubTitle($text);
+                    $player->sendSubTitle($text, -1, -1, -1);
                     break;
                 case self::TIP:
                     $player->sendTip($text);
                     break;
                 case self::POPUP:
-                    $player->sendPopup($text);
+                    $player->sendActionBarMessage($text);
                     break;
             }
         }
@@ -557,7 +557,7 @@ class Arena {
 
         if($killer instanceof Player && !is_null($economy) && $moneyReward > 0) {
             $economy->addMoney($killer, $moneyReward);
-            $killer->sendPopup("§r§6+{$moneyReward} coins!");
+            $killer->sendActionBarMessage("§r§6+{$moneyReward} coins!");
         }
 
         $killerData = $this->getPlayerData($killer);
