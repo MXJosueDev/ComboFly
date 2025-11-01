@@ -213,6 +213,7 @@ If you don't specify button text, it will use the client's translated "Yes" and 
 use dktapps\pmforms\ModalForm;
 use pocketmine\player\Player;
 
+// Using default button text: "gui.yes" and "gui.no"
 $form = new ModalForm(
     "Teleport",
     "Do you want to teleport to spawn?",
@@ -222,7 +223,6 @@ $form = new ModalForm(
             $player->sendMessage("Teleported to spawn!");
         }
     }
-    // Using default button text: "gui.yes" and "gui.no"
 );
 
 $player->sendForm($form);
