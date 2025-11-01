@@ -75,6 +75,7 @@ $form = new MenuForm(
     "Shop Menu",
     "Select an item to purchase:",
     [
+        // Note: Replace example.com URLs with actual image URLs
         new MenuOption("Diamond Sword", new FormIcon("https://example.com/sword.png")),
         new MenuOption("Golden Apple", new FormIcon("https://example.com/apple.png")),
         new MenuOption("Enchanted Book", new FormIcon("https://example.com/book.png"))
@@ -310,8 +311,9 @@ Icons can be added to `MenuOption` buttons. Icons can be loaded from URLs or pat
 use dktapps\pmforms\FormIcon;
 
 // Load icon from URL (most commonly used)
+// Note: Replace with actual image URL (e.g., from imgur, github, or your own server)
 $icon = new FormIcon(
-    "https://example.com/icon.png",
+    "https://example.com/icon.png",  // Placeholder - use a real URL
     FormIcon::IMAGE_TYPE_URL  // Default, can be omitted
 );
 
