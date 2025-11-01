@@ -213,7 +213,7 @@ If you don't specify button text, it will use the client's translated "Yes" and 
 use dktapps\pmforms\ModalForm;
 use pocketmine\player\Player;
 
-// Using default button text: "gui.yes" and "gui.no"
+// Omitting button text parameters uses the client's default "Yes" and "No" text
 $form = new ModalForm(
     "Teleport",
     "Do you want to teleport to spawn?",
@@ -336,22 +336,10 @@ $option = new MenuOption("Diamond Sword", $icon);
 ## Error Handling
 
 ### Form Validation
-The library automatically validates form responses. If validation fails, a `FormValidationException` is thrown:
-
-```php
-use pocketmine\form\FormValidationException;
-
-try {
-    // Form handling is done automatically by PocketMine-MP
-    // Validation errors are caught internally
-} catch(FormValidationException $e) {
-    // This is handled by the server
-    $player->sendMessage("Invalid form data: " . $e->getMessage());
-}
-```
+The library automatically validates form responses. Form validation is handled internally by PocketMine-MP, so you don't need to manually catch validation exceptions. If a player sends invalid form data, the server will handle it automatically.
 
 ### Custom Form Response Validation
-When retrieving values from `CustomFormResponse`, ensure the element name exists:
+When retrieving values from `CustomFormResponse`, make sure to use the correct element name:
 
 ```php
 try {
