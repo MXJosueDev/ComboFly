@@ -108,173 +108,223 @@ Please see [CONTRIBUTING](https://github.com/MXJosueDev/ComboFly/blob/PM4/CONTRI
 
 ### API
 
-- Set up the arena
+The ComboFly Arena API provides methods to manage arena functionality programmatically. All methods are accessed through the `Arena` singleton instance.
+
+#### Getting Started
+
 ```php
 <?php
 
-use combofly\Arena; /* Class in which the API methods are.*/
+use combofly\Arena;
+
+$arena = Arena::getInstance();
+```
+
+#### Arena Configuration
+
+**Set Arena Spawn Position**
+
+Configure where players spawn when entering the arena.
+
+```php
+<?php
+
+use combofly\Arena;
 use pocketmine\world\Position;
 use pocketmine\Server;
 
-$arena = Arena::getInstance(); /* Getting the instance of the object. */
+$arena = Arena::getInstance();
 
-$world = Server::getInstance()->getWorldManager()->getWorldByName("ComboFlyArena"); /* Object with instance of `pocketmine\world\World`. */
-$pos = new Position(0, 100, 0 $world); /* Object instantiated to `pocketmine\world\Position`. */
+$world = Server::getInstance()->getWorldManager()->getWorldByName("ComboFlyArena");
+$pos = new Position(0, 100, 0, $world);
 
-$arena->setArena($pos); /* Set the position in which players will appear in the arena. */
+$arena->setArena($pos);
 ```
 
-- Set up the lobby
+**Set Lobby Spawn Position**
+
+Configure where players return when exiting the arena.
+
 ```php
 <?php
 
-use combofly\Arena; /* Class in which the API methods are.*/
+use combofly\Arena;
 use pocketmine\world\Position;
 use pocketmine\Server;
 
-$arena = Arena::getInstance(); /* Getting the instance of the object. */
+$arena = Arena::getInstance();
 
-$world = Server::getInstance()->getWorldManager()->getDefaultWorld(); /* Object with instance of `pocketmine\world\World`. */
-$pos = new Position(0, 100, 0 $world); /* Object instantiated to `pocketmine\world\Position`. */
+$world = Server::getInstance()->getWorldManager()->getDefaultWorld();
+$pos = new Position(0, 100, 0, $world);
 
-$arena->setLobby($pos); /* Sets the position players will appear in when they exit the arena. */
+$arena->setLobby($pos);
 ```
 
-- Known if arena or lobby is loaded
+**Check Arena Status**
+
+Check if arena or lobby positions are configured.
+
 ```php
 <?php
 
-use combofly\Arena; /* Class in which the API methods are.*/
+use combofly\Arena;
 
-$arena = Arena::getInstance(); /* Getting the instance of the object. */
+$arena = Arena::getInstance();
 
-/* Returns `true` if it is loaded and` false` if not. */
-$isArenaLoaded = $arena->isArenaLoaded(); 
-$isLobbyLoaded = $arena->isLobbyLoaded(); 
+$isArenaLoaded = $arena->isArenaLoaded(); // Returns true if arena is configured
+$isLobbyLoaded = $arena->isLobbyLoaded(); // Returns true if lobby is configured
 ```
 
-- Add players or spectators to the arena
+#### Player Management
+
+**Add Players to Arena**
+
+Add a player as an active participant or spectator.
+
 ```php
 <?php
 
-use combofly\Arena; /* Class in which the API methods are.*/
+use combofly\Arena;
 use pocketmine\Server;
 
-$arena = Arena::getInstance(); /* Getting the instance of the object. */
+$arena = Arena::getInstance();
+$player = Server::getInstance()->getPlayerExact("PlayerName");
 
-$player = Server::getInstance()->getPlayerExact("MXJosuepro033"); /* Player to add. */
-
-/* This adds the player to the arena. */
-$arena->addPlayer($player); 
-$arena->addSpectator($player); 
+$arena->addPlayer($player);     // Add as active player
+$arena->addSpectator($player);  // Add as spectator
 ```
 
-- Remove players or spectators to the arena
+**Remove Players from Arena**
+
+Remove a player or spectator from the arena.
+
 ```php
 <?php
 
-use combofly\Arena; /* Class in which the API methods are.*/
+use combofly\Arena;
 use pocketmine\Server;
 
-$arena = Arena::getInstance(); /* Getting the instance of the object. */
+$arena = Arena::getInstance();
+$player = Server::getInstance()->getPlayerExact("PlayerName");
 
-$player = Server::getInstance()->getPlayerExact("MXJosuepro033"); /* Player to remove. */
-
-/* This remove the player to the arena. */
-$arena->quitPlayer($player); 
-$arena->quitSpectator($player); 
+$arena->quitPlayer($player);     // Remove active player
+$arena->quitSpectator($player);  // Remove spectator
 ```
 
-- Know if a player is a player or a spectator in the arena
+**Check Player Status**
+
+Check if a player is in the arena as a participant or spectator.
+
 ```php
 <?php
 
-use combofly\Arena; /* Class in which the API methods are.*/
+use combofly\Arena;
 use pocketmine\Server;
 
-$arena = Arena::getInstance(); /* Getting the instance of the object. */
+$arena = Arena::getInstance();
+$player = Server::getInstance()->getPlayerExact("PlayerName");
 
-$player = Server::getInstance()->getPlayerExact("MXJosuepro033"); /* Player. */
+if ($arena->isPlayer($player)) {
+    // Player is an active participant
+}
 
-/* This returns `true` if it is and` false` if not. */
-$arena->isPlayer($player); 
-$arena->isSpectator($player); 
+if ($arena->isSpectator($player)) {
+    // Player is a spectator
+}
 ```
 
-- Get the list of players, spectators, or all players
+**Get Player Lists**
+
+Retrieve lists of players in the arena.
+
 ```php
 <?php
 
-use combofly\Arena; /* Class in which the API methods are.*/
+use combofly\Arena;
 
-$arena = Arena::getInstance(); /* Getting the instance of the object. */
+$arena = Arena::getInstance();
 
-$players = $arena->getPlayers(); /* Returns an array with the list of players. */
-$spectators = $arena->getSpectators(); /* Returns an array with the list of spectators. */
-$all = $arena->getAllPlayers(); /* Returns an array with the list of players and spectators. */
+$players = $arena->getPlayers();       // Array of active players
+$spectators = $arena->getSpectators(); // Array of spectators
+$all = $arena->getAllPlayers();        // Array of all players (active + spectators)
 ```
 
-- Set up the players kit when entering the arena
+#### Kit Management
+
+**Configure Arena Kit**
+
+Set the kit items from a player's current inventory and armor.
+
 ```php
 <?php
 
-use combofly\Arena; /* Class in which the API methods are.*/
+use combofly\Arena;
+use pocketmine\Server;
 
-$arena = Arena::getInstance(); /* Getting the instance of the object. */
+$arena = Arena::getInstance();
+$player = Server::getInstance()->getPlayerExact("PlayerName");
 
-$player = Server::getInstance()->getPlayerExact("MXJosuepro033"); /* From this variable the Inventory and the Armor Inventory are obtained. */
-
-$arena->setKit($player); /* This sets up the arena kit. */
+// The player's current inventory and armor will become the arena kit
+$arena->setKit($player);
 ```
 
-- Give the arena kit to a player
+**Give Kit to Player**
+
+Give the configured arena kit to a player (clears their inventory first).
+
 ```php
 <?php
 
-use combofly\Arena; /* Class in which the API methods are.*/
+use combofly\Arena;
+use pocketmine\Server;
 
-$arena = Arena::getInstance(); /* Getting the instance of the object. */
+$arena = Arena::getInstance();
+$player = Server::getInstance()->getPlayerExact("PlayerName");
 
-$player = Server::getInstance()->getPlayerExact("MXJosuepro033"); /* Player to give the kit. */
-
-$arena->giveKit($player); /* This resets the player's inventory and gives him the items. */
+// Clears player inventory and gives them the arena kit
+$arena->giveKit($player);
 ```
 
-- Broadcast Message
+#### Broadcasting Messages
+
+Send messages to all players and spectators in the arena.
+
 ```php
 <?php
 
-use combofly\Arena; /* Class in which the API methods are.*/
+use combofly\Arena;
 
-$arena = Arena::getInstance(); /* Getting the instance of the object. */
+$arena = Arena::getInstance();
 
-/* The second parameter is the type of message to send, you can find the types
-   in `combofly\Arena` or this is the list:
-    - MESSAGE  
-    - TITLE  
-    - SUBTITLE
-    - TIP   
-    - POPUP */
-$arena->broadcast("Your message here.", Arena::MESSAGE); /* Global message to players and spectators in the arena. */
+// Available message types: MESSAGE, TITLE, SUBTITLE, TIP, POPUP
+$arena->broadcast("Welcome to the arena!", Arena::MESSAGE);
+$arena->broadcast("Fight!", Arena::TITLE);
+$arena->broadcast("Good luck!", Arena::SUBTITLE);
+$arena->broadcast("Watch your back!", Arena::TIP);
+$arena->broadcast("New player joined!", Arena::POPUP);
 ```
 
-- Get Kills, Deaths and PlayerData of Player
+#### Player Statistics
+
+Get player statistics (kills, deaths, and complete data).
+
 ```php
 <?php
 
-use combofly\Arena; /* Class in which the API methods are.*/
+use combofly\Arena;
+use pocketmine\player\Player;
 
-$arena = Arena::getInstance(); /* Getting the instance of the object. */
+$arena = Arena::getInstance();
 
-$player = "MXJosuepro033"; /* Getting a player to get their kills. */
+// Can use Player object or player name string
+$player = "PlayerName"; // or Server::getInstance()->getPlayerExact("PlayerName");
 
-/* The $player parameter can have a `pocketmine\player\Player` instance or be a string 
-   with the player's name (If you query the data for the player's name
-   and it is offline, it must have played before or it will return `0` or `null` 
-   depending on the method used). */
-$playerData = $arena->getPlayerData($player); /* It will return an object with instance of `combofly\PlayerData`. */
-$playerKills = $arena->getKills($player); /* This will return the number of kills of the player. */
-$playerDeaths = $arena->getDeaths($player); /* This will return the number of deaths of the player. */
+$playerData = $arena->getPlayerData($player);  // Returns PlayerData object
+$kills = $arena->getKills($player);            // Returns kill count (int)
+$deaths = $arena->getDeaths($player);          // Returns death count (int)
+
+// Note: For offline players queried by name, they must have played before
+// Otherwise returns 0 for kills/deaths or null for PlayerData
 ```
 
 ## License
